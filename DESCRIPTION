@@ -1,0 +1,13 @@
+Package: undidR
+Version: 0.0.1
+Date: 2024-10-08
+Title: Unpooled Difference-In-Differences
+Authors@R: 
+    person("Eric", "Jamieson", email = "ericbrucejamieson@gmail.com", role = c("aut", "cre"))
+Maintainer: Eric Jamieson <ericbrucejamieson@gmail.com>
+Depends: R (>= 4.0)
+Description: Implements difference-in-differences with unpoolable data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
