@@ -1,6 +1,4 @@
 # undidR
-### Difference-in-differences for unpoolable data
-
 
 ## Installation 
 ```R
