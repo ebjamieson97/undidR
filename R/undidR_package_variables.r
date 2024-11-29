@@ -20,6 +20,9 @@
                           "%d%m%Y", "%m/%d/%Y", "%m-%d-%Y", "%m%d%Y",
                           "%Y")
 
+  # Other compatiable date formats
+  env$other_formats <- c("ddmonyyyy", "yyyym00")
+
   # Define a dictionary to convert general date formats into R date formats
   env$date_format_dict_to_r <- c("yyyy/mm/dd" = "%Y/%m/%d",
                                  "yyyy-mm-dd" = "%Y-%m-%d",

@@ -12,5 +12,6 @@
 #' undid_date_formats()
 undid_date_formats <- function() {
   list(General_Formats = .undid_env$date_formats_general,
-       R_Specific_Formats = .undid_env$date_formats_r)
+       R_Specific_Formats = .undid_env$date_formats_r,
+       Other_Formats = .undid_env$other_formats)
 }
