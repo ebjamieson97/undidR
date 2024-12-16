@@ -426,7 +426,7 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
     for (period in silo_times) {
       x <- as.matrix(silo_df[silo_df$time == period, covariates])
       y <- as.vector(silo_df[silo_df$time == period, ]$outcome)
-      beta_hat <- .pinv(t(x) %*% x) %*% t(x) %*% y
+      beta_hat <- .inv(t(x) %*% x) %*% t(x) %*% y
       resid <- y - x %*% beta_hat
       trends_data[trends_data$time == period,
                   "mean_outcome_residualized"] <- mean(resid)

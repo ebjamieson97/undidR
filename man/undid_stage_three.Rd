@@ -13,7 +13,7 @@ undid_stage_three(
   save_csv = FALSE,
   filename = "UNDID_results.csv",
   filepath = tempdir(),
-  nperm = 1000,
+  nperm = 1001,
   verbose = TRUE
 )
 }
@@ -49,7 +49,7 @@ Defaults to \code{UNDID_results.csv}}
 \item{filepath}{Filepath to save the .csv file. Defaults to \code{tempdir()}.}
 
 \item{nperm}{Number of random permutations of gvar & silo pairs to consider
-when calculating the randomization inference p-value. Defaults to \code{1000}.}
+when calculating the randomization inference p-value. Defaults to \code{1001}.}
 
 \item{verbose}{A logical value (either \code{TRUE} or \code{FALSE}) which toggles
 display output showing the progress of the randomization inference.

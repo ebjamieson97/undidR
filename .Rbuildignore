@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^man/figures/
+^dev$
+^\.gitignore$

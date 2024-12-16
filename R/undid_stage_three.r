@@ -37,7 +37,7 @@
 #' Defaults to `UNDID_results.csv`
 #' @param filepath Filepath to save the .csv file. Defaults to `tempdir()`.
 #' @param nperm Number of random permutations of gvar & silo pairs to consider
-#' when calculating the randomization inference p-value. Defaults to `1000`.
+#' when calculating the randomization inference p-value. Defaults to `1001`.
 #' @param verbose A logical value (either `TRUE` or `FALSE`) which toggles
 #' display output showing the progress of the randomization inference.
 #' Defaults to `TRUE`.
@@ -57,7 +57,7 @@
 undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
                               covariates = FALSE, interpolation = FALSE,
                               save_csv = FALSE, filename = "UNDID_results.csv",
-                              filepath = tempdir(), nperm = 1000,
+                              filepath = tempdir(), nperm = 1001,
                               verbose = TRUE) {
   if (identical(save_csv, TRUE)) {
     filepath <- .filename_filepath_check(filename, filepath)
@@ -195,12 +195,11 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
         diff_df[
           mask & is.na(diff_df[[value]]), value
         ] <- y_hat
-      } 
+      }
     }
   }
   return(diff_df)
 }
-
 
 #' @keywords internal
 # Runs stage three calculations with agg == "silo"
@@ -407,16 +406,28 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 
 
   # Take gvar assignment from init and randomize across silos `nperm` times
+  # Enforce unique permutations
   gvar <- init$gvar
-  for (i in seq_len(nperm)) {
-    init[[paste0("gvar_randomized_", i)]] <- sample(gvar)
+  seen <- new.env(hash = TRUE, size = nperm, parent = emptyenv())
+  key <- paste(gvar, collapse = "")
+  seen[[key]] <- TRUE
+  i <- 1
+  while (i < nperm) {
+    new_perm <- sample(gvar)
+    key <- paste(new_perm, collapse = "")
+    if (is.null(seen[[key]])) {
+      init[[paste0("gvar_randomized_", i)]] <- new_perm
+      seen[[key]] <- TRUE
+      i <- i + 1
+    }
   }
+  rm(seen)
 
   # Create preallocation vector to store agg_ATT from each randomization
-  ri_att <- rep(NA_real_, nperm)
+  ri_att <- rep(NA_real_, nperm - 1)
 
   # Loop through gvar randomizations nperm times
-  for (j in seq_len(nperm)) {
+  for (j in seq_len(nperm - 1)) {
 
     # Creates a mask for init that selects control silos
     mask_gvar <- is.na(init[[paste0("gvar_randomized_", toString(j))]])
@@ -510,10 +521,10 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 
     # Add progress indicator
     if (verbose && j %% 100 == 0) {
-      message(sprintf("Completed %d of %d permutations", j, nperm))
+      message(sprintf("Completed %d of %d permutations", j, nperm - 1))
     }
   }
-  return(sum(abs(ri_att) >= abs(agg_att)) / length(ri_att))
+  return(sum(abs(ri_att) > abs(agg_att)) / length(ri_att))
 }
 
 #' @keywords internal
@@ -575,35 +586,34 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
                   "\nOverriding `nperm` to:", unique_permutations))
     nperm <- unique_permutations
   }
-  ri_atts <- rep(NA_real_, nperm)
-  # If max permutations less than 2000 ensure each is unique
-  if (nperm <= 2000) {
-    perm_matrix <- matrix(NA_real_, ncol = nperm, nrow = length(y))
-    seen <- new.env(hash = TRUE)
-    i <- 1
-    while (i <= nperm) {
-      new_perm <- sample(x[, 2])
-      key <- paste(new_perm, collapse = "")
-      if (is.null(seen[[key]])) {
-        perm_matrix[, i] <- new_perm
-        seen[[key]] <- TRUE
-        i <- i + 1
-      }
-    }
-    for (i in seq_len(nperm)) {
-      x_ri <- cbind(1, perm_matrix[, i])
-      reg <- .regress(x_ri, y, w)
-      ri_atts[i] <- reg$beta_hat[2]
-    }
-  } else {
-    for (i in seq_len(nperm)) {
-      x_ri <- cbind(1, sample(x[, 2]))
-      reg <- .regress(x_ri, y, w)
-      ri_atts[i] <- reg$beta_hat[2]
-    }
+  if (nperm < 500) {
+    warning("Randomization inference may not be valid with `nperm` < 500.")
   }
 
-  ri_pval <- (sum(ri_atts >= results$agg_ATT[1])) / length(ri_atts)
+  # Enforce unique permutations
+  ri_atts <- rep(NA_real_, nperm - 1)
+  perm_matrix <- matrix(NA_real_, ncol = nperm - 1, nrow = length(y))
+  seen <- new.env(hash = TRUE, size = nperm, parent = emptyenv())
+  key <- paste(x[, 2], collapse = "")
+  seen[[key]] <- TRUE
+  i <- 1
+  while (i < nperm) {
+    new_perm <- sample(x[, 2])
+    key <- paste(new_perm, collapse = "")
+    if (is.null(seen[[key]])) {
+      perm_matrix[, i] <- new_perm
+      seen[[key]] <- TRUE
+      i <- i + 1
+    }
+  }
+  for (i in seq_len(nperm - 1)) {
+    x_ri <- cbind(1, perm_matrix[, i])
+    reg <- .regress(x_ri, y, w)
+    ri_atts[i] <- reg$beta_hat[2]
+  }
+  rm(seen)
+
+  ri_pval <- (sum(abs(ri_atts) > abs(results$agg_ATT[1]))) / length(ri_atts)
   results$RI_pval[1] <- ri_pval
 
   return(results)

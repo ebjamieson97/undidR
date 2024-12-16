@@ -1,4 +1,14 @@
 #' @keywords internal
+# Computes the inverse using solve() and if not invertible tries .pinv()
+.inv <- function(x) {
+  tryCatch({
+    return(solve(x))
+  }, error = function(e) {
+    return(.pinv(x))
+  })
+}
+
+#' @keywords internal
 # Compute Moore-Penrose pseudoinverse
 .pinv <- function(x, tol = sqrt(.Machine$double.eps)) {
   sv <- svd(x)
@@ -11,16 +21,16 @@
 # Compute beta coefficients and their SE's
 .regress <- function(x, y, w = NULL) {
   if (is.null(w)) {
-    beta_hat <- .pinv(t(x) %*% x) %*% t(x) %*% y
+    beta_hat <- .inv(t(x) %*% x) %*% t(x) %*% y
   } else {
-    beta_hat <- .pinv(t(x) %*% w %*% x) %*% t(x) %*% w %*% y
+    beta_hat <- .inv(t(x) %*% w %*% x) %*% t(x) %*% w %*% y
   }
 
   resid <- y - x %*% beta_hat
   sigma_sq <- resid^2
   omega <- diag(as.vector(sigma_sq))
-  beta_hat_cov <- .pinv(t(x) %*% x) %*% t(x) %*%
-    omega %*% x %*% .pinv(t(x) %*% x)
+  beta_hat_cov <- .inv(t(x) %*% x) %*% t(x) %*%
+    omega %*% x %*% .inv(t(x) %*% x)
   beta_hat_var <- diag(beta_hat_cov)
   return(list(beta_hat = as.vector(beta_hat),
               beta_hat_var = as.vector(beta_hat_var)))
@@ -118,4 +128,12 @@
       ((length(beta_hat_jknives) - 1) / length(beta_hat_jknives))
   )
   return(jknife_se)
+}
+
+#' @keywords internal
+#' checks that input is given as TRUE or FALSE
+.validate_logical_args <- function(logical, arg_name) {
+  if (!(identical(logical, TRUE) || identical(logical, FALSE))) {
+    stop(paste(arg_name, "must be a single `TRUE` or `FALSE` value."))
+  }
 }

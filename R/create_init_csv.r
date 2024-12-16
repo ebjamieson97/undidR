@@ -57,12 +57,26 @@ create_init_csv <- function(silo_names = character(), start_times = character(),
     }
   }
 
-  # Check if all vectors have the same length
+  # Remove whitespace typos from start_times, end_times, and treatment_times
+  start_times <- gsub("\\s+", "", start_times)
+  end_times <- gsub("\\s+", "", end_times)
+  treatment_times <- gsub("\\s+", "", treatment_times)
+
+  # If only a single value is entered for start or end times, adjust to vector
+  if (length(start_times) == 1) {
+    start_times <- rep(start_times, length(silo_names))
+  }
+  if (length(end_times) == 1) {
+    end_times <- rep(end_times, length(silo_names))
+  }
+
+  # First ensure that silo_names and treatment times have the same length
   vector_lengths <- vapply(list(silo_names, start_times, end_times,
                                 treatment_times), length, integer(1))
   if (length(unique(vector_lengths)) != 1) {
-    stop("Error: 'silo_names', 'start_times', 'end_times', and 'treatment_times'
-    must all have the same length.")
+    stop("Error: 'silo_names' and 'treatment_times' must both have
+     the same length, and 'start_times' and 'end_times' must either have
+     a length of 1 or the same length as 'silo_names' and 'treatment_times'.")
   }
 
   # Parse covariates

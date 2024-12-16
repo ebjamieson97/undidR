@@ -10,8 +10,8 @@ plot_parallel_trends(
   save_csv = FALSE,
   combine = FALSE,
   pch = NA,
-  pch_control = NULL,
-  pch_treated = NULL,
+  pch_control = NA,
+  pch_treated = NA,
   control_colour = c("darkgrey", "lightgrey"),
   control_color = NULL,
   treatment_colour = c("darkred", "lightcoral"),
@@ -21,7 +21,7 @@ plot_parallel_trends(
   ylab = NA,
   title = NA,
   xticks = 4,
-  date_format = "\%Y",
+  date_format = "\%Y-\%m-\%d",
   xdates = NULL,
   xaxlabsz = 0.8,
   save_png = FALSE,
@@ -34,13 +34,16 @@ plot_parallel_trends(
   ydecimal = 2,
   legend_location = "topright",
   simplify_legend = TRUE,
-  legend_text = 0.7,
+  legend_cex = 0.7,
   legend_on = TRUE,
   treatment_indicator_col = "grey",
   treatment_indicator_alpha = 0.5,
   treatment_indicator_lwd = 2,
   treatment_indicator_lty = 2,
-  interpolate = FALSE
+  interpolate = FALSE,
+  filepath = tempdir(),
+  filenamecsv = "combined_trends_data.csv",
+  filenamepng = "undid_plot.png"
 )
 }
 \arguments{
@@ -129,7 +132,7 @@ of the legend (defaults to \code{topright})}
 colour for the treatment silos in the legend and one colour for the control.
 Defaults to \code{TRUE}}
 
-\item{legend_text}{An double for setting the size of the text in the legend.
+\item{legend_cex}{An double for adjusting the size of the text in the legend.
 Defaults to \code{0.7}}
 
 \item{legend_on}{A logical value for turning the legend on or off
@@ -152,6 +155,14 @@ for the treatment_indicator lines (defaults to \code{2})}
 \item{interpolate}{A logical value (either \code{TRUE} or \code{FALSE}) which
 determines if interpolation should be used to fill missing trends data.
 Defaults to \code{FALSE}.}
+
+\item{filepath}{Filepath to save the .csv file. Defaults to \code{tempdir()}.}
+
+\item{filenamecsv}{A string filename for the combined trends data
+Defaults to \code{"combined_trends_data.csv"}.}
+
+\item{filenamepng}{A string filename for the .png file output.
+Defaults to \code{"undid_plot.png"}.}
 }
 \description{
 The \code{plot_parallel_trends} function combines the trends_data.csv's
