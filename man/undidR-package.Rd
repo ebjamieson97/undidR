@@ -12,6 +12,7 @@ A framework for estimating difference-in-differences with unpoolable data, based
 Useful links:
 \itemize{
   \item \url{https://github.com/ebjamieson97/undidR}
+  \item \url{https://ebjamieson97.github.io/undidR/}
   \item Report bugs at \url{https://github.com/ebjamieson97/undidR/issues}
 }
 
