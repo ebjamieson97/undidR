@@ -1,39 +1,39 @@
 #' Creates the `init.csv`
 #'
-#' The `create_init_csv` function generates a CSV file with information
+#' The `create_init_csv()` function generates a CSV file with information
 #' on each silo's start times, end times, and treatment times.
 #' If parameters are left empty, generates a blank CSV with only the headers.
 #'
 #' @details Ensure dates are entered consistently in the same date format.
-#' Control silos should be marked as `"control"` in the `treatment_times`
-#' vector. If `covariates` is `FALSE`, no covariate column will be
-#' included in the CSV.
+#' Call [undid_date_formats()] to view valid date formats. Control silos
+#' should be marked as `"control"` in the `treatment_times` vector. If
+#' `covariates` is `FALSE`, no covariate column will be included in the CSV.
 #'
-#' @param silo_names A vector of strings of silo names.
-#' @param start_times A vector of strings of start times.
-#' @param end_times A vector of strings of end times.
-#' @param treatment_times A vector of strings of treatment times.
-#' @param covariates A vector of strings of covariates (optional).
-#' @param filename A string filename for the created initializing .csv file.
-#' Defaults to `init.csv`
-#' @param filepath Filepath to save the .csv file. Defaults to `tempdir()`.
+#' @param silo_names A character vector of silo names.
+#' @param start_times A character vector of start times.
+#' @param end_times A character vector of end times.
+#' @param treatment_times A character vector of treatment times.
+#' @param covariates A character vector of covariates, or, `FALSE` (default).
+#' @param filename A character filename for the created initializing CSV file.
+#'  Defaults to `"init.csv"`.
+#' @param filepath Filepath to save the CSV file. Defaults to `tempdir()`.
 #'
-#' @return A data frame containing the contents written to the CSV file.
-#' The CSV file is saved in the specified directory (or in a temporary
-#' directory by default) with the default filename `init.csv`.
-#'
-#' @export
+#' @returns A data frame containing the contents written to the CSV file.
+#'  The CSV file is saved in the specified directory (or in a temporary
+#'  directory by default) with the default filename `init.csv`.
 #'
 #' @examples
 #' create_init_csv(
-#'   silo_names = c("71", "73"),
-#'   start_times = c("1989", "1989"),
-#'   end_times = c("2000", "2000"),
-#'   treatment_times = c("1991", "control"),
+#'   silo_names = c("73", "46", "54", "23", "86", "32",
+#'                  "71", "58", "64", "59", "85", "57"),
+#'   start_times = "1989",
+#'   end_times = "2000",
+#'   treatment_times = c(rep("control", 6),
+#'                       "1991", "1993", "1996", "1997", "1997", "1998"),
 #'   covariates = c("asian", "black", "male")
 #' )
 #' unlink(file.path(tempdir(), "init.csv"))
-#'
+#' @export
 create_init_csv <- function(silo_names = character(), start_times = character(),
                             end_times = character(),
                             treatment_times = character(),
@@ -53,7 +53,7 @@ create_init_csv <- function(silo_names = character(), start_times = character(),
                covariates = covariates)
   for (arg_name in names(args)) {
     if (!is.character(args[[arg_name]])) {
-      stop(paste("Error:", sQuote(arg_name), "must be of type character."))
+      stop(paste(sQuote(arg_name), "must be of type character."))
     }
   }
 
@@ -74,9 +74,9 @@ create_init_csv <- function(silo_names = character(), start_times = character(),
   vector_lengths <- vapply(list(silo_names, start_times, end_times,
                                 treatment_times), length, integer(1))
   if (length(unique(vector_lengths)) != 1) {
-    stop("Error: 'silo_names' and 'treatment_times' must both have
-     the same length, and 'start_times' and 'end_times' must either have
-     a length of 1 or the same length as 'silo_names' and 'treatment_times'.")
+    stop("`silo_names` and `treatment_times` must both have
+     the same length, and `start_times` and `end_times` must either have
+     a length of 1 or the same length as `silo_names` and `treatment_times`.")
   }
 
   # Parse covariates

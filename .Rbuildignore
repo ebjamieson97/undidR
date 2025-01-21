@@ -1,6 +1,10 @@
 ^undidR\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^man/figures/
 ^dev$
 ^\.gitignore$
+^doc$
+^Meta$
+^README\.Rmd$
+
+^\.github$

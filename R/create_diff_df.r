@@ -2,55 +2,45 @@
 #'
 #' Creates the `empty_diff_df.csv` which lists all of the differences that
 #' need to calculated at each silo in order to compute the aggregate ATT.
-#' The `empty_diff_df.csv` is then sent out to each silo to be filled out.
+#' The `empty_diff_df.csv` is then to be sent out to each silo to be filled out.
 #'
 #' @details Ensure that dates in the `init.csv` are entered consistently
-#' in the same date format. Call `undid_date_formats()` to see a list of valid
-#' date formats. Covariates specified when calling `create_diff_df` will
+#' in the same date format. Call [undid_date_formats()] to see a list of valid
+#' date formats. Covariates specified when calling `create_diff_df()` will
 #' override any covariates specified in the `init.csv`.
 #'
-#' @param init_filepath A string filepath to the `init.csv`.
-#' @param date_format A string specifying the date format used in the
-#' `init.csv`. Call `undid_date_formats()` to see a list of valid date formats.
-#' @param freq A string indicating the length of the time periods to be used
-#' when computing the differences in mean outcomes between periods at each silo.
-#' @param covariates A vector of strings specifying covariates to be considered
-#' at each silo. If `FALSE` uses covariates from the `init.csv`.
-#' Defaults to `FALSE`.
-#' @param freq_multiplier A numeric value or `FALSE`. Specify if the frequency
-#' should be multiplied by a non-zero integer. For example, to consider two year
-#' periods, set `freq = "yearly", freq_multiplier = 2`. Defaults to `FAlSE`.
-#' @param weights A string indicating the type of weighting to use in the
-#' case of common adoption. Defaults to `"standard"`. The `"standard"` weight
-#' is calculated as \eqn{w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}}.
-#' @param filename A string filename for the created .csv file. Defaults to
-#' `empty_diff_df.csv`
-#' @param filepath Filepath to save the .csv file. Defaults to `tempdir()`.
+#' @param init_filepath A character filepath to the `init.csv`.
+#' @param date_format A character specifying the date format used in the
+#'  `init.csv`. Call [undid_date_formats()] to see a list of valid date formats.
+#' @param freq A character indicating the length of the time periods to be used
+#'  when computing the differences in mean outcomes between periods at each
+#'  silo. Options are: `"yearly"`, `"monthly"`, `"weekly"`, or `"daily"`.
+#' @param covariates A character vector specifying covariates to be considered
+#'  at each silo. If `FALSE` (default) uses covariates from the `init.csv`.
+#' @param freq_multiplier A numeric value or `FALSE` (default).
+#'  Specify if the frequency should be multiplied by a non-zero integer.
+#' @param weights A character indicating the weighting to use in the case of
+#'  common adoption. The `"standard"` (default) weight is calculated as
+#'  \eqn{w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}}.
+#'  Options are: `"standard"`.
+#' @param filename A character filename for the created CSV file. Defaults to
+#'  `"empty_diff_df.csv"`
+#' @param filepath Filepath to save the CSV file. Defaults to `tempdir()`.
 #'
-#' @return The `empty_diff_df.csv` is created in the working directory.
-#' Its file path is printed and a dataframe of the `empty_diff_df.csv`
-#' is returned.
-#'
+#' @returns A data frame detailing the silo and time combinations for which
+#'  differences must be calculated in order to compute the aggregate ATT. A
+#'  CSV copy is saved to the specified directory which is then to be sent out
+#'  to each silo.
 #'
 #' @examples
-#' # Create a temporary `init.csv` file for this example
-#' init_df <- data.frame(
-#'   silo_name = c("71", "73"),
-#'   start_time = c("1989", "1989"),
-#'   end_time = c("2000", "2000"),
-#'   treatment_time = c("1991", "control")
-#' )
-#' init_filepath <- tempfile(fileext = ".csv")
-#' write.table(init_df, init_filepath, sep = ",", row.names = FALSE,
-#'             col.names = TRUE, quote = FALSE)
-#'
-#' # Example call to create_diff_df
+#' file_path <- system.file("extdata/staggered", "init.csv",
+#'                          package = "undidR")
 #' create_diff_df(
-#'   init_filepath = init_filepath,
+#'   init_filepath = file_path,
 #'   date_format = "yyyy",
 #'   freq = "yearly"
 #' )
-#' unlink(file.path(tempdir(), c("init.csv", "empty_diff_df.csv")))
+#' unlink(file.path(tempdir(), "empty_diff_df.csv"))
 #' @importFrom utils read.csv write.csv
 #' @export
 create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
@@ -98,7 +88,7 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   } else if (length(unique(init_df$treatment_time)) > 2) {
     diff_df <- .create_staggered_diff_df(init_df, date_format, freq_string)
   } else {
-    stop("Error: only one unique treatment_time value found.")
+    stop("Only one unique `treatment_time` value found.")
   }
 
   # Add the diff_estimate columns
@@ -141,7 +131,7 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
 .parse_freq_freq_multiplier <- function(freq, freq_multiplier) {
   # Process freq_multiplier and freq
   if (!freq %in% names(.undid_env$freq_map)) {
-    stop("Choose: \"yearly\", \"monthly\", \"weekly\", or \"daily\".")
+    stop("Choose: `\"yearly\"`, `\"monthly\"`, `\"weekly\"`, or `\"daily\"`.")
   } else {
     freq <- .undid_env$freq_map[[freq]]
   }
@@ -150,11 +140,11 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   } else if (is.numeric(freq_multiplier)) {
     freq_multiplier <- as.character(as.integer(freq_multiplier))
     if (freq_multiplier == "0") {
-      stop("Ensure freq_multiplier is set to FALSE or a non-zero integer.")
+      stop("Ensure `freq_multiplier` is set to `FALSE` or a non-zero integer.")
     }
     freq <- paste0(freq, "s")
   } else {
-    stop("Ensure freq_multiplier is set to FALSE or a non-zero integer.")
+    stop("Ensure `freq_multiplier` is set to `FALSE` or a non-zero integer.")
   }
   freq_string <- paste0(freq_multiplier, " ", freq)
   return(freq_string)
@@ -209,32 +199,33 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   all_treatment_times <- sort(as.Date(na.omit(init_df$treatment_time_date)))
 
   # Grab start and end times
-  start_window <- as.character(init_df$start_time[1])
-  end_window <- as.character(init_df$end_time[1])
+  start <- init_df$start_time[1]
+  end <- init_df$end_time[1]
+  gt_control <- do.call(rbind,
+                        lapply(all_treatment_times, function(treatment_time) {
+                          times <- seq.Date(from = as.Date(treatment_time),
+                                            to = end, by = freq_string)
+                          data.frame(g = treatment_time, t = times)
+                        }))
+  gt_control <- unique(gt_control)
 
   # Create an empty list to store diff_df subsets for each silo
   diff_df_list <- list()
   # Loop through each silo and create appropriate rows
   for (silo in unique(init_df$silo_name)) {
-    start <- init_df[init_df$silo_name == silo, "start_time"]
-    end <- init_df[init_df$silo_name == silo, "end_time"]
-    times <- seq(from = start, to = end, by = freq_string)
     treatment_time <- init_df[init_df$silo_name == silo, "treatment_time"]
 
     if (treatment_time != "control") {
       treatment_time <- .parse_string_to_date(treatment_time, date_format)
-      gt <- expand.grid(g = treatment_time, t = times)
-      gt <- subset(gt, g <= t)
-      diff_times <- expand.grid(post = seq(from = treatment_time, to = end,
-                                           by = freq_string),
+      gt <- data.frame(g = treatment_time,
+                       t = seq.Date(from = treatment_time,
+                                    to = end, by = freq_string))
+      diff_times <- expand.grid(post = gt$t,
                                 pre = seq(treatment_time, length = 2,
                                           by = paste0("-", freq_string))[2])
       treat <- "1"
     } else if (treatment_time == "control") {
-      gt <- expand.grid(g = all_treatment_times, t = times)
-      gt <- subset(gt, g <= t)
-      gt <- gt[order(gt$g), ]
-      gt <- unique(gt)
+      gt <- gt_control
       diff_times <- data.frame(post = as.Date(NULL), pre = as.Date(NULL))
       for (g in unique(gt$g)) {
         g <- as.Date(g)
@@ -253,6 +244,7 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
     t_vector <- .parse_date_to_string(gt$t, date_format)
     post_vector <- .parse_date_to_string(diff_times$post, date_format)
     pre_vector <- .parse_date_to_string(diff_times$pre, date_format)
+
     # Create the diff_df subset for that silo
     temp_df <- data.frame(silo_name = rep(silo, diff_times_nrows),
                           gvar = gvar_vector,
@@ -294,7 +286,7 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   ri_df <- do.call(rbind, ri_df_list)
   diff_df <- rbind(diff_df, ri_df)
   diff_df$gvar <- .parse_date_to_string(diff_df$gvar, date_format)
-  diff_df$start_time <- start_window
-  diff_df$end_time <- end_window
+  diff_df$start_time <- .parse_date_to_string(start, date_format)
+  diff_df$end_time <- .parse_date_to_string(end, date_format)
   return(diff_df)
 }

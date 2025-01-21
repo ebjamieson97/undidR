@@ -1,6 +1,6 @@
-#' Runs stage two procedures
+#' Runs UNDID stage two procedures
 #'
-#' Based on the information given in the `empty_diff_df.csv`,
+#' Based on the information given in the received `empty_diff_df.csv`,
 #' computes the appropriate differences in mean outcomes at the local silo
 #' and saves as `filled_diff_df_$silo_name.csv`. Also stores trends data
 #' as `trends_data_$silo_name.csv`.
@@ -8,86 +8,55 @@
 #' @details Covariates at the local silo should be renamed to match the
 #' spelling used in the `empty_diff_df.csv`.
 #'
-#' @param empty_diff_filepath A character filepath to the `empty_diff_df.csv`
+#' @param empty_diff_filepath A character filepath to the `empty_diff_df.csv`.
 #' @param silo_name A character indicating the name of the local silo. Ensure
-#' spelling is the same as it is written in the `empty_diff_df.csv`.
+#'  spelling is the same as it is written in the `empty_diff_df.csv`.
 #' @param silo_df A data frame of the local silo's data. Ensure any covariates
-#' are spelled the same in this data frame as they are in the
-#' `empty_diff_df.csv`.
+#'  are spelled the same in this data frame as they are in the
+#'  `empty_diff_df.csv`.
 #' @param time_column A character which indicates the name of the column in
-#' the `silo_df` which contains the date data.
+#'  the `silo_df` which contains the date data. Ensure the `time_column`
+#'  references a column of character values.
 #' @param outcome_column A character which indicates the name of the column in
-#' the `silo_df` which contains the outcome of interest.
+#'  the `silo_df` which contains the outcome of interest. Ensure the
+#'  `outcome_column` references a column of numeric values.
 #' @param silo_date_format A character which indicates the date format which
-#' the date strings in the `time_column` are written in.
-#' @param consider_covariates An optional parameter which if set to `FALSE`
-#' ignores any of the computations involving the covariates.
-#' @param filepath Filepath to save the .csv files. Defaults to `tempdir()`.
+#'  the date strings in the `time_column` are written in.
+#' @param consider_covariates An optional logical parameter which if set to
+#' `FALSE` ignores any of the computations involving the covariates.
+#'  Defaults to `TRUE`.
+#' @param filepath Character value indicating the filepath to
+#'  save the CSV files. Defaults to `tempdir()`.
 #'
-#' @return A list of data frames. The first being the filled differences
-#' data frame, and the second being the trends data data frame.
-#'
-#' @export
+#' @returns A list of data frames. The first being the filled differences
+#' data frame, and the second being the trends data data frame. Use
+#' the suffix $diff_df to access the filled differences data frame, and
+#' use $trends_data to access the trends data data frame.
 #'
 #' @examples
-#' # Create sample silo data
-#' dates <- seq.Date(as.Date("2023-01-01"), as.Date("2023-12-31"), by = "month")
-#' silo_data <- data.frame(
-#'   date = format(dates, "%Y-%m-%d"),
-#'   value = rnorm(length(dates), mean = 100, sd = 10),
-#'   age = sample(30:60, length(dates), replace = TRUE),
-#'   gender = sample(c(1, 0), length(dates), replace = TRUE)
-#' )
+#' # Load data
+#' silo_data <- silo71
+#' empty_diff_path <- system.file("extdata/staggered", "empty_diff_df.csv",
+#'                                package = "undidR")
 #'
-#' # Create a temporary empty_diff_df.csv
-#' empty_diff <- data.frame(
-#'   silo_name = c("hospital_a", "hospital_b"),
-#'   treat = c(1, 0),
-#'   common_treatment_time = c("2023-06-01", "2023-06-01"),
-#'   start_time = c("2023-01-01", "2023-01-01"),
-#'   end_time = c("2023-12-31", "2023-12-31"),
-#'   weights = c("standard", "standard"),
-#'   diff_estimate = c(NA, NA),
-#'   diff_var = c(NA, NA),
-#'   diff_estimate_covariates = c(NA, NA),
-#'   diff_var_covariates = c(NA, NA),
-#'   covariates = c("age;gender", "age;gender"),
-#'   freq = c("1 month", "1 month"),
-#'   date_format = c("%Y-%m-%d", "%Y-%m-%d")
-#' )
-#'
-#' temp_dir <- tempdir()
-#' empty_diff_path <- file.path(temp_dir, "empty_diff_df.csv")
-#' write.csv(empty_diff, empty_diff_path, row.names = FALSE)
-#' # Run the function
+#' # Run `undid_stage_two()`
 #' results <- undid_stage_two(
 #'   empty_diff_filepath = empty_diff_path,
-#'   silo_name = "hospital_a",
+#'   silo_name = "71",
 #'   silo_df = silo_data,
-#'   time_column = "date",
-#'   outcome_column = "value",
-#'   silo_date_format = "yyyy-mm-dd"
+#'   time_column = "year",
+#'   outcome_column = "coll",
+#'   silo_date_format = "yyyy"
 #' )
+#'
 #' # View results
 #' head(results$diff_df)
 #' head(results$trends_data)
-#' # Example without covariates
-#' results_no_cov <- undid_stage_two(
-#'   empty_diff_filepath = empty_diff_path,
-#'   silo_name = "hospital_a",
-#'   silo_df = silo_data,
-#'   time_column = "date",
-#'   outcome_column = "value",
-#'   silo_date_format = "%Y-%m-%d",
-#'   consider_covariates = FALSE
-#' )
-#' # View results with no covariates
-#' head(results_no_cov$diff_df)
-#' head(results_no_cov$trends_data)
+#'
 #' # Clean up temporary files
-#' unlink(file.path(temp_dir, c("empty_diff_df.csv",
-#'                              "diff_df_hospital_a.csv",
-#'                              "trends_data_hospital_a.csv")))
+#' unlink(file.path(tempdir(), c("diff_df_71.csv",
+#'                              "trends_data_71.csv")))
+#' @export
 undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
                             time_column, outcome_column, silo_date_format,
                             consider_covariates = TRUE, filepath = tempdir()) {
@@ -107,7 +76,7 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
   colnames(silo_df)[colnames(silo_df) == time_column] <- "time"
   colnames(silo_df)[colnames(silo_df) == outcome_column] <- "outcome"
   if (!all(!is.na(suppressWarnings(as.numeric(silo_df$outcome))))) {
-    stop("Error: Ensure every value in the outcome column is a numeric value.")
+    stop("Ensure every value in the outcome column is a numeric value.")
   }
   if (!is.numeric(silo_df$outcome)) {
     stop(paste("Please ensure that the", outcome_column,
@@ -126,7 +95,7 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
   } else if (identical(consider_covariates, TRUE)) {
     covariates <- diff_df$covariates[1]
   } else {
-    stop("'consider_covariates' must be entered as either `TRUE` or `FALSE`.")
+    stop("`consider_covariates` must be entered as either `TRUE` or `FALSE`.")
   }
   if (covariates != "none") {
     covariates <- unlist(strsplit(covariates, ";"))
@@ -219,16 +188,16 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
 # Checks that the time and outcome columns actually exist
 .time_and_outcome_check <- function(silo_df, time_column, outcome_column) {
   if (!is.character(time_column)) {
-    stop("Error: Please enter the 'time_column' as a character value.")
+    stop("Please enter the `time_column` as a character value.")
   }
   if (!is.character(outcome_column)) {
-    stop("Error: Please enter the 'outcome_column' as a character value.")
+    stop("Please enter the `outcome_column` as a character value.")
   }
   if (!outcome_column %in% colnames(silo_df)) {
-    stop(paste("Error:", outcome_column, "not found in local silo."))
+    stop(paste(outcome_column, "not found in local silo."))
   }
   if (!time_column %in% colnames(silo_df)) {
-    stop(paste("Error:", time_column, "not found in local silo."))
+    stop(paste(time_column, "not found in local silo."))
   }
 }
 
@@ -308,12 +277,8 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
 
       # Keep track of dates with no obs
       if (count_pre == 0 || count_post == 0) {
-        if (count_pre == 0) {
-          missing_dates <- c(missing_dates, pre)
-        }
-        if (count_post == 0) {
-          missing_dates <- c(missing_dates, post)
-        }
+        missing_dates <- .track_missing_dates(missing_dates, count_pre,
+                                              count_post, pre, post)
       } else {
         x <- cbind(rep(1, length(x)), x)
         y <- as.numeric(silo_df[time_filter, ]$outcome)
@@ -338,16 +303,37 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
 
     }
   }
-  if (length(missing_dates) > 0) {
-    warning(paste("No obs found for:",
-                  paste(sort(unique(as.Date(missing_dates))), collapse = ", ")))
-  }
+  .warn_missing_dates(missing_dates)
+
   diff_df$gvar <- as.Date(diff_df$gvar)
   diff_df$gvar <- .parse_date_to_string(diff_df$gvar,
                                         diff_df$date_format[1])
   diff_df <- diff_df[, !(names(diff_df) %in%
                            c("diff_times_post", "diff_times_pre", "t"))]
   return(diff_df)
+}
+
+#' @keywords internal
+#' Keeps track of missing dates in `fill_diff_df_staggered()`
+.track_missing_dates <- function(missing_dates, count_pre,
+                                 count_post, pre, post) {
+  if (count_pre == 0) {
+    missing_dates <- c(missing_dates, pre)
+  }
+  if (count_post == 0) {
+    missing_dates <- c(missing_dates, post)
+  }
+  return(missing_dates)
+}
+
+#' @keywords internal
+#' Send a warning if there are any missing dates when running
+#'`fill_diff_df_staggered()`
+.warn_missing_dates <- function(missing_dates) {
+  if (length(missing_dates) > 0) {
+    warning(paste("No obs found for:",
+                  paste(sort(unique(as.Date(missing_dates))), collapse = ", ")))
+  }
 }
 
 #' @keywords internal

@@ -1,10 +1,11 @@
-#' Populate the internal .undid_env environment
+#' Populate the internal `.undid_env` environment
 #'
-#' This function populates the .undid_env environment with pre-defined
-#' variables for use within the package. It is called during .onLoad().
+#' This function populates the `.undid_env` environment with pre-defined
+#' variables for use within the package. It is called during `.onLoad()`.
 #'
 #' @param env An environment to populate with package variables.
 #' @keywords internal
+#' @noRd
 .populate_undid_env <- function(env) {
 
   # Define the easily parsed date formats

@@ -1,0 +1,81 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# undidR
+
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+The **undidR** package provides a framework for implementing difference-in-differences with unpoolable data (UNDID) developed in [Karim, Webb, Austin, and Strumpf (2024)](https://arxiv.org/abs/2403.15910v2). UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered treatment adoption scenarios, as well as the optional inclusion of covariates. Additionally, **undidR** incorporates a randomization inference (RI) procedure, based on [MacKinnon and Webb (2020)](https://doi.org/10.1016/j.jeconom.2020.04.024), for calculating p-values for the UNDID ATT.
+
+See the below schematic for an overview of the **undidR** framework:
+```{r schematic, echo=FALSE, fig.align='center', out.width='90%', fig.cap="Schematic of the UNDID framework."}
+knitr::include_graphics("vignettes/figures/undidR_schematic.png")
+```
+## Installation
+
+You can install the development version of undidR from [https://github.com/ebjamieson97/undidR](https://github.com/ebjamieson97/undidR) with:
+
+``` {r, eval=FALSE}
+install.packages("devtools") # If devtools is not already installed
+devtools::install_github("ebjamieson97/undidR", dependencies = TRUE,
+                         build_vignettes = TRUE)
+```
+
+## Examples
+
+For a set of highly detailed examples see the package vignette using:
+```{r}
+vignette("undidR", package = "undidR")
+```
+
+The following code chunk shows some basic examples of using **undidR** at each of its three stages.
+```{r example}
+library(undidR)
+
+# Stage One: `create_init_csv()` & `create_diff_df()`
+init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
+                                       "71", "58", "64", "59", "85", "57"),
+                        start_times = "1989",
+                        end_times = "2000",
+                        treatment_times = c(rep("control", 6),
+                                            "1991", "1993", "1996", "1997",
+                                            "1997", "1998"))
+init
+
+init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
+                               winslash = "/", mustWork = FALSE)
+empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
+                                freq = "yearly",
+                                covariates = c("asian", "black", "male"))
+head(empty_diff_df, 4)
+
+## Stage Two: `undid_stage_two()`
+silo_data <- silo71
+empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
+                                   package = "undidR")
+stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
+                          silo_df = silo_data, time_column = "year",
+                          outcome_column = "coll", silo_date_format = "yyyy")
+head(stage2$diff_df, 4)
+head(stage2$trends_data, 4)
+
+## Stage Three: `undid_stage_three()`
+dir_path <- system.file("extdata/staggered", package = "undidR")
+results <- undid_stage_three(dir_path, agg = "silo", covariates = TRUE,
+                             nperm = 501)
+results
+```

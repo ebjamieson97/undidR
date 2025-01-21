@@ -1,96 +1,118 @@
-#' Plots parallel trends figures.
+#' Plots parallel trends figures
 #'
-#' The `plot_parallel_trends` function combines the trends_data.csv's
-#' and plots parallel trends figures.
+#' The `plot_parallel_trends()` function combines the various
+#' trends data CSV files and plots parallel trends figures.
+#' All treatment and all control groups can be combined so that there
+#' is one control line and one treatment line by setting `combine = TRUE`.
 #'
-#' @details All treatment and all control groups can be combined so that
-#' there is one control line and one treatment line by setting combine = `TRUE`
-#'
-#' @param dir_path A string filepath to the folder containing all
-#' of the trends_data.csv's
+#' @param dir_path A character filepath to the folder containing all
+#'  of the trends data CSV files.
 #' @param save_csv A logical value (defaults to `FALSE`)
-#' indicating whether or not to save the combined_trends_data.csv
+#'  indicating whether or not to save the `combined_trends_data.csv`.
 #' @param combine A logical value (defaults to `FALSE`) indicating whether
-#' to plot each silo separately or to combine silos based on treatment status
-#' @param covariates A logical value (defaults to `FALSE`)
-#' indicating whether or not to consider covariates
-#' @param pch An integer (from 0 to 25, defaults to `NA`)
-#' or vector of integers (from 0 to 25) determines the points used on the plot
-#' @param pch_control An integer (from 0 to 25, defaults to `NULL`)
-#' or vector of integers (from 0 to 25) determines the points used on the plot
-#' for control silos. Takes value of pch if NULL
-#' @param pch_treated An integer (from 0 to 25, defaults to `NULL`) or vector
-#' of integers (from 0 to 25) determines the points used on the plot for treated
-#' silos. Takes value of pch if NULL
-#' @param control_colour A vector of string colours
-#' (defaults to `c("darkgrey", "lightgrey")`) option for the control silos.
-#' If combine = TRUE, takes the 1st value to determine colour of control line
-#' @param control_color Overrides `control_colour` if used
-#' @param treatment_colour A vector of string colours
-#' (defaults to `c("darkred", "lightcoral")`) for the treatment silos.
-#' If combine = TRUE, takes the 1st value to determine colour of control line
-#' @param treatment_color Overrides `treatment_colour` if used
-#' @param lwd An integer (defaults to `2`) for selecting the line widths
-#' @param xlab A string value for the x-axis label (defaults to `NA`)
-#' @param ylab A string value for the y-axis label (defaults to `NA`)
-#' @param title A string value for the title of the plot (defaults to `NA`)
+#'  to plot each silo separately or to combine silos based on treatment status.
+#' @param covariates A logical value (defaults to `FALSE`) indicating whether or
+#'  not to consider covariates, i.e. whether or not to use the `mean_outcome`
+#'  column or the `mean_outcome_residualized` column from the trends data CSV
+#'  files.
+#' @param pch An integer (0 to 25) or vector of integers (from 0 to 25)
+#'  which determine the style of points used on the plot. Setting to `NA`
+#'  (default) will omit points from the plot.
+#' @param pch_control An integer (from 0 to 25) or vector of integers
+#'  (from 0 to 25) which determine the style of points used on the plot
+#'  for control silos. Takes value of pch if set to `NULL` (default).
+#' @param pch_treated An integer (from 0 to 25) or vector of integers
+#'  (from 0 to 25) which determine the style of points used on the plot
+#'  for treated silos. Takes value of pch if set to `NULL` (default).
+#' @param control_colour A character vector of colours
+#'  (defaults to `c("darkgrey", "lightgrey")`) for the control silo lines.
+#'  If `combine = TRUE`, takes the 1st value to determine the colour of
+#'  the control line.
+#' @param control_color Overrides `control_colour` if used. Defaults to `NULL`.
+#' @param treatment_colour A character vector of colours
+#'  (defaults to `c("darkred", "lightcoral")`) for the treatment silos.
+#'  If combine = TRUE, takes the 1st value to determine the colour of
+#'  the control line.
+#' @param treatment_color Overrides `control_colour` if used.
+#'  Defaults to `NULL`.
+#' @param lwd An integer (defaults to `2`) for selecting the line widths.
+#' @param xlab A character value for the x-axis label (defaults to `NA`).
+#' @param ylab A character value for the y-axis label (defaults to `NA`).
+#' @param title A character value for the title of the plot (defaults to `NA`).
 #' @param xticks An integer value denoting how many ticks to display
-#' on the x-axis (defaults to `4`)
-#' @param xdates Takes in a vector of dates to be used at the dates shown
-#' along the x-axis (defaults to `NULL`)
+#'  on the x-axis (defaults to `4`).
+#' @param xdates Takes in a vector of date objects to be used as the dates shown
+#'  along the x-axis (defaults to `NULL`).
 #' @param date_format A string value denoting the format with which to display
-#' the dates along the x-axis (defaults to `"%Y"`)
-#' @param xaxlabsz A double indicating the x-axis label sizes
-#' (defaults to `0.8`)
+#'  the dates along the x-axis (defaults to `"%Y"`).
+#'  Uses standard R date formatting styles.
+#' @param xaxlabsz A double indicating the x-axis label sizes in comparison
+#'  to a standardized default size (defaults to `0.8`).
 #' @param save_png A logical value indicating whether or not to save the plot
-#' as a png file (defaults to `FALSE`)
-#' @param width An integer denoting the width of the saved .png file
-#' @param height An integer denoting the height of the saved .png file
+#'  as a PNG file (defaults to `FALSE`).
+#' @param width An integer denoting the width of the saved PNG file.
+#' @param height An integer denoting the height of the saved PNG file.
 #' @param ylim A vector of two doubles defining the min and max range of the
-#' values on the y-axis. Defaults to the min and max values in
-#' the y column of trends_data
+#'  values on the y-axis. Defaults to the min and max values of the values
+#'  to be plotted.
 #' @param yaxlabsz A double for specifying the y-axis label sizes
-#' (defaults to `0.8`)
-#' @param ylabels A vector of values that you would like
-#' to appear on the y-axis (defaults to `NULL`)
+#'  (defaults to `0.8`) in comparison to a standardized default size.
+#' @param ylabels A vector of values that you would like to appear
+#'  on the y-axis (defaults to `NULL`).
 #' @param yticks An integer denoting how many values to display
-#' along the y-axis (defaults to `4`)
+#'  along the y-axis (defaults to `4`).
 #' @param ydecimal An integer value denoting to which decimal point
-#' the values along the y-axis are rounded to
-#' @param legend_location A string value for determining the location
-#' of the legend (defaults to `topright`)
+#'  the values along the y-axis are rounded to.
+#' @param legend_location A character value for determining the location
+#'  of the legend (defaults to `"topright"`). Options are: `"topright"`,
+#'  `"topleft"`, `"bottomright"`, `"bottomleft"`, `"top"`, `"bottom"`,
+#'  `"left"`, `"right"`, `"center"`.
 #' @param simplify_legend A logical value which if set to `TRUE` shows one
-#' colour for the treatment silos in the legend and one colour for the control.
-#' Defaults to `TRUE`
-#' @param legend_cex An double for adjusting the size of the text in the legend.
-#' Defaults to `0.7`
+#'  colour for the treatment silos in the legend and one colour for the control
+#'  silos. Defaults to `TRUE`.
+#' @param legend_cex A double for adjusting the size of the text in the legend
+#'  compared to a standard default size. Defaults to `0.7`.
 #' @param legend_on A logical value for turning the legend on or off
-#' (defaults to `TRUE`)
-#' @param treatment_indicator_col A string value for determining the colour of
-#' the dashed vertical line showing when treatment times were
-#' (defaults to `"grey"`)
+#'  (defaults to `TRUE`).
+#' @param treatment_indicator_col A character value for determining the colour
+#'  of the dashed vertical lines showing when treatment times were
+#'  (defaults to `"grey"`).
 #' @param treatment_indicator_alpha A double for for determining the
-#' transparency level of the dashed vertical lines showing the treatment
-#' times (defaults to `0.5`)
-#' @param treatment_indicator_lwd A double for for selecting the line width
-#' of the treatment indicator lines (defaults to `2`)
-#' @param treatment_indicator_lty An integer for the selecting the lty option
-#' for the treatment_indicator lines (defaults to `2`)
+#'  transparency level of the dashed vertical lines showing the treatment
+#'  times (defaults to `0.5`).
+#' @param treatment_indicator_lwd A double for selecting the line width
+#'  of the treatment indicator lines (defaults to `2`).
+#' @param treatment_indicator_lty An integer for the selecting the lty option,
+#'  i.e. the line style, for the treatment_indicator lines (defaults to `2`).
 #' @param interpolate A logical value (either `TRUE` or `FALSE`) which
-#' determines if interpolation should be used to fill missing trends data.
-#' Defaults to `FALSE`.
-#' @param filepath Filepath to save the .csv file. Defaults to `tempdir()`.
+#'  determines if interpolation should be used to fill missing trends data.
+#'  Defaults to `FALSE`. Uses a piecewise linear function.
+#' @param filepath Filepath to save the CSV file. Defaults to `tempdir()`.
 #' @param filenamecsv A string filename for the combined trends data
-#' Defaults to `"combined_trends_data.csv"`.
-#' @param filenamepng A string filename for the .png file output.
-#' Defaults to `"undid_plot.png"`.
+#'  Defaults to `"combined_trends_data.csv"`.
+#' @param filenamepng A string filename for the PNG file output.
+#'  Defaults to `"undid_plot.png"`.
+#'
+#' @returns A data frame built from the trends data from all CSV
+#' files in the specified directory. If `combine = FALSE`, the
+#' data frame includes all silos joined by row. If `combine = TRUE`,
+#' the data frame merges treated silos into a single treatment group
+#' and control silos into a single control group.
 #'
 #' @examples
-#' NULL
+#' # Get path to example data included with package
+#' dir_path <- system.file("extdata/staggered", package = "undidR")
 #'
+#' # Basic usage with default parameters
+#' plot_parallel_trends(dir_path)
+#'
+#' # Custom plot with modified parameters
+#' plot_parallel_trends(dir_path, combine = TRUE, lwd = 4,
+#'                      xdates = as.Date(c("1989-01-01", "1991-01-01",
+#'                                         "1993-01-01", "1995-01-01",
+#'                                         "1997-01-01", "1999-01-01")))
 #' @importFrom graphics axis legend lines abline
 #' @export
-#'
 plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
                                  combine = FALSE, pch = NA, pch_control = NA,
                                  pch_treated = NA,
@@ -131,7 +153,8 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
                           date_format)
 
   # Read in trends data (optionally, save csv of combined data)
-  trends_data <- .combine_trends_data(dir_path, covariates, interpolate)
+  trends_data <- .combine_trends_data(dir_path, covariates, interpolate,
+                                      combine)
   if (identical(save_csv, TRUE)) {
     filepath <- .filename_filepath_check(filenamecsv, filepath)
     full_path <- file.path(filepath, filenamecsv)
@@ -170,22 +193,25 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
   # is called in the case of an error
   if (identical(save_png, TRUE)) {
     if (!endsWith(filenamepng, ".png")) {
-      stop("'filenamepng' must end with .png")
+      stop("`filenamepng` must end with .png")
     }
     tryCatch({
-      png(filename = filenamepng, width = width, height = height)
+      png_filepath <- normalizePath(file.path(filepath, filenamepng),
+                                    winslash = "/", mustWork = FALSE)
+      png(filename = png_filepath, width = width, height = height)
       device_open <- TRUE
-      .plot_undid(trends_data, combine, yticks,
-                  ydecimal, xlab, ylab, ylim, xlabels,
-                  date_format, xaxlabsz, yaxlabsz,
-                  treatment_colour, ylabels,
-                  control_colour, pch_treated, pch_control,
-                  lwd, treatment_indicator_alpha,
-                  treatment_indicator_col,
-                  treatment_indicator_lwd,
-                  treatment_indicator_lty, legend_on,
-                  legend_location, legend_cex, simplify_legend,
-                  title)
+      trends_data <- .plot_undid(trends_data, combine, yticks,
+                                 ydecimal, xlab, ylab, ylim, xlabels,
+                                 date_format, xaxlabsz, yaxlabsz,
+                                 treatment_colour, ylabels,
+                                 control_colour, pch_treated, pch_control,
+                                 lwd, treatment_indicator_alpha,
+                                 treatment_indicator_col,
+                                 treatment_indicator_lwd,
+                                 treatment_indicator_lty, legend_on,
+                                 legend_location, legend_cex, simplify_legend,
+                                 title)
+      message(filenamepng, " saved to: ", png_filepath)
     }, error = function(e) {
       message("An error occurred while plotting: ", e$message)
     }, finally = {
@@ -194,17 +220,17 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
       }
     })
   } else if (identical(save_png, FALSE)) {
-    .plot_undid(trends_data, combine, yticks,
-                ydecimal, xlab, ylab, ylim, xlabels,
-                date_format, xaxlabsz, yaxlabsz,
-                treatment_colour, ylabels,
-                control_colour, pch_treated, pch_control,
-                lwd, treatment_indicator_alpha,
-                treatment_indicator_col,
-                treatment_indicator_lwd,
-                treatment_indicator_lty, legend_on,
-                legend_location, legend_cex, simplify_legend,
-                title)
+    trends_data <- .plot_undid(trends_data, combine, yticks,
+                               ydecimal, xlab, ylab, ylim, xlabels,
+                               date_format, xaxlabsz, yaxlabsz,
+                               treatment_colour, ylabels,
+                               control_colour, pch_treated, pch_control,
+                               lwd, treatment_indicator_alpha,
+                               treatment_indicator_col,
+                               treatment_indicator_lwd,
+                               treatment_indicator_lty, legend_on,
+                               legend_location, legend_cex, simplify_legend,
+                               title)
   } else {
     stop("`save_png` must be set to either `TRUE` or `FALSE`.")
   }
@@ -215,11 +241,11 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
 
 #' @keywords internal
 # Combines trends data
-.combine_trends_data <- function(dir_path, covariates, interpolate) {
+.combine_trends_data <- function(dir_path, covariates, interpolate, combine) {
 
   files <- list.files(dir_path,
                       pattern = "^trends_data_.*\\.csv$", full.names = TRUE)
-  if (length(files) == 0) stop(paste("No trends_data csv files found in:",
+  if (length(files) == 0) stop(paste("No trends data CSV files found in:",
                                      dir_path))
   trends_data <- do.call(rbind, lapply(files, read.csv))
   trends_data$silo_name <- as.character(trends_data$silo_name)
@@ -234,24 +260,39 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
   } else if (identical(covariates, FALSE)) {
     trends_data$y <- trends_data$mean_outcome
   } else {
-    stop("Covariates must be set to ")
+    stop("`covariates` must be set to either `TRUE` or `FALSE`")
   }
 
   if (any(is.na(trends_data$y))) {
     if (identical(interpolate, TRUE)) {
       missing_silos <- unique(trends_data[is.na(trends_data$y), "silo_name"])
       for (silo in missing_silos) {
-        trends_data[is.na(trends_data$y) &
-                      trends_data$silo_name ==
-                        silo, "y"] <- .piecewise_linear_function(
+        y_hat <- .piecewise_linear_function(
           trends_data[trends_data$silo_name == silo, "y"]
         )
+        trends_data[is.na(trends_data$y) &
+                      trends_data$silo_name ==
+                        silo, "y"] <- y_hat
       }
+      if (identical(combine, FALSE)) {
+        if (identical(covariates, TRUE)) {
+          trends_data$mean_outcome_residualized <- trends_data$y
+        } else if (identical(covariates, FALSE)) {
+          trends_data$mean_outcome <- trends_data$y
+        }
+      }
+    } else if (identical(interpolate, FALSE)) {
+      warning("`NA` values found, consider setting `interpolate = TRUE`")
     } else if (!(identical(interpolate, FALSE))) {
       stop("`interpolate` must be set to `TRUE` or `FALSE`.")
     }
   }
 
+  if (identical(combine, FALSE)) {
+
+  }
+
+  trends_data$time <- as.Date(trends_data$time)
   return(trends_data)
 
 }
@@ -271,28 +312,31 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
                         title) {
 
   if (identical(combine, TRUE)) {
-    .plot_undid_combined(trends_data, yticks, ydecimal,
-                         xlab, ylab, ylim, xlabels, date_format,
-                         xaxlabsz, yaxlabsz, treatment_colour,
-                         control_colour, pch_treated, pch_control,
-                         lwd, treatment_indicator_alpha,
-                         treatment_indicator_col, ylabels,
-                         treatment_indicator_lwd,
-                         treatment_indicator_lty, legend_on,
-                         legend_location, legend_cex, title)
+    trends_data <- .plot_undid_combined(trends_data, yticks, ydecimal,
+                                        xlab, ylab, ylim, xlabels, date_format,
+                                        xaxlabsz, yaxlabsz, treatment_colour,
+                                        control_colour, pch_treated,
+                                        pch_control,
+                                        lwd, treatment_indicator_alpha,
+                                        treatment_indicator_col, ylabels,
+                                        treatment_indicator_lwd,
+                                        treatment_indicator_lty, legend_on,
+                                        legend_location, legend_cex, title)
+    return(trends_data)
   } else if (identical(combine, FALSE)) {
-    .plot_undid_separate(trends_data, yticks, ydecimal,
-                         control_colour, treatment_colour,
-                         pch_treated, pch_control,
-                         xlab, ylab, xlabels, date_format,
-                         xaxlabsz, yaxlabsz, lwd,
-                         treatment_indicator_alpha,
-                         treatment_indicator_col,
-                         treatment_indicator_lty,
-                         treatment_indicator_lwd,
-                         legend_on, ylabels,
-                         simplify_legend, legend_location,
-                         legend_cex, title, ylim)
+    trends_data <- .plot_undid_separate(trends_data, yticks, ydecimal,
+                                        control_colour, treatment_colour,
+                                        pch_treated, pch_control,
+                                        xlab, ylab, xlabels, date_format,
+                                        xaxlabsz, yaxlabsz, lwd,
+                                        treatment_indicator_alpha,
+                                        treatment_indicator_col,
+                                        treatment_indicator_lty,
+                                        treatment_indicator_lwd,
+                                        legend_on, ylabels,
+                                        simplify_legend, legend_location,
+                                        legend_cex, title, ylim)
+    return(trends_data)
   }
 }
 
@@ -308,9 +352,6 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
                                  treatment_indicator_lty, legend_on,
                                  legend_location, legend_cex, title) {
 
-  if (any(is.na(trends_data$y))) {
-    warning("`NA` values found, consider setting `interpolate = TRUE`.")
-  }
   time <- c()
   silo_name <- c()
   y_vec <- c()
@@ -394,7 +435,7 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
   } else if (!(identical(legend_on, FALSE))) {
     stop("`legend_on` must be set to either `TRUE` or `FALSE`.")
   }
-
+  return(trends_data)
 }
 
 #' @keywords internal
@@ -520,6 +561,7 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
              cex = legend_cex)
     }
   }
+  return(trends_data)
 }
 
 #' @keywords internal
@@ -596,7 +638,7 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
 
   # Validate xdates
   if (!is.null(xdates) && !inherits(xdates, "Date")) {
-    stop("`xdates` must be of class 'Date' or be `NULL`.")
+    stop("`xdates` must be of class `Date` or be `NULL`.")
   }
 
   # Validate title arguments
@@ -622,7 +664,7 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
 .validate_pch <- function(pch, arg_name) {
   if (!(is.numeric(pch) || is.na(pch))) {
     stop(paste0("`", arg_name, "` must be a numeric value between 0 and 25,
-                or NA."))
+                or `NA`."))
   }
   if (is.numeric(pch)) {
     if (any(pch < 0 | pch > 25)) {
@@ -684,10 +726,10 @@ plot_parallel_trends <- function(dir_path, covariates = FALSE, save_csv = FALSE,
 #' Validate date format
 .validate_date_format <- function(date_format) {
   if (!is.character(date_format) || length(date_format) != 1) {
-    stop("'date_format' must be a character string of length 1.")
+    stop("`date_format` must be a character string of length 1.")
   }
   if (!grepl("%", date_format, fixed = TRUE)) {
-    stop("'date_format' must be formatted in standard R format with
+    stop("`date_format` must be formatted in standard R format with
          at least one '%'.")
   }
 }

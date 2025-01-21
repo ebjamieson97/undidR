@@ -19,64 +19,69 @@ undid_stage_three(
 }
 \arguments{
 \item{dir_path}{A character specifying the filepath to the folder containing
-all of the filled_diff_df_ csv files.}
+all of the filled diff df CSV files.}
 
 \item{agg}{A character which specifies the aggregation methodology for
 computing the aggregate ATT in the case of staggered adoption.
-Either \code{"silo"}, \code{"g"}, or \code{"gt"}. Defaults to \code{"silo"}.}
+Options are: \code{"silo"}, \code{"g"}, or \code{"gt"}. Defaults to \code{"silo"}.}
 
 \item{weights}{A logical value (either \code{TRUE} or \code{FALSE}) which determines
 whether or not the weights should be used in the case of common adoption.
 Defaults to \code{TRUE}.}
 
 \item{covariates}{A logical value (either \code{TRUE} or \code{FALSE}) which specifies
-whether to use the 'diff_estimate' or the 'diff_estimate_covariates'}
+whether to use the \code{diff_estimate} column or the \code{diff_estimate_covariates}
+column from the filled diff df CSV files when computing ATTs.}
 
-\item{interpolation}{A logical value or a string which specifies which,
+\item{interpolation}{A logical value or a character which specifies which,
 if any, method of interpolation/extrapolation for missing values of
-'diff_estimate' and 'diff_estimate_covariates' should be used.
-Defaults to \code{FALSE}. There must be at least one diff_estimate or
-'diff_estimate_covariates' value for the (silo,g) group for which
-a missing value is being estimated in order for interpolation to work.
-column when computing the aggregate ATT. Defaults to \code{FALSE}.}
+\code{diff_estimate} or \code{diff_estimate_covariates} should be used.
+There must be at least one \code{diff_estimate} or \code{diff_estimate_covariates}
+value for the (silo,g) group for which a missing value is being estimated
+in order for interpolation to work. Options are: \code{"linear_function"},
+\code{"nearest_value"}, or \code{"piecewise_linear"}. Defaults to \code{FALSE}.}
 
-\item{save_csv}{A logical value (either \code{TRUE} or \code{FALSE}) which determines
-if a .csv copy of the UNDID results will be saved or not. Defaults to \code{FALSE}.}
+\item{save_csv}{A logical value, either \code{TRUE} or \code{FALSE} (default),
+which determines if a CSV copy of the UNDID results will be saved or not.}
 
-\item{filename}{A string filename for the created .csv file.
-Defaults to \code{UNDID_results.csv}}
+\item{filename}{A string filename for the created CSV file.
+Defaults to \code{"UNDID_results.csv"}}
 
-\item{filepath}{Filepath to save the .csv file. Defaults to \code{tempdir()}.}
+\item{filepath}{Filepath to save the CSV file. Defaults to \code{tempdir()}.}
 
 \item{nperm}{Number of random permutations of gvar & silo pairs to consider
 when calculating the randomization inference p-value. Defaults to \code{1001}.}
 
 \item{verbose}{A logical value (either \code{TRUE} or \code{FALSE}) which toggles
-display output showing the progress of the randomization inference.
+messages showing the progress of the randomization inference.
 Defaults to \code{TRUE}.}
 }
 \value{
-A dataframe of group level results (silo, g, or gt) as well
-as the aggregate ATT and its standard erorrs and p-values from
-two-sided tests of agg_ATT == 0.
+A data frame containing the aggregate ATT and its
+standard errors and p-values from two-sided tests of \code{agg_ATT} == 0.
+Also returns group (silo, g, or gt) level ATTs for staggered adoption.
 }
 \description{
-Takes in all of the filled_diff_df_$silo_name.csv's
-and uses them to compute the aggregate ATT, standard errors, and p-values.
+Takes in all of the filled diff df CSV files and uses them to compute
+group level ATTs as well as the aggregate ATT and its standard errors
+and p-values.
 }
 \details{
-The agg parameter specifies the aggregation method used in the
-case of staggered adoption. By default it is set to "silo" so that the ATTs
+The \code{agg} parameter specifies the aggregation method used in the
+case of staggered adoption. By default it is set to \code{"silo"} so that the ATTs
 are aggregated across silos with each silo having equal weight, but can be
-set to "gt" or "g" instead. Aggregating across "g" calculates ATTs for
-groups based on when the treatment time was, with each "g" group having equal
-weight. Aggregating across "gt" calculates ATTs for groups based on when the
-treatment time was and the time for which the ATT is calculated. This \code{agg}
-parameter is ignored in the case of a common treatment time and only takes
-effect in the case of staggered adoption. For common adoption, refer to the
-\code{weights} parameter.
+set to \code{"gt"} or \code{"g"} instead. Aggregating across \code{"g"} calculates ATTs for
+groups based on when the treatment time was, with each \code{"g"} group having
+equal weight. Aggregating across \code{"gt"} calculates ATTs for groups based on
+when the treatment time was and the time for which the ATT is calculated.
+The \code{agg} parameter is ignored in the case of a common treatment time and
+only takes effect in the case of staggered adoption. For common adoption,
+refer to the \code{weights} parameter.
 }
 \examples{
-NULL
+
+# Execute `undid_stage_three()`
+dir <- system.file("extdata/staggered", package = "undidR")
+undid_stage_three(dir, agg = "g", nperm = 501, verbose = FALSE)
 
 }

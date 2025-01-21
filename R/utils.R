@@ -1,5 +1,5 @@
 #' @keywords internal
-# Computes the inverse using solve() and if not invertible tries .pinv()
+#' Computes the inverse using `solve()` and if not invertible tries `.pinv()`
 .inv <- function(x) {
   tryCatch({
     return(solve(x))
@@ -9,7 +9,7 @@
 }
 
 #' @keywords internal
-# Compute Moore-Penrose pseudoinverse
+#' Compute Moore-Penrose pseudoinverse
 .pinv <- function(x, tol = sqrt(.Machine$double.eps)) {
   sv <- svd(x)
   pos <- sv$d > max(tol * sv$d[1], 0)
@@ -18,7 +18,7 @@
 }
 
 #' @keywords internal
-# Compute beta coefficients and their SE's
+#' Compute beta coefficients and their SE's
 .regress <- function(x, y, w = NULL) {
   if (is.null(w)) {
     beta_hat <- .inv(t(x) %*% x) %*% t(x) %*% y
@@ -38,8 +38,8 @@
 
 
 #' @keywords internal
-# Searches vector for missing/non-missing values
-# and returns imputed values using a linear function
+#' Searches vector for missing/non-missing values
+#' and returns imputed values using a linear function
 .extrapolate_linear <- function(y) {
   n <- length(y)
   x_full <- as.matrix(cbind(rep(1, n), seq(1, n)))
@@ -52,8 +52,8 @@
 }
 
 #' @keywords internal
-# Searches vector for missing/non-missing values
-# and returns imputed values by fetching nearest values
+#' Searches vector for missing/non-missing values
+#' and returns imputed values by fetching nearest values
 .get_nearest_value <- function(y) {
 
   y_copy <- y
@@ -76,8 +76,8 @@
 }
 
 #' @keywords internal
-# Searches vector for missing/non-missing values
-# and returns imputed values using piecewise linear functions
+#' Searches vector for missing/non-missing values
+#' and returns imputed values using piecewise linear functions
 .piecewise_linear_function  <- function(y) {
 
   n <- length(y)
@@ -104,7 +104,7 @@
 }
 
 #' @keywords internal
-# Compute the jackknife SE for beta hat given X and Y
+#' Compute the jackknife SE for beta hat given X and Y
 .compute_jknife_se <- function(x, y, agg_att, w = NULL) {
 
   x <- as.matrix(x)
@@ -131,7 +131,7 @@
 }
 
 #' @keywords internal
-#' checks that input is given as TRUE or FALSE
+#' Checks that input is given as TRUE or FALSE
 .validate_logical_args <- function(logical, arg_name) {
   if (!(identical(logical, TRUE) || identical(logical, FALSE))) {
     stop(paste(arg_name, "must be a single `TRUE` or `FALSE` value."))

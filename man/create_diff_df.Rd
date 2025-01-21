@@ -16,64 +16,55 @@ create_diff_df(
 )
 }
 \arguments{
-\item{init_filepath}{A string filepath to the \code{init.csv}.}
+\item{init_filepath}{A character filepath to the \code{init.csv}.}
 
-\item{date_format}{A string specifying the date format used in the
-\code{init.csv}. Call \code{undid_date_formats()} to see a list of valid date formats.}
+\item{date_format}{A character specifying the date format used in the
+\code{init.csv}. Call \code{\link[=undid_date_formats]{undid_date_formats()}} to see a list of valid date formats.}
 
-\item{freq}{A string indicating the length of the time periods to be used
-when computing the differences in mean outcomes between periods at each silo.}
+\item{freq}{A character indicating the length of the time periods to be used
+when computing the differences in mean outcomes between periods at each
+silo. Options are: \code{"yearly"}, \code{"monthly"}, \code{"weekly"}, or \code{"daily"}.}
 
-\item{covariates}{A vector of strings specifying covariates to be considered
-at each silo. If \code{FALSE} uses covariates from the \code{init.csv}.
-Defaults to \code{FALSE}.}
+\item{covariates}{A character vector specifying covariates to be considered
+at each silo. If \code{FALSE} (default) uses covariates from the \code{init.csv}.}
 
-\item{freq_multiplier}{A numeric value or \code{FALSE}. Specify if the frequency
-should be multiplied by a non-zero integer. For example, to consider two year
-periods, set \verb{freq = "yearly", freq_multiplier = 2}. Defaults to \code{FAlSE}.}
+\item{freq_multiplier}{A numeric value or \code{FALSE} (default).
+Specify if the frequency should be multiplied by a non-zero integer.}
 
-\item{weights}{A string indicating the type of weighting to use in the
-case of common adoption. Defaults to \code{"standard"}. The \code{"standard"} weight
-is calculated as \eqn{w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}}.}
+\item{weights}{A character indicating the weighting to use in the case of
+common adoption. The \code{"standard"} (default) weight is calculated as
+\eqn{w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}}.
+Options are: \code{"standard"}.}
 
-\item{filename}{A string filename for the created .csv file. Defaults to
-\code{empty_diff_df.csv}}
+\item{filename}{A character filename for the created CSV file. Defaults to
+\code{"empty_diff_df.csv"}}
 
-\item{filepath}{Filepath to save the .csv file. Defaults to \code{tempdir()}.}
+\item{filepath}{Filepath to save the CSV file. Defaults to \code{tempdir()}.}
 }
 \value{
-The \code{empty_diff_df.csv} is created in the working directory.
-Its file path is printed and a dataframe of the \code{empty_diff_df.csv}
-is returned.
+A data frame detailing the silo and time combinations for which
+differences must be calculated in order to compute the aggregate ATT. A
+CSV copy is saved to the specified directory which is then to be sent out
+to each silo.
 }
 \description{
 Creates the \code{empty_diff_df.csv} which lists all of the differences that
 need to calculated at each silo in order to compute the aggregate ATT.
-The \code{empty_diff_df.csv} is then sent out to each silo to be filled out.
+The \code{empty_diff_df.csv} is then to be sent out to each silo to be filled out.
 }
 \details{
 Ensure that dates in the \code{init.csv} are entered consistently
-in the same date format. Call \code{undid_date_formats()} to see a list of valid
-date formats. Covariates specified when calling \code{create_diff_df} will
+in the same date format. Call \code{\link[=undid_date_formats]{undid_date_formats()}} to see a list of valid
+date formats. Covariates specified when calling \code{create_diff_df()} will
 override any covariates specified in the \code{init.csv}.
 }
 \examples{
-# Create a temporary `init.csv` file for this example
-init_df <- data.frame(
-  silo_name = c("71", "73"),
-  start_time = c("1989", "1989"),
-  end_time = c("2000", "2000"),
-  treatment_time = c("1991", "control")
-)
-init_filepath <- tempfile(fileext = ".csv")
-write.table(init_df, init_filepath, sep = ",", row.names = FALSE,
-            col.names = TRUE, quote = FALSE)
-
-# Example call to create_diff_df
+file_path <- system.file("extdata/staggered", "init.csv",
+                         package = "undidR")
 create_diff_df(
-  init_filepath = init_filepath,
+  init_filepath = file_path,
   date_format = "yyyy",
   freq = "yearly"
 )
-unlink(file.path(tempdir(), c("init.csv", "empty_diff_df.csv")))
+unlink(file.path(tempdir(), "empty_diff_df.csv"))
 }

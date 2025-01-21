@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_parallel_trends.r
 \name{plot_parallel_trends}
 \alias{plot_parallel_trends}
-\title{Plots parallel trends figures.}
+\title{Plots parallel trends figures}
 \usage{
 plot_parallel_trends(
   dir_path,
@@ -47,132 +47,155 @@ plot_parallel_trends(
 )
 }
 \arguments{
-\item{dir_path}{A string filepath to the folder containing all
-of the trends_data.csv's}
+\item{dir_path}{A character filepath to the folder containing all
+of the trends data CSV files.}
 
-\item{covariates}{A logical value (defaults to \code{FALSE})
-indicating whether or not to consider covariates}
+\item{covariates}{A logical value (defaults to \code{FALSE}) indicating whether or
+not to consider covariates, i.e. whether or not to use the \code{mean_outcome}
+column or the \code{mean_outcome_residualized} column from the trends data CSV
+files.}
 
 \item{save_csv}{A logical value (defaults to \code{FALSE})
-indicating whether or not to save the combined_trends_data.csv}
+indicating whether or not to save the \code{combined_trends_data.csv}.}
 
 \item{combine}{A logical value (defaults to \code{FALSE}) indicating whether
-to plot each silo separately or to combine silos based on treatment status}
+to plot each silo separately or to combine silos based on treatment status.}
 
-\item{pch}{An integer (from 0 to 25, defaults to \code{NA})
-or vector of integers (from 0 to 25) determines the points used on the plot}
+\item{pch}{An integer (0 to 25) or vector of integers (from 0 to 25)
+which determine the style of points used on the plot. Setting to \code{NA}
+(default) will omit points from the plot.}
 
-\item{pch_control}{An integer (from 0 to 25, defaults to \code{NULL})
-or vector of integers (from 0 to 25) determines the points used on the plot
-for control silos. Takes value of pch if NULL}
+\item{pch_control}{An integer (from 0 to 25) or vector of integers
+(from 0 to 25) which determine the style of points used on the plot
+for control silos. Takes value of pch if set to \code{NULL} (default).}
 
-\item{pch_treated}{An integer (from 0 to 25, defaults to \code{NULL}) or vector
-of integers (from 0 to 25) determines the points used on the plot for treated
-silos. Takes value of pch if NULL}
+\item{pch_treated}{An integer (from 0 to 25) or vector of integers
+(from 0 to 25) which determine the style of points used on the plot
+for treated silos. Takes value of pch if set to \code{NULL} (default).}
 
-\item{control_colour}{A vector of string colours
-(defaults to \code{c("darkgrey", "lightgrey")}) option for the control silos.
-If combine = TRUE, takes the 1st value to determine colour of control line}
+\item{control_colour}{A character vector of colours
+(defaults to \code{c("darkgrey", "lightgrey")}) for the control silo lines.
+If \code{combine = TRUE}, takes the 1st value to determine the colour of
+the control line.}
 
-\item{control_color}{Overrides \code{control_colour} if used}
+\item{control_color}{Overrides \code{control_colour} if used. Defaults to \code{NULL}.}
 
-\item{treatment_colour}{A vector of string colours
+\item{treatment_colour}{A character vector of colours
 (defaults to \code{c("darkred", "lightcoral")}) for the treatment silos.
-If combine = TRUE, takes the 1st value to determine colour of control line}
+If combine = TRUE, takes the 1st value to determine the colour of
+the control line.}
 
-\item{treatment_color}{Overrides \code{treatment_colour} if used}
+\item{treatment_color}{Overrides \code{control_colour} if used.
+Defaults to \code{NULL}.}
 
-\item{lwd}{An integer (defaults to \code{2}) for selecting the line widths}
+\item{lwd}{An integer (defaults to \code{2}) for selecting the line widths.}
 
-\item{xlab}{A string value for the x-axis label (defaults to \code{NA})}
+\item{xlab}{A character value for the x-axis label (defaults to \code{NA}).}
 
-\item{ylab}{A string value for the y-axis label (defaults to \code{NA})}
+\item{ylab}{A character value for the y-axis label (defaults to \code{NA}).}
 
-\item{title}{A string value for the title of the plot (defaults to \code{NA})}
+\item{title}{A character value for the title of the plot (defaults to \code{NA}).}
 
 \item{xticks}{An integer value denoting how many ticks to display
-on the x-axis (defaults to \code{4})}
+on the x-axis (defaults to \code{4}).}
 
 \item{date_format}{A string value denoting the format with which to display
-the dates along the x-axis (defaults to \code{"\%Y"})}
+the dates along the x-axis (defaults to \code{"\%Y"}).
+Uses standard R date formatting styles.}
 
-\item{xdates}{Takes in a vector of dates to be used at the dates shown
-along the x-axis (defaults to \code{NULL})}
+\item{xdates}{Takes in a vector of date objects to be used as the dates shown
+along the x-axis (defaults to \code{NULL}).}
 
-\item{xaxlabsz}{A double indicating the x-axis label sizes
-(defaults to \code{0.8})}
+\item{xaxlabsz}{A double indicating the x-axis label sizes in comparison
+to a standardized default size (defaults to \code{0.8}).}
 
 \item{save_png}{A logical value indicating whether or not to save the plot
-as a png file (defaults to \code{FALSE})}
+as a PNG file (defaults to \code{FALSE}).}
 
-\item{width}{An integer denoting the width of the saved .png file}
+\item{width}{An integer denoting the width of the saved PNG file.}
 
-\item{height}{An integer denoting the height of the saved .png file}
+\item{height}{An integer denoting the height of the saved PNG file.}
 
 \item{ylim}{A vector of two doubles defining the min and max range of the
-values on the y-axis. Defaults to the min and max values in
-the y column of trends_data}
+values on the y-axis. Defaults to the min and max values of the values
+to be plotted.}
 
 \item{yaxlabsz}{A double for specifying the y-axis label sizes
-(defaults to \code{0.8})}
+(defaults to \code{0.8}) in comparison to a standardized default size.}
 
-\item{ylabels}{A vector of values that you would like
-to appear on the y-axis (defaults to \code{NULL})}
+\item{ylabels}{A vector of values that you would like to appear
+on the y-axis (defaults to \code{NULL}).}
 
 \item{yticks}{An integer denoting how many values to display
-along the y-axis (defaults to \code{4})}
+along the y-axis (defaults to \code{4}).}
 
 \item{ydecimal}{An integer value denoting to which decimal point
-the values along the y-axis are rounded to}
+the values along the y-axis are rounded to.}
 
-\item{legend_location}{A string value for determining the location
-of the legend (defaults to \code{topright})}
+\item{legend_location}{A character value for determining the location
+of the legend (defaults to \code{"topright"}). Options are: \code{"topright"},
+\code{"topleft"}, \code{"bottomright"}, \code{"bottomleft"}, \code{"top"}, \code{"bottom"},
+\code{"left"}, \code{"right"}, \code{"center"}.}
 
 \item{simplify_legend}{A logical value which if set to \code{TRUE} shows one
-colour for the treatment silos in the legend and one colour for the control.
-Defaults to \code{TRUE}}
+colour for the treatment silos in the legend and one colour for the control
+silos. Defaults to \code{TRUE}.}
 
-\item{legend_cex}{An double for adjusting the size of the text in the legend.
-Defaults to \code{0.7}}
+\item{legend_cex}{A double for adjusting the size of the text in the legend
+compared to a standard default size. Defaults to \code{0.7}.}
 
 \item{legend_on}{A logical value for turning the legend on or off
-(defaults to \code{TRUE})}
+(defaults to \code{TRUE}).}
 
-\item{treatment_indicator_col}{A string value for determining the colour of
-the dashed vertical line showing when treatment times were
-(defaults to \code{"grey"})}
+\item{treatment_indicator_col}{A character value for determining the colour
+of the dashed vertical lines showing when treatment times were
+(defaults to \code{"grey"}).}
 
 \item{treatment_indicator_alpha}{A double for for determining the
 transparency level of the dashed vertical lines showing the treatment
-times (defaults to \code{0.5})}
+times (defaults to \code{0.5}).}
 
-\item{treatment_indicator_lwd}{A double for for selecting the line width
-of the treatment indicator lines (defaults to \code{2})}
+\item{treatment_indicator_lwd}{A double for selecting the line width
+of the treatment indicator lines (defaults to \code{2}).}
 
-\item{treatment_indicator_lty}{An integer for the selecting the lty option
-for the treatment_indicator lines (defaults to \code{2})}
+\item{treatment_indicator_lty}{An integer for the selecting the lty option,
+i.e. the line style, for the treatment_indicator lines (defaults to \code{2}).}
 
 \item{interpolate}{A logical value (either \code{TRUE} or \code{FALSE}) which
 determines if interpolation should be used to fill missing trends data.
-Defaults to \code{FALSE}.}
+Defaults to \code{FALSE}. Uses a piecewise linear function.}
 
-\item{filepath}{Filepath to save the .csv file. Defaults to \code{tempdir()}.}
+\item{filepath}{Filepath to save the CSV file. Defaults to \code{tempdir()}.}
 
 \item{filenamecsv}{A string filename for the combined trends data
 Defaults to \code{"combined_trends_data.csv"}.}
 
-\item{filenamepng}{A string filename for the .png file output.
+\item{filenamepng}{A string filename for the PNG file output.
 Defaults to \code{"undid_plot.png"}.}
 }
-\description{
-The \code{plot_parallel_trends} function combines the trends_data.csv's
-and plots parallel trends figures.
+\value{
+A data frame built from the trends data from all CSV
+files in the specified directory. If \code{combine = FALSE}, the
+data frame includes all silos joined by row. If \code{combine = TRUE},
+the data frame merges treated silos into a single treatment group
+and control silos into a single control group.
 }
-\details{
-All treatment and all control groups can be combined so that
-there is one control line and one treatment line by setting combine = \code{TRUE}
+\description{
+The \code{plot_parallel_trends()} function combines the various
+trends data CSV files and plots parallel trends figures.
+All treatment and all control groups can be combined so that there
+is one control line and one treatment line by setting \code{combine = TRUE}.
 }
 \examples{
-NULL
+# Get path to example data included with package
+dir_path <- system.file("extdata/staggered", package = "undidR")
 
+# Basic usage with default parameters
+plot_parallel_trends(dir_path)
+
+# Custom plot with modified parameters
+plot_parallel_trends(dir_path, combine = TRUE, lwd = 4,
+                     xdates = as.Date(c("1989-01-01", "1991-01-01",
+                                        "1993-01-01", "1995-01-01",
+                                        "1997-01-01", "1999-01-01")))
 }

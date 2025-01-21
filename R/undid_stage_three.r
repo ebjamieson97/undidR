@@ -1,59 +1,63 @@
 #' Computes UNDID results
 #'
-#' Takes in all of the filled_diff_df_$silo_name.csv's
-#' and uses them to compute the aggregate ATT, standard errors, and p-values.
+#' Takes in all of the filled diff df CSV files and uses them to compute
+#' group level ATTs as well as the aggregate ATT and its standard errors
+#' and p-values.
 #'
-#' @details The agg parameter specifies the aggregation method used in the
-#' case of staggered adoption. By default it is set to "silo" so that the ATTs
+#' @details
+#' The `agg` parameter specifies the aggregation method used in the
+#' case of staggered adoption. By default it is set to `"silo"` so that the ATTs
 #' are aggregated across silos with each silo having equal weight, but can be
-#' set to "gt" or "g" instead. Aggregating across "g" calculates ATTs for
-#' groups based on when the treatment time was, with each "g" group having equal
-#' weight. Aggregating across "gt" calculates ATTs for groups based on when the
-#' treatment time was and the time for which the ATT is calculated. This `agg`
-#' parameter is ignored in the case of a common treatment time and only takes
-#' effect in the case of staggered adoption. For common adoption, refer to the
-#' `weights` parameter.
+#' set to `"gt"` or `"g"` instead. Aggregating across `"g"` calculates ATTs for
+#' groups based on when the treatment time was, with each `"g"` group having
+#' equal weight. Aggregating across `"gt"` calculates ATTs for groups based on
+#' when the treatment time was and the time for which the ATT is calculated.
+#' The `agg` parameter is ignored in the case of a common treatment time and
+#' only takes effect in the case of staggered adoption. For common adoption,
+#' refer to the `weights` parameter.
 #'
 #' @param dir_path A character specifying the filepath to the folder containing
-#' all of the filled_diff_df_ csv files.
+#'  all of the filled diff df CSV files.
 #' @param agg A character which specifies the aggregation methodology for
-#' computing the aggregate ATT in the case of staggered adoption.
-#' Either `"silo"`, `"g"`, or `"gt"`. Defaults to `"silo"`.
+#'  computing the aggregate ATT in the case of staggered adoption.
+#'  Options are: `"silo"`, `"g"`, or `"gt"`. Defaults to `"silo"`.
 #' @param weights A logical value (either `TRUE` or `FALSE`) which determines
-#' whether or not the weights should be used in the case of common adoption.
-#' Defaults to `TRUE`.
+#'  whether or not the weights should be used in the case of common adoption.
+#'  Defaults to `TRUE`.
 #' @param covariates A logical value (either `TRUE` or `FALSE`) which specifies
-#' whether to use the 'diff_estimate' or the 'diff_estimate_covariates'
-#' @param interpolation A logical value or a string which specifies which,
-#' if any, method of interpolation/extrapolation for missing values of
-#' 'diff_estimate' and 'diff_estimate_covariates' should be used.
-#' Defaults to `FALSE`. There must be at least one diff_estimate or
-#' 'diff_estimate_covariates' value for the (silo,g) group for which
-#' a missing value is being estimated in order for interpolation to work.
-#' column when computing the aggregate ATT. Defaults to `FALSE`.
-#' @param save_csv A logical value (either `TRUE` or `FALSE`) which determines
-#' if a .csv copy of the UNDID results will be saved or not. Defaults to `FALSE`.
-#' @param filename A string filename for the created .csv file.
-#' Defaults to `UNDID_results.csv`
-#' @param filepath Filepath to save the .csv file. Defaults to `tempdir()`.
+#'  whether to use the `diff_estimate` column or the `diff_estimate_covariates`
+#'  column from the filled diff df CSV files when computing ATTs.
+#' @param interpolation A logical value or a character which specifies which,
+#'  if any, method of interpolation/extrapolation for missing values of
+#'  `diff_estimate` or `diff_estimate_covariates` should be used.
+#'  There must be at least one `diff_estimate` or `diff_estimate_covariates`
+#'  value for the (silo,g) group for which a missing value is being estimated
+#'  in order for interpolation to work. Options are: `"linear_function"`,
+#'  `"nearest_value"`, or `"piecewise_linear"`. Defaults to `FALSE`.
+#' @param save_csv A logical value, either `TRUE` or `FALSE` (default),
+#'  which determines if a CSV copy of the UNDID results will be saved or not.
+#' @param filename A string filename for the created CSV file.
+#'  Defaults to `"UNDID_results.csv"`
+#' @param filepath Filepath to save the CSV file. Defaults to `tempdir()`.
 #' @param nperm Number of random permutations of gvar & silo pairs to consider
-#' when calculating the randomization inference p-value. Defaults to `1001`.
+#'  when calculating the randomization inference p-value. Defaults to `1001`.
 #' @param verbose A logical value (either `TRUE` or `FALSE`) which toggles
-#' display output showing the progress of the randomization inference.
-#' Defaults to `TRUE`.
+#'  messages showing the progress of the randomization inference.
+#'  Defaults to `TRUE`.
 #'
-#'
-#' @return A dataframe of group level results (silo, g, or gt) as well
-#' as the aggregate ATT and its standard erorrs and p-values from
-#' two-sided tests of agg_ATT == 0.
+#' @returns A data frame containing the aggregate ATT and its
+#' standard errors and p-values from two-sided tests of `agg_ATT` == 0.
+#' Also returns group (silo, g, or gt) level ATTs for staggered adoption.
 #'
 #' @examples
-#' NULL
+#'
+#' # Execute `undid_stage_three()`
+#' dir <- system.file("extdata/staggered", package = "undidR")
+#' undid_stage_three(dir, agg = "g", nperm = 501, verbose = FALSE)
 #'
 #' @importFrom stats pt na.omit setNames
 #' @importFrom grDevices adjustcolor colorRampPalette dev.off png
 #' @export
-#'
 undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
                               covariates = FALSE, interpolation = FALSE,
                               save_csv = FALSE, filename = "UNDID_results.csv",
@@ -106,13 +110,13 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Return a combined dataframe of all filled_diff_df csv files from a folder
+#' Return a combined dataframe of all filled_diff_df csv files from a folder
 .combine_diff_data <- function(dir_path, covariates = FALSE,
                                interpolation = FALSE) {
 
   files <- list.files(dir_path,
                       pattern = "^filled_diff_df_.*\\.csv$", full.names = TRUE)
-  if (length(files) == 0) stop(paste("No filled_diff_df csv files found in:",
+  if (length(files) == 0) stop(paste("No filled diff df CSV files found in:",
                                      dir_path))
   diff_df <- do.call(rbind, lapply(files, .read_diff_df))
 
@@ -123,7 +127,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
     diff_estimate_na_count <- sum(is.na(diff_df$diff_estimate_covariates))
     value <- "diff_estimate_covariates"
   } else {
-    stop("Set covariates to either `TRUE` or `FALSE`.")
+    stop("Set `covariates` to either `TRUE` or `FALSE`.")
   }
 
   if (diff_estimate_na_count > 0) {
@@ -142,7 +146,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
                                                       collapse = ", ")))
       }
       if (identical(interpolation, FALSE)) {
-        stop(paste("Consider setting 'interpolation' to one of the following:",
+        stop(paste("Consider setting `interpolation` to one of the following:",
                    paste(.undid_env$interpolation_options, collapse = ", ")))
       }
     }
@@ -151,7 +155,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
   if (!identical(FALSE, interpolation)) {
     if (!is.character(interpolation) ||
           (!interpolation %in% .undid_env$interpolation_options)) {
-      stop(paste("Interpolation must be set to `FALSE` or one of:",
+      stop(paste("`interpolation` must be set to `FALSE` or one of:",
                  paste(.undid_env$interpolation_options, collapse = ", ")))
     }
     diff_df <- .interpolate_extrapolate(diff_df, interpolation, value)
@@ -161,8 +165,8 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Returns the combined_diff_df with imputed values or stops
-# if unable to compute these values
+#' Returns the combined_diff_df with imputed values or stops
+#' if unable to compute these values
 .interpolate_extrapolate <- function(diff_df, interpolation, value) {
   silos <- unique(diff_df[is.na(diff_df[[value]]), "silo_name"])
   for (silo in silos) {
@@ -183,18 +187,9 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 
       } else if (non_missing_count > 1) {
         y <- diff_df[mask, value]
-        if (interpolation == "linear_function") {
-          y_hat <- .extrapolate_linear(y)
-        }
-        if (interpolation == "nearest_value") {
-          y_hat <- .get_nearest_value(y)
-        }
-        if (interpolation == "piecewise_linear") {
-          y_hat <- .piecewise_linear_function(y)
-        }
         diff_df[
           mask & is.na(diff_df[[value]]), value
-        ] <- y_hat
+        ] <- .extrap_wrapper(y, interpolation)
       }
     }
   }
@@ -202,7 +197,22 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Runs stage three calculations with agg == "silo"
+#' Simple wrapper to reduce cyclomatic complexity in `.interpolate_extrpolate`
+.extrap_wrapper <- function(y, interpolation) {
+  if (interpolation == "linear_function") {
+    y_hat <- .extrapolate_linear(y)
+  }
+  if (interpolation == "nearest_value") {
+    y_hat <- .get_nearest_value(y)
+  }
+  if (interpolation == "piecewise_linear") {
+    y_hat <- .piecewise_linear_function(y)
+  }
+  return(y_hat)
+}
+
+#' @keywords internal
+#' Runs stage three calculations with agg == "silo"
 .stage_three_silo <- function(diff_df, nperm, verbose) {
 
   # Set up results data frame
@@ -258,7 +268,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Runs stage three calculations with agg == "g"
+#' Runs stage three calculations with agg == "g"
 .stage_three_g <- function(diff_df, nperm, verbose) {
 
   # Set up results data frame
@@ -314,7 +324,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Runs stage three calculations with agg == "gt"
+#' Runs stage three calculations with agg == "gt"
 .stage_three_gt <- function(diff_df, nperm, verbose) {
 
   # Set up results data frame
@@ -367,16 +377,14 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 
 
 #' @keywords internal
-# Procedure for computing randomization inference p-value
-# Takes in the combined_diff data, the method of aggregation,
-# the number of randomizations (nperm), the agg_att to compare to the
-# ri_att's, and an option to print progress of computing the nperm iterations
+#' Procedure for computing randomization inference p-value
+#' Takes in the combined_diff data, the method of aggregation,
+#' the number of randomizations (nperm), the agg_att to compare to the
+#' ri_att's, and an option to print progress of computing the nperm iterations
 .compute_ri_pval <- function(diff_df, agg, nperm, agg_att, verbose) {
 
   # Stop if verbose is not `TRUE` or `FALSE`
-  if (!(identical(verbose, TRUE) || identical(verbose, FALSE))) {
-    stop("`verbose` must be set to `TRUE` or `FALSE`.")
-  }
+  .validate_logical_args(verbose, "verbose")
 
   # Reorder dataframe, grab unique gt groups
   diff_df <- diff_df[order(diff_df$gvar, diff_df$t), ]
@@ -393,17 +401,7 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
   n_unique_perms <- choose(nrow(init), nrow(init[init$treat == 1, ]))
 
   # Stop if nperm is not numeric, display warning if nperm < 500
-  if (!is.numeric(nperm)) {
-    stop("`nperm` must be a numeric value.")
-  } else if (nperm > n_unique_perms) {
-    stop(paste0("`nperm` = ", nperm,
-                " is greater than the number of unique permutations (",
-                n_unique_perms, ").\nSet `nperm` <= ", n_unique_perms))
-  } else if (nperm < 500) {
-    warning("Randomization inference may not be valid with `nperm` < 500.")
-  }
-
-
+  .nperm_check(nperm, n_unique_perms)
 
   # Take gvar assignment from init and randomize across silos `nperm` times
   # Enforce unique permutations
@@ -467,57 +465,8 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
     # Reset row number index
     rownames(ri_df) <- NULL
 
-    # Compute agg_ATT if for agg = "silo"
-    if (agg == "silo") {
-
-      # Store treated silo names and create a preallocation vector for att's
-      treated_silos <- unique(ri_df[ri_df$treat == 1, "silo_name"])
-      att_vector <- rep(NA_real_, length(treated_silos))
-
-      # Loop through treated silos and compute atts for each silo
-      for (i in seq_along(treated_silos)) {
-        silo <- treated_silos[i]
-        treated_mask <- ri_df$silo_name == silo & ri_df$treat == 1
-        gvar_treated <- ri_df[treated_mask, "gvar"][1]
-        control_mask <- ri_df$treat == 0 & ri_df$gvar == gvar_treated
-        subset <- rbind(ri_df[treated_mask, ], ri_df[control_mask, ])
-        x <- cbind(1, subset$treat)
-        y <- subset$y
-        reg <- .regress(x, y)
-        att_vector[i] <- reg$beta_hat[2]
-      }
-
-      # Push the agg_ATT for this iteration with agg = "silo" to ri_att vector
-      ri_att[j] <- mean(att_vector)
-    }
-
-
-    if (agg == "g") {
-      att_vector <- rep(NA_real_, length(new_gvars))
-      # Loop through gvars and compute results
-      for (i in seq_along(new_gvars)) {
-        gvar <- new_gvars[i]
-        mask <- ri_df$gvar == gvar
-        x <- as.matrix(cbind(1, ri_df[mask, "treat"]))
-        y <- as.vector(ri_df[mask, "y"])
-        reg <- .regress(x, y)
-        att_vector[i] <- reg$beta_hat[2]
-      }
-      ri_att[j] <- mean(att_vector)
-    }
-
-    if (agg == "gt") {
-      att_vector <- rep(NA_real_, length(gts))
-      for (i in seq_along(gts)) {
-        gt <- gts[i]
-        mask <- ri_df$gt == gt
-        x <- as.matrix(cbind(1, ri_df[mask, "treat"]))
-        y <- as.vector(ri_df[mask, "y"])
-        reg <- .regress(x, y)
-        att_vector[i] <- reg$beta_hat[2]
-      }
-      ri_att[j] <- mean(att_vector)
-    }
+    # Compute agg_ATT conditional on aggregation method and send to ri_att
+    ri_att[j] <- .ri_agg_att(ri_df, agg, new_gvars, gts)
 
     # Add progress indicator
     if (verbose && j %% 100 == 0) {
@@ -528,20 +477,72 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
 }
 
 #' @keywords internal
-# Runs stage three calculations for common adoption
+#' Checks that nperm is numeric and is less than or equal to n_unique_perms
+#' and greater than 500
+.nperm_check <- function(nperm, n_unique_perms) {
+  if (!is.numeric(nperm)) {
+    stop("`nperm` must be a numeric value.")
+  } else if (nperm > n_unique_perms) {
+    stop(paste0("`nperm` = ", nperm,
+                " is greater than the number of unique permutations (",
+                n_unique_perms, ").\nSet `nperm` <= ", n_unique_perms))
+  } else if (nperm < 500) {
+    warning("Randomization inference may not be valid with `nperm` < 500.")
+  }
+}
+
+#' @keywords internal
+#' Compute agg_att within `.compute_ri_pval()` for a permutation
+.ri_agg_att <- function(ri_df, agg, new_gvars, gts) {
+  if (agg == "silo") {
+    treated_silos <- unique(ri_df[ri_df$treat == 1, "silo_name"])
+    att_vector <- rep(NA_real_, length(treated_silos))
+    for (i in seq_along(treated_silos)) {
+      silo <- treated_silos[i]
+      treated_mask <- ri_df$silo_name == silo & ri_df$treat == 1
+      gvar_treated <- ri_df[treated_mask, "gvar"][1]
+      control_mask <- ri_df$treat == 0 & ri_df$gvar == gvar_treated
+      subset <- rbind(ri_df[treated_mask, ], ri_df[control_mask, ])
+      x <- cbind(1, subset$treat)
+      y <- subset$y
+      reg <- .regress(x, y)
+      att_vector[i] <- reg$beta_hat[2]
+    }
+  }
+
+  if (agg == "g") {
+    att_vector <- rep(NA_real_, length(new_gvars))
+    for (i in seq_along(new_gvars)) {
+      gvar <- new_gvars[i]
+      mask <- ri_df$gvar == gvar
+      x <- as.matrix(cbind(1, ri_df[mask, "treat"]))
+      y <- as.vector(ri_df[mask, "y"])
+      reg <- .regress(x, y)
+      att_vector[i] <- reg$beta_hat[2]
+    }
+  }
+
+  if (agg == "gt") {
+    att_vector <- rep(NA_real_, length(gts))
+    for (i in seq_along(gts)) {
+      gt <- gts[i]
+      mask <- ri_df$gt == gt
+      x <- as.matrix(cbind(1, ri_df[mask, "treat"]))
+      y <- as.vector(ri_df[mask, "y"])
+      reg <- .regress(x, y)
+      att_vector[i] <- reg$beta_hat[2]
+    }
+  }
+
+  return(mean(att_vector))
+}
+
+#' @keywords internal
+#' Runs stage three calculations for common adoption
 .stage_three_common <- function(diff_df, weights, nperm) {
 
   # Construct weights
-  if ((identical(weights, TRUE)) && nrow(diff_df) > 2) {
-    w <- diff_df$weights
-    sum_w <- sum(w)
-    w <- w / sum_w
-    w <- diag(w)
-  } else if ((identical(weights, FALSE)) || nrow(diff_df) == 2) {
-    w <- diag(rep(1, nrow(diff_df)))
-  } else {
-    stop("`weights` must be set to `TRUE` or `FALSE`.")
-  }
+  w <- .stg_thr_weights(weights, diff_df)
 
   # Create results data frame
   results <- data.frame(treatment_time = diff_df$common_treatment_time[1],
@@ -617,4 +618,19 @@ undid_stage_three <- function(dir_path, agg = "silo", weights = TRUE,
   results$RI_pval[1] <- ri_pval
 
   return(results)
+}
+
+#' @keywords internal
+#' Returns weights depending on if weights is true or false
+.stg_thr_weights <- function(weights, diff_df) {
+  if ((identical(weights, TRUE))) {
+    w <- diff_df$weights
+    sum_w <- sum(w)
+    w <- w / sum_w
+    return(diag(w))
+  } else if ((identical(weights, FALSE))) {
+    return(diag(rep(1, nrow(diff_df))))
+  } else {
+    stop("`weights` must be set to `TRUE` or `FALSE`.")
+  }
 }

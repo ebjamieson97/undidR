@@ -7,11 +7,20 @@
 undid_date_formats()
 }
 \value{
-A list of valid date formats
+A named list containing valid date formats:
+\itemize{
+\item \code{General_Formats}: General date formats compatible with the package.
+\item \code{R_Specific_Formats}: Date formats specific to R.
+\item \code{Other_Formats}: Formats seen sometimes in Stata.
+}
 }
 \description{
-The \code{undid_date_formats} function returns a list of all valid date formats
-that can be used within the package
+The \code{undid_date_formats()} function returns a list of all valid date formats
+that can be used within the \code{undidR} package.
+}
+\details{
+The date formats returned by this function are used to ensure
+consistency in date processing within the \code{undidR} package.
 }
 \examples{
 undid_date_formats()

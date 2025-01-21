@@ -2,7 +2,7 @@
 % Please edit documentation in R/undid_stage_two.r
 \name{undid_stage_two}
 \alias{undid_stage_two}
-\title{Runs stage two procedures}
+\title{Runs UNDID stage two procedures}
 \usage{
 undid_stage_two(
   empty_diff_filepath,
@@ -16,7 +16,7 @@ undid_stage_two(
 )
 }
 \arguments{
-\item{empty_diff_filepath}{A character filepath to the \code{empty_diff_df.csv}}
+\item{empty_diff_filepath}{A character filepath to the \code{empty_diff_df.csv}.}
 
 \item{silo_name}{A character indicating the name of the local silo. Ensure
 spelling is the same as it is written in the \code{empty_diff_df.csv}.}
@@ -26,25 +26,31 @@ are spelled the same in this data frame as they are in the
 \code{empty_diff_df.csv}.}
 
 \item{time_column}{A character which indicates the name of the column in
-the \code{silo_df} which contains the date data.}
+the \code{silo_df} which contains the date data. Ensure the \code{time_column}
+references a column of character values.}
 
 \item{outcome_column}{A character which indicates the name of the column in
-the \code{silo_df} which contains the outcome of interest.}
+the \code{silo_df} which contains the outcome of interest. Ensure the
+\code{outcome_column} references a column of numeric values.}
 
 \item{silo_date_format}{A character which indicates the date format which
 the date strings in the \code{time_column} are written in.}
 
-\item{consider_covariates}{An optional parameter which if set to \code{FALSE}
-ignores any of the computations involving the covariates.}
+\item{consider_covariates}{An optional logical parameter which if set to
+\code{FALSE} ignores any of the computations involving the covariates.
+Defaults to \code{TRUE}.}
 
-\item{filepath}{Filepath to save the .csv files. Defaults to \code{tempdir()}.}
+\item{filepath}{Character value indicating the filepath to
+save the CSV files. Defaults to \code{tempdir()}.}
 }
 \value{
 A list of data frames. The first being the filled differences
-data frame, and the second being the trends data data frame.
+data frame, and the second being the trends data data frame. Use
+the suffix $diff_df to access the filled differences data frame, and
+use $trends_data to access the trends data data frame.
 }
 \description{
-Based on the information given in the \code{empty_diff_df.csv},
+Based on the information given in the received \code{empty_diff_df.csv},
 computes the appropriate differences in mean outcomes at the local silo
 and saves as \code{filled_diff_df_$silo_name.csv}. Also stores trends data
 as \code{trends_data_$silo_name.csv}.
@@ -54,62 +60,26 @@ Covariates at the local silo should be renamed to match the
 spelling used in the \code{empty_diff_df.csv}.
 }
 \examples{
-# Create sample silo data
-dates <- seq.Date(as.Date("2023-01-01"), as.Date("2023-12-31"), by = "month")
-silo_data <- data.frame(
-  date = format(dates, "\%Y-\%m-\%d"),
-  value = rnorm(length(dates), mean = 100, sd = 10),
-  age = sample(30:60, length(dates), replace = TRUE),
-  gender = sample(c(1, 0), length(dates), replace = TRUE)
-)
+# Load data
+silo_data <- silo71
+empty_diff_path <- system.file("extdata/staggered", "empty_diff_df.csv",
+                               package = "undidR")
 
-# Create a temporary empty_diff_df.csv
-empty_diff <- data.frame(
-  silo_name = c("hospital_a", "hospital_b"),
-  treat = c(1, 0),
-  common_treatment_time = c("2023-06-01", "2023-06-01"),
-  start_time = c("2023-01-01", "2023-01-01"),
-  end_time = c("2023-12-31", "2023-12-31"),
-  weights = c("standard", "standard"),
-  diff_estimate = c(NA, NA),
-  diff_var = c(NA, NA),
-  diff_estimate_covariates = c(NA, NA),
-  diff_var_covariates = c(NA, NA),
-  covariates = c("age;gender", "age;gender"),
-  freq = c("1 month", "1 month"),
-  date_format = c("\%Y-\%m-\%d", "\%Y-\%m-\%d")
-)
-
-temp_dir <- tempdir()
-empty_diff_path <- file.path(temp_dir, "empty_diff_df.csv")
-write.csv(empty_diff, empty_diff_path, row.names = FALSE)
-# Run the function
+# Run `undid_stage_two()`
 results <- undid_stage_two(
   empty_diff_filepath = empty_diff_path,
-  silo_name = "hospital_a",
+  silo_name = "71",
   silo_df = silo_data,
-  time_column = "date",
-  outcome_column = "value",
-  silo_date_format = "yyyy-mm-dd"
+  time_column = "year",
+  outcome_column = "coll",
+  silo_date_format = "yyyy"
 )
+
 # View results
 head(results$diff_df)
 head(results$trends_data)
-# Example without covariates
-results_no_cov <- undid_stage_two(
-  empty_diff_filepath = empty_diff_path,
-  silo_name = "hospital_a",
-  silo_df = silo_data,
-  time_column = "date",
-  outcome_column = "value",
-  silo_date_format = "\%Y-\%m-\%d",
-  consider_covariates = FALSE
-)
-# View results with no covariates
-head(results_no_cov$diff_df)
-head(results_no_cov$trends_data)
+
 # Clean up temporary files
-unlink(file.path(temp_dir, c("empty_diff_df.csv",
-                             "diff_df_hospital_a.csv",
-                             "trends_data_hospital_a.csv")))
+unlink(file.path(tempdir(), c("diff_df_71.csv",
+                             "trends_data_71.csv")))
 }
