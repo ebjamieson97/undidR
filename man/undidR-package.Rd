@@ -4,9 +4,9 @@
 \name{undidR-package}
 \alias{undidR}
 \alias{undidR-package}
-\title{undidR: Difference-In-Differences with Unpoolable Data}
+\title{undidR: Difference-in-Differences with Unpoolable Data}
 \description{
-A method for estimating difference-in-differences with unpoolable data. Allows for covariates, multiple groups, and staggered adoption.
+A framework for estimating difference-in-differences with unpoolable data, based on Karim, Webb, Austin, and Strumpf (2024) \href{https://arxiv.org/abs/2403.15910v2}{arXiv:2403.15910v2}. Supports common or staggered adoption, multiple groups, and the inclusion of covariates. Also computes p-values for the aggregate average treatment effect on the treated (ATT) via the randomization inference procedure described in MacKinnon and Webb (2020) \doi{10.1016/j.jeconom.2020.04.024}.
 }
 \seealso{
 Useful links:
@@ -17,7 +17,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Eric Jamieson \email{ericbrucejamieson@gmail.com}
+\strong{Maintainer}: Eric Jamieson \email{ericbrucejamieson@gmail.com} [copyright holder]
 
 }
 \keyword{internal}

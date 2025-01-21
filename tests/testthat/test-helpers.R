@@ -92,3 +92,16 @@ test_that("check .parse_date_to_string() for ddmonyyyy format",
     expect_equal(date_str, "01jan1991")
   }
 )
+
+test_that(".parse_string_to_date() works in many contexts",
+  {
+    # Ensure mm/yyyy (or mm-yyyy) format is processed correctly
+    # (other formats are tested implicitly through other tests)
+    date_str <- .parse_string_to_date("04/1991", "mm/yyyy")
+    expect_equal(date_str, as.Date("1991-04-01"))
+
+    expect_error({
+      .parse_string_to_date("25 Sept 1997", "dd month year")
+    }, "Please enter a valid date format.")
+  }
+)

@@ -25,7 +25,8 @@ p-values for the UNDID ATT.
 
 See the image below for an overview of the **undidR** framework:
 <img src="vignettes/figures/undidR_schematic.png" width="90%" style="display: block; margin: auto;" />
-\## Installation
+
+## Installation
 
 You can install the development version of undidR from
 <https://github.com/ebjamieson97/undidR> with:
@@ -58,7 +59,7 @@ init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                         treatment_times = c(rep("control", 6),
                                             "1991", "1993", "1996", "1997",
                                             "1997", "1998"))
-#> init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/init.csv
+#> init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpeOdAQV/init.csv
 init
 #>    silo_name start_time end_time treatment_time
 #> 1         73       1989     2000        control
@@ -79,7 +80,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly",
                                 covariates = c("asian", "black", "male"))
-#> empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/empty_diff_df.csv
+#> empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpeOdAQV/empty_diff_df.csv
 head(empty_diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time
 #> 1        73 1991     0  1991;1990 1991;1991  0       1989     2000
@@ -107,8 +108,8 @@ empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpeOdAQV/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpeOdAQV/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time   end_time
 #> 1        71 1991     1  1991;1990 1991;1991  0 1989-01-01 2000-01-01
@@ -165,7 +166,7 @@ results
 #> 5         NA         NA            NA                NA                   NA
 #> 6         NA         NA            NA                NA                   NA
 #>   agg_ATT_RI_p_val
-#> 1            0.172
+#> 1            0.196
 #> 2               NA
 #> 3               NA
 #> 4               NA

@@ -68,15 +68,38 @@ test_that("simplify_legend can be set to FALSE with no issues",
   }
 )
 
-test_that("plot saves as .png properly",
+test_that("plot saves as .png and .csv properly",
   {
     dir <- system.file("extdata/staggered", package = "undidR")
     trends <- suppressMessages({
       plot_parallel_trends(dir, combine = FALSE, filenamepng = "undid_plot.png",
-                           save_png = TRUE, filepath = tempdir())
+                           save_png = TRUE, save_csv = TRUE,
+                           filenamecsv = "trends_all_silos.csv",
+                           filepath = tempdir())
     })
-    full_path <- normalizePath(file.path(tempdir(), "undid_plot.png"),
-                               winslash = "/", mustWork = FALSE)
-    expect_true(file.exists(full_path))
+    full_path_png <- normalizePath(file.path(tempdir(), "undid_plot.png"),
+                                   winslash = "/", mustWork = FALSE)
+    full_path_csv <- normalizePath(file.path(tempdir(), "trends_all_silos.csv"),
+                                   winslash = "/", mustWork = FALSE)
+    expect_true(file.exists(full_path_png))
+    expect_true(file.exists(full_path_csv))
+  }
+)
+
+test_that("additional plotting args work",
+  {
+    dir <- system.file("extdata/staggered", package = "undidR")
+
+    # Check that pch works
+    expect_error(plot_parallel_trends(dir, combine = FALSE,
+                                      simplify_legend = TRUE,
+                                      pch = 2),
+                 regexp = NA)
+    # Check that American spelling for colour args works
+    expect_error(plot_parallel_trends(dir, combine = FALSE,
+                                      simplify_legend = TRUE,
+                                      control_color = c("red", "coral"),
+                                      treatment_color = c("grey", "blue")),
+                 regexp = NA)
   }
 )
