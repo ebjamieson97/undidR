@@ -6,34 +6,26 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/ebjamieson97/undidR/graph/badge.svg)](https://app.codecov.io/gh/ebjamieson97/undidR)
 <!-- badges: end -->
 
-The **undidR** package provides a framework for implementing
+The **undidR** package provides the framework for implementing
 difference-in-differences with unpoolable data (UNDID) developed in
 [Karim, Webb, Austin, and Strumpf
 (2024)](https://arxiv.org/abs/2403.15910v2). UNDID is designed to
 estimate the average treatment effect on the treated (ATT) in settings
 where data from different silos cannot be pooled together (potentially
 for reasons of confidentiality). The package supports both common and
-staggered treatment adoption scenarios, as well as the optional
-inclusion of covariates. Additionally, **undidR** incorporates a
-randomization inference (RI) procedure, based on [MacKinnon and Webb
+staggered adoption scenarios, as well as the optional inclusion of
+covariates. Additionally, **undidR** incorporates a randomization
+inference (RI) procedure, based on [MacKinnon and Webb
 (2020)](https://doi.org/10.1016/j.jeconom.2020.04.024), for calculating
 p-values for the UNDID ATT.
 
-See the below schematic for an overview of the **undidR** framework:
-
-<div class="figure" style="text-align: center">
-
-<img src="vignettes/figures/undidR_schematic.png" alt="Schematic of the UNDID framework." width="90%" />
-<p class="caption">
-
-Schematic of the UNDID framework.
-</p>
-
-</div>
-
-## Installation
+See the image below for an overview of the **undidR** framework:
+<img src="vignettes/figures/undidR_schematic.png" width="90%" style="display: block; margin: auto;" />
+\## Installation
 
 You can install the development version of undidR from
 <https://github.com/ebjamieson97/undidR> with:
@@ -50,16 +42,15 @@ For a set of highly detailed examples see the package vignette using:
 
 ``` r
 vignette("undidR", package = "undidR")
-#> Warning: vignette 'undidR' not found
 ```
 
-The following code chunk shows some basic examples of using **undidR**
+The following code chunks show some basic examples of using **undidR**
 at each of its three stages.
+
+### Stage One: `create_init_csv()` & `create_diff_df()`
 
 ``` r
 library(undidR)
-
-# Stage One: `create_init_csv()` & `create_diff_df()`
 init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                                        "71", "58", "64", "59", "85", "57"),
                         start_times = "1989",
@@ -67,7 +58,7 @@ init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                         treatment_times = c(rep("control", 6),
                                             "1991", "1993", "1996", "1997",
                                             "1997", "1998"))
-#> init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpCiOHXx/init.csv
+#> init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/init.csv
 init
 #>    silo_name start_time end_time treatment_time
 #> 1         73       1989     2000        control
@@ -88,7 +79,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly",
                                 covariates = c("asian", "black", "male"))
-#> empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpCiOHXx/empty_diff_df.csv
+#> empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/empty_diff_df.csv
 head(empty_diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time
 #> 1        73 1991     0  1991;1990 1991;1991  0       1989     2000
@@ -105,16 +96,19 @@ head(empty_diff_df, 4)
 #> 2 asian;black;male        yyyy 1 year
 #> 3 asian;black;male        yyyy 1 year
 #> 4 asian;black;male        yyyy 1 year
+```
 
-## Stage Two: `undid_stage_two()`
+### Stage Two: `undid_stage_two()`
+
+``` r
 silo_data <- silo71
 empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
                                    package = "undidR")
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpCiOHXx/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpCiOHXx/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpMDdO8j/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time   end_time
 #> 1        71 1991     1  1991;1990 1991;1991  0 1989-01-01 2000-01-01
@@ -142,8 +136,11 @@ head(stage2$trends_data, 4)
 #> 2 asian;black;male        yyyy 1 year
 #> 3 asian;black;male        yyyy 1 year
 #> 4 asian;black;male        yyyy 1 year
+```
 
-## Stage Three: `undid_stage_three()`
+### Stage Three: `undid_stage_three()`
+
+``` r
 dir_path <- system.file("extdata/staggered", package = "undidR")
 results <- undid_stage_three(dir_path, agg = "silo", covariates = TRUE,
                              nperm = 501)
@@ -168,7 +165,7 @@ results
 #> 5         NA         NA            NA                NA                   NA
 #> 6         NA         NA            NA                NA                   NA
 #>   agg_ATT_RI_p_val
-#> 1             0.18
+#> 1            0.172
 #> 2               NA
 #> 3               NA
 #> 4               NA
