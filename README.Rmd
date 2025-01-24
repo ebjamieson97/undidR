@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ebjamieson97/undidR/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/ebjamieson97/undidR/graph/badge.svg)](https://app.codecov.io/gh/ebjamieson97/undidR)
+[![CRAN status](https://www.r-pkg.org/badges/version/undidR)](https://CRAN.R-project.org/package=undidR)
 <!-- badges: end -->
 
 The **undidR** package provides the framework for implementing difference-in-differences with unpoolable data (UNDID) developed in [Karim, Webb, Austin, and Strumpf (2024)](https://arxiv.org/abs/2403.15910v2). UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered adoption scenarios, as well as the optional inclusion of covariates. Additionally, **undidR** incorporates a randomization inference (RI) procedure, based on [MacKinnon and Webb (2020)](https://doi.org/10.1016/j.jeconom.2020.04.024), for calculating p-values for the UNDID ATT.
@@ -29,12 +30,10 @@ knitr::include_graphics("vignettes/figures/undidR_schematic.png")
 
 ## Installation
 
-You can install the development version of undidR from [https://github.com/ebjamieson97/undidR](https://github.com/ebjamieson97/undidR) with:
+You can install the stable release version of `undidR` from [CRAN](https://CRAN.R-project.org/package=undidR) with:
 
-``` {r, eval=FALSE}
-install.packages("devtools") # If devtools is not already installed
-devtools::install_github("ebjamieson97/undidR", dependencies = TRUE,
-                         build_vignettes = TRUE)
+```{r, eval=FALSE}
+install.packages("undidR")
 ```
 
 ## Examples
