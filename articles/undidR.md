@@ -70,7 +70,7 @@ init <- create_init_csv(silo_names = c("73", "46", "71", "58"),
                         end_times = "2000",
                         treatment_times = c("control", "control",
                                             "1991", "1991"))
-#> init.csv saved to: /tmp/RtmpUBe3LX/init.csv
+#> init.csv saved to: /tmp/Rtmp1Qzt4P/init.csv
 init
 #>   silo_name start_time end_time treatment_time
 #> 1        73       1989     2000        control
@@ -85,7 +85,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
                                winslash = "/", mustWork = FALSE)
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both")
-#> empty_diff_df.csv saved to: /tmp/RtmpUBe3LX/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/Rtmp1Qzt4P/empty_diff_df.csv
 empty_diff_df
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        73     0                  1991       1989     2000    both
@@ -117,7 +117,7 @@ init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                         treatment_times = c(rep("control", 6),
                                             "1991", "1993", "1996", "1997",
                                             "1997", "1998"))
-#> init.csv saved to: /tmp/RtmpUBe3LX/init.csv
+#> init.csv saved to: /tmp/Rtmp1Qzt4P/init.csv
 init
 #>    silo_name start_time end_time treatment_time
 #> 1         73       1989     2000        control
@@ -140,7 +140,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both",
                                 covariates = c("asian", "black", "male"))
-#> empty_diff_df.csv saved to: /tmp/RtmpUBe3LX/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/Rtmp1Qzt4P/empty_diff_df.csv
 head(empty_diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both
@@ -199,8 +199,8 @@ empty_diff_filepath <- system.file("extdata/common", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/RtmpUBe3LX/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmpUBe3LX/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/Rtmp1Qzt4P/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/Rtmp1Qzt4P/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        71     1                  1991       1989     2000    both
@@ -233,8 +233,8 @@ empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/RtmpUBe3LX/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmpUBe3LX/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/Rtmp1Qzt4P/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/Rtmp1Qzt4P/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both

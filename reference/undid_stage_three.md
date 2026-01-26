@@ -112,7 +112,10 @@ An UnDiDObj with S3 methods of
 ``` r
 # Execute `undid_stage_three()`
 dir <- system.file("extdata/staggered", package = "undidR")
-undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
+# \donttest{
+   # Recommended: nperm >= 399 for reasonable precision
+   # (~15 seconds on typical hardware)
+   undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
 #> 
 #>   Weighting: both
 #>   Covariates: none
@@ -121,4 +124,5 @@ undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
 #>   Aggregate ATT:  0.0761
 #> 
 #> (5 sub-aggregate estimates available via print(., level='sub'))
+# }
 ```

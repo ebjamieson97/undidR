@@ -151,7 +151,10 @@ inference procedure. Defaults to <code>100</code>.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Execute `undid_stage_three()`</span></span></span>
 <span class="r-in"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/staggered"</span>, package <span class="op">=</span> <span class="st">"undidR"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">undid_stage_three</span><span class="op">(</span><span class="va">dir</span>, agg <span class="op">=</span> <span class="st">"g"</span>, nperm <span class="op">=</span> <span class="fl">399</span>, verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span>   <span class="co"># Recommended: nperm &gt;= 399 for reasonable precision</span></span></span>
+<span class="r-in"><span>   <span class="co"># (~15 seconds on typical hardware)</span></span></span>
+<span class="r-in"><span>   <span class="fu">undid_stage_three</span><span class="op">(</span><span class="va">dir</span>, agg <span class="op">=</span> <span class="st">"g"</span>, nperm <span class="op">=</span> <span class="fl">399</span>, verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Weighting: both</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Covariates: none</span>
@@ -160,6 +163,7 @@ inference procedure. Defaults to <code>100</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Aggregate ATT:  0.0761</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (5 sub-aggregate estimates available via print(., level='sub'))</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
