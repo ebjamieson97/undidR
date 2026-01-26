@@ -83,5 +83,9 @@ and p-values.
 
 # Execute `undid_stage_three()`
 dir <- system.file("extdata/staggered", package = "undidR")
-undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
+\donttest{
+   # Recommended: nperm >= 399 for reasonable precision
+   # (~15 seconds on typical hardware)
+   undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
+}
 }
