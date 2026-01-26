@@ -186,12 +186,18 @@ plot(results)
 ```{r, fig.width=6, fig.height=4, out.width = "70%", dpi=300, fig.align="center"}
 plot(results, event = TRUE)
 ```
+
 ## References
 
 You can access citations by calling `citation("undidR")`.
 
 ```{r}
 citation("undidR")
+```
+
+You can also call `print(citation("undidR"), bibtex = TRUE)`.
+
+```{r}
 print(citation("undidR"), bibtex = TRUE)
 ```
 
