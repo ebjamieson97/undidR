@@ -124,7 +124,7 @@ weights when computing the aggregate ATT from the subaggregate ATTs.</p>
 <span>                        end_times <span class="op">=</span> <span class="st">"2000"</span>,</span>
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"control"</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1991"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpfHtMlr/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpUBe3LX/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;   silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1        73       1989     2000        control</span></span>
@@ -139,7 +139,7 @@ weights when computing the aggregate ATT from the subaggregate ATTs.</p>
 <span>                               winslash <span class="op">=</span> <span class="st">"/"</span>, mustWork <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
 <span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>, weights <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpfHtMlr/empty_diff_df.csv</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpUBe3LX/empty_diff_df.csv</span></span>
 <span><span class="va">empty_diff_df</span></span>
 <span><span class="co">#&gt;   silo_name treat common_treatment_time start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        73     0                  1991       1989     2000    both</span></span>
@@ -171,7 +171,7 @@ weights when computing the aggregate ATT from the subaggregate ATTs.</p>
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1993"</span>, <span class="st">"1996"</span>, <span class="st">"1997"</span>,</span>
 <span>                                            <span class="st">"1997"</span>, <span class="st">"1998"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpfHtMlr/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpUBe3LX/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;    silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1         73       1989     2000        control</span></span>
@@ -194,7 +194,7 @@ weights when computing the aggregate ATT from the subaggregate ATTs.</p>
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
 <span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>, weights <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>                                covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpfHtMlr/empty_diff_df.csv</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpUBe3LX/empty_diff_df.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">empty_diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -247,8 +247,8 @@ that silos may have to rename their covariate columns.</p>
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpfHtMlr/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpfHtMlr/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpUBe3LX/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpUBe3LX/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name treat common_treatment_time start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        71     1                  1991       1989     2000    both</span></span>
@@ -281,8 +281,8 @@ that silos may have to rename their covariate columns.</p>
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpfHtMlr/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpfHtMlr/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpUBe3LX/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpUBe3LX/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -461,8 +461,12 @@ with <code>UnDiDObj$trends</code>.</p>
 <p><img src="undidR_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, event <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="undidR_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;">
-## References</p>
+<p><img src="undidR_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>You can access citations by calling
 <code>citation("undidR")</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
@@ -488,8 +492,11 @@ with <code>UnDiDObj$trends</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
 <span><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
-<span><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"undidR"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span></code></pre></div>
+<p>You can also call
+<code>print(citation("undidR"), bibtex = TRUE)</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"undidR"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; To cite the UN-DID paper, please use:</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;   Karim S, Webb M, Austin N, Strumpf E (2024).</span></span>
@@ -546,7 +553,6 @@ Difference-in-Differences with Unpoolable Data. <a href="https://arxiv.org/abs/2
 <p>MacKinnon, J. and Webb, M. 2020. Randomization inference for
 difference-in-differences with few treated clusters. Journal of
 Econometrics. <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="external-link">https://doi.org/10.1016/j.jeconom.2020.04.024</a></p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

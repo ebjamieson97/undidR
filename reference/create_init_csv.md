@@ -76,7 +76,7 @@ create_init_csv(
                       "1991", "1993", "1996", "1997", "1997", "1998"),
   covariates = c("asian", "black", "male")
 )
-#> init.csv saved to: /tmp/RtmpJgi5JA/init.csv
+#> init.csv saved to: /tmp/RtmpEV6s5f/init.csv
 #>    silo_name start_time end_time treatment_time       covariates
 #> 1         73       1989     2000        control asian;black;male
 #> 2         46       1989     2000        control asian;black;male
