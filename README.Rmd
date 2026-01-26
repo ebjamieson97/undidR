@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![CRAN status](https://www.r-pkg.org/badges/version/undidR)](https://CRAN.R-project.org/package=undidR)
 <!-- badges: end -->
 
-The **undidR** package provides the framework for implementing difference-in-differences with unpoolable data (UNDID) developed in [Karim, Webb, Austin, and Strumpf (2024)](https://arxiv.org/abs/2403.15910v2). UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered adoption scenarios, as well as the optional inclusion of covariates. Additionally, **undidR** incorporates a randomization inference (RI) procedure, based on [MacKinnon and Webb (2020)](https://doi.org/10.1016/j.jeconom.2020.04.024), for calculating p-values for the UNDID ATT.
+The **undidR** package provides the framework for implementing difference-in-differences with unpoolable data (UNDID) developed in [Karim, Webb, Austin, and Strumpf (2025)](https://arxiv.org/abs/2403.15910v2). UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered adoption scenarios, as well as the optional inclusion of covariates. Additionally, **undidR** incorporates a randomization inference (RI) procedure, based on [MacKinnon and Webb (2020)](https://doi.org/10.1016/j.jeconom.2020.04.024), for calculating p-values for the UNDID ATT.
 
 See the image below for an overview of the **undidR** framework:
 ```{r schematic, echo=FALSE, fig.align='center', out.width='90%'}
