@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">undidR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@ described in <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="exte
 (2020)</a> to calculate RI p-values.</p>
 <p>Below is an overview of the <strong>undidR</strong> framework:</p>
 <div class="figure" style="text-align: center">
-<img src="figures%2FundidR_schematic.png" alt="Schematic of the UNDID framework." width="90%"><p class="caption">
+<img src="figures/undidR_schematic.png" class="r-plt" alt="Schematic of the UNDID framework." width="90%"><p class="caption">
 Schematic of the UNDID framework.
 </p>
 </div>
@@ -98,6 +98,20 @@ formats within the <strong>undidR</strong> package call
 <code><a href="../reference/create_init_csv.html">create_init_csv()</a></code> or when calling
 <code><a href="../reference/create_diff_df.html">create_diff_df()</a></code> via the <code>covariates</code>
 parameter.</p>
+<p>The choice of weights is also set during the initialization stage.
+The options of weights are one of: <code>"none"</code>,
+<code>"diff"</code>, <code>"att"</code>, or <code>"both"</code>. Each of
+these options describes levels at which the weights are applied. The
+<code>"diff"</code> option uses weights based off of the number of
+observations (treated and untreated) associated with each contrast
+(difference) at each silo. The weights are used when computing the
+subaggregate ATTs from the differences. The counts of these observations
+are recorded during stage two and kept in the <code>n</code> column of
+the <code>diff_df</code> CSV files. Likewise, the number of observations
+after treatment time are stored in the <code>n_t</code> column. The
+“<code>att</code>” weighting option uses the number of post-treatment
+observations from treated silos associated with each subaggregate ATT as
+weights when computing the aggregate ATT from the subaggregate ATTs.</p>
 <div class="section level3">
 <h3 id="common-treatment-time-stage-one">1.1 Common Treatment Time (Stage One)<a class="anchor" aria-label="anchor" href="#common-treatment-time-stage-one"></a>
 </h3>
@@ -110,7 +124,7 @@ parameter.</p>
 <span>                        end_times <span class="op">=</span> <span class="st">"2000"</span>,</span>
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="st">"control"</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1991"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpiiVlXU/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpfHtMlr/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;   silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1        73       1989     2000        control</span></span>
@@ -124,24 +138,24 @@ parameter.</p>
 <span><span class="va">init_filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"init.csv"</span><span class="op">)</span>,</span>
 <span>                               winslash <span class="op">=</span> <span class="st">"/"</span>, mustWork <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
-<span>                                freq <span class="op">=</span> <span class="st">"yearly"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpiiVlXU/empty_diff_df.csv</span></span>
+<span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>, weights <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpfHtMlr/empty_diff_df.csv</span></span>
 <span><span class="va">empty_diff_df</span></span>
-<span><span class="co">#&gt;   silo_name treat common_treatment_time start_time   end_time  weights</span></span>
-<span><span class="co">#&gt; 1        73     0                  1991 1989-01-01 2000-01-01 standard</span></span>
-<span><span class="co">#&gt; 2        46     0                  1991 1989-01-01 2000-01-01 standard</span></span>
-<span><span class="co">#&gt; 3        71     1                  1991 1989-01-01 2000-01-01 standard</span></span>
-<span><span class="co">#&gt; 4        58     1                  1991 1989-01-01 2000-01-01 standard</span></span>
+<span><span class="co">#&gt;   silo_name treat common_treatment_time start_time end_time weights</span></span>
+<span><span class="co">#&gt; 1        73     0                  1991       1989     2000    both</span></span>
+<span><span class="co">#&gt; 2        46     0                  1991       1989     2000    both</span></span>
+<span><span class="co">#&gt; 3        71     1                  1991       1989     2000    both</span></span>
+<span><span class="co">#&gt; 4        58     1                  1991       1989     2000    both</span></span>
 <span><span class="co">#&gt;   diff_estimate diff_var diff_estimate_covariates diff_var_covariates</span></span>
 <span><span class="co">#&gt; 1            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 2            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 3            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 4            NA       NA                       NA                  NA</span></span>
-<span><span class="co">#&gt;   covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 2       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 3       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 4       none        yyyy 1 year</span></span></code></pre></div>
+<span><span class="co">#&gt;   covariates date_format   freq  n n_t anonymize_size</span></span>
+<span><span class="co">#&gt; 1       none        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 2       none        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 3       none        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 4       none        yyyy 1 year NA  NA             NA</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="staggered-adoption-stage-one">1.2 Staggered Adoption (Stage One)<a class="anchor" aria-label="anchor" href="#staggered-adoption-stage-one"></a>
@@ -157,7 +171,7 @@ parameter.</p>
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1993"</span>, <span class="st">"1996"</span>, <span class="st">"1997"</span>,</span>
 <span>                                            <span class="st">"1997"</span>, <span class="st">"1998"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpiiVlXU/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: /tmp/RtmpfHtMlr/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;    silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1         73       1989     2000        control</span></span>
@@ -178,25 +192,25 @@ parameter.</p>
 <span><span class="va">init_filepath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/normalizePath.html" class="external-link">normalizePath</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"init.csv"</span><span class="op">)</span>,</span>
 <span>                               winslash <span class="op">=</span> <span class="st">"/"</span>, mustWork <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
-<span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>,</span>
+<span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>, weights <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>                                covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpiiVlXU/empty_diff_df.csv</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: /tmp/RtmpfHtMlr/empty_diff_df.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">empty_diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time</span></span>
-<span><span class="co">#&gt; 1        73 1991     0  1991;1990 1991;1991  0       1989     2000</span></span>
-<span><span class="co">#&gt; 2        73 1991     0  1992;1990 1991;1992  0       1989     2000</span></span>
-<span><span class="co">#&gt; 3        73 1991     0  1993;1990 1991;1993  0       1989     2000</span></span>
-<span><span class="co">#&gt; 4        73 1991     0  1994;1990 1991;1994  0       1989     2000</span></span>
+<span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
+<span><span class="co">#&gt; 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 2        73 1991     0  1992;1990 1991;1992  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 3        73 1991     0  1993;1990 1991;1993  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 4        73 1991     0  1994;1990 1991;1994  0       1989     2000    both</span></span>
 <span><span class="co">#&gt;   diff_estimate diff_var diff_estimate_covariates diff_var_covariates</span></span>
 <span><span class="co">#&gt; 1            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 2            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 3            NA       NA                       NA                  NA</span></span>
 <span><span class="co">#&gt; 4            NA       NA                       NA                  NA</span></span>
-<span><span class="co">#&gt;         covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year</span></span></code></pre></div>
+<span><span class="co">#&gt;         covariates date_format   freq  n n_t anonymize_size</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year NA  NA             NA</span></span>
+<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year NA  NA             NA</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -211,6 +225,15 @@ intervals of <code>freq</code>.</p>
 <p>These are returned from <code><a href="../reference/undid_stage_two.html">undid_stage_two()</a></code> as a list of
 two data frames which can be accessed by the suffixes of
 <code>$diff_df</code> and <code>$trends_data</code>, respectively.</p>
+<p>In order to accommodate silos that might have very stringent data
+sharing policies, there is an option of <code>anonymize_weights</code>
+(defaults to <code>FALSE</code>) during the second stage. If selected,
+it will round the counts in the <code>n</code> column (in the trends
+data and diff matrix) as well as the <code>n_t</code> column to the
+closest value of <code>anonymize_size</code> (which defaults to 5).</p>
+<p>The <code><a href="../reference/undid_stage_two.html">undid_stage_two()</a></code> looks for covariates based on how
+they are spelled in the <code>empty_diff_df.csv</code> file. This means
+that silos may have to rename their covariate columns.</p>
 <div class="section level3">
 <h3 id="common-treatment-time-stage-two">2.1 Common Treatment Time (Stage Two)<a class="anchor" aria-label="anchor" href="#common-treatment-time-stage-two"></a>
 </h3>
@@ -224,26 +247,26 @@ two data frames which can be accessed by the suffixes of
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpiiVlXU/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpiiVlXU/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpfHtMlr/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpfHtMlr/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   silo_name treat common_treatment_time start_time   end_time           weights</span></span>
-<span><span class="co">#&gt; 1        71     1                  1991 1989-01-01 2000-01-01 0.829525483304042</span></span>
+<span><span class="co">#&gt;   silo_name treat common_treatment_time start_time end_time weights</span></span>
+<span><span class="co">#&gt; 1        71     1                  1991       1989     2000    both</span></span>
 <span><span class="co">#&gt;   diff_estimate    diff_var diff_estimate_covariates diff_var_covariates</span></span>
-<span><span class="co">#&gt; 1    0.05879783 0.002597221                       NA                  NA</span></span>
-<span><span class="co">#&gt;   covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1       none        yyyy 1 year</span></span>
+<span><span class="co">#&gt; 1    0.05879783 0.002597221               0.06696561         0.002532783</span></span>
+<span><span class="co">#&gt;         covariates date_format   freq   n n_t anonymize_size</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year 569 472             NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">trends_data</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name treatment_time time mean_outcome mean_outcome_residualized</span></span>
-<span><span class="co">#&gt; 1        71           1991 1989    0.3061224                        NA</span></span>
-<span><span class="co">#&gt; 2        71           1991 1990    0.2708333                        NA</span></span>
-<span><span class="co">#&gt; 3        71           1991 1991    0.4000000                        NA</span></span>
-<span><span class="co">#&gt; 4        71           1991 1992    0.3400000                        NA</span></span>
-<span><span class="co">#&gt;   covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 2       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 3       none        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 4       none        yyyy 1 year</span></span></code></pre></div>
+<span><span class="co">#&gt; 1        71           1991 1989    0.3061224                 0.1998800</span></span>
+<span><span class="co">#&gt; 2        71           1991 1990    0.2708333                 0.1502040</span></span>
+<span><span class="co">#&gt; 3        71           1991 1991    0.4000000                 0.1949109</span></span>
+<span><span class="co">#&gt; 4        71           1991 1992    0.3400000                 0.1876636</span></span>
+<span><span class="co">#&gt;         covariates date_format   freq  n</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year 49</span></span>
+<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year 48</span></span>
+<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year 45</span></span>
+<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year 50</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="staggered-adoption-stage-two">2.2 Staggered Adoption (Stage Two)<a class="anchor" aria-label="anchor" href="#staggered-adoption-stage-two"></a>
@@ -258,35 +281,35 @@ two data frames which can be accessed by the suffixes of
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpiiVlXU/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpiiVlXU/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: /tmp/RtmpfHtMlr/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: /tmp/RtmpfHtMlr/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time   end_time</span></span>
-<span><span class="co">#&gt; 1        71 1991     1  1991;1990 1991;1991  0 1989-01-01 2000-01-01</span></span>
-<span><span class="co">#&gt; 2        71 1991     1  1992;1990 1991;1992  0 1989-01-01 2000-01-01</span></span>
-<span><span class="co">#&gt; 3        71 1991     1  1993;1990 1991;1993  0 1989-01-01 2000-01-01</span></span>
-<span><span class="co">#&gt; 4        71 1991     1  1994;1990 1991;1994  0 1989-01-01 2000-01-01</span></span>
+<span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
+<span><span class="co">#&gt; 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 2        71 1991     1  1992;1990 1991;1992  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 3        71 1991     1  1993;1990 1991;1993  0       1989     2000    both</span></span>
+<span><span class="co">#&gt; 4        71 1991     1  1994;1990 1991;1994  0       1989     2000    both</span></span>
 <span><span class="co">#&gt;   diff_estimate    diff_var diff_estimate_covariates diff_var_covariates</span></span>
 <span><span class="co">#&gt; 1    0.12916667 0.009447555              0.116348472         0.009397021</span></span>
 <span><span class="co">#&gt; 2    0.06916667 0.008602222              0.069515594         0.008272557</span></span>
 <span><span class="co">#&gt; 3    0.02546296 0.007975422              0.005133291         0.007767637</span></span>
 <span><span class="co">#&gt; 4    0.02703901 0.008564103              0.029958108         0.008338060</span></span>
-<span><span class="co">#&gt;         covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year</span></span>
+<span><span class="co">#&gt;         covariates date_format   freq   n n_t anonymize_size</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year  93  45             NA</span></span>
+<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year  98  50             NA</span></span>
+<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year 102  54             NA</span></span>
+<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year  95  47             NA</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">trends_data</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name treatment_time time mean_outcome mean_outcome_residualized</span></span>
 <span><span class="co">#&gt; 1        71           1991 1989    0.3061224                 0.1998800</span></span>
 <span><span class="co">#&gt; 2        71           1991 1990    0.2708333                 0.1502040</span></span>
 <span><span class="co">#&gt; 3        71           1991 1991    0.4000000                 0.1949109</span></span>
 <span><span class="co">#&gt; 4        71           1991 1992    0.3400000                 0.1876636</span></span>
-<span><span class="co">#&gt;         covariates date_format   freq</span></span>
-<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year</span></span>
-<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year</span></span></code></pre></div>
+<span><span class="co">#&gt;         covariates date_format   freq  n</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year 49</span></span>
+<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year 48</span></span>
+<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year 45</span></span>
+<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year 50</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -297,13 +320,30 @@ estimate, its standard errors, and its p-values, as well as group level
 ATT estimates for staggered adoption.</p>
 <p>In the case of staggered adoption these group level ATTs can either
 be grouped by silo (<code>agg = "silo"</code>), by treatment time
-(<code>agg = "g"</code>), or by treatment time for every time period
-after treatment has started (<code>agg = "gt"</code>).</p>
-<p>Plotting of parallel trends figures is conveniently fast tracked by
-the use of the <code><a href="../reference/plot_parallel_trends.html">plot_parallel_trends()</a></code> function. Some of the
-most important parameters are highlighted in the examples below, but
-there are a plethora options. Call <code>?plot_parallel_trends()</code>
-to see all the parameters and their descriptions.</p>
+(<code>agg = "g"</code>), by treatment time for every time period after
+treatment has started (<code>agg = "gt"</code>), or, the
+<code>"gt"</code> aggregation can further be separated by silo with
+<code>agg = "sgt"</code>. There is also an option to aggregate by time
+since treatment with <code>agg = "time"</code>.</p>
+<p><code><a href="../reference/undid_stage_three.html">undid_stage_three()</a></code> returns an object with the class
+<code>UnDiDObj</code> which has four S3 methods: <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>,
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>, and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> are likely the most
+useful.</p>
+<p>With the <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method for <code>UnDiDObj</code>, you
+can specify the <code>event</code> parameter as
+<code>event = TRUE</code> in order to produce an event study plot. You
+can specify the confidence intervals on the event study plot with
+<code>ci</code> (defaults to 0.95) and the window for which you want to
+observe the event study plot can be restricted by setting
+<code>event_window = c(start, end)</code> where <code>start</code> and
+<code>end</code> are numeric values describing the periods before and
+after treatment time. The <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method for also inherits
+standard parameters normally used in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>.</p>
+<p>Further, you can access the diff matrix itself that is used to
+compute subaggregate ATTs and the aggregate ATT with
+<code>UnDiDObj$diff</code>. Likewise, you can access the trends data
+with <code>UnDiDObj$trends</code>.</p>
 <div class="section level3">
 <h3 id="common-treatment-time-stage-three">3.1 Common Treatment Time (Stage Three)<a class="anchor" aria-label="anchor" href="#common-treatment-time-stage-three"></a>
 </h3>
@@ -313,138 +353,200 @@ to see all the parameters and their descriptions.</p>
 <span><span class="co"># them together in order to compute the group level ATTs, aggregate ATT</span></span>
 <span><span class="co"># and associated standard errors and p-values.</span></span>
 <span><span class="va">dir_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/common"</span>, package <span class="op">=</span> <span class="st">"undidR"</span><span class="op">)</span></span>
-<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_three.html">undid_stage_three</a></span><span class="op">(</span><span class="va">dir_path</span>, covariates <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in .stage_three_common(diff_df, weights, nperm): `nperm` was set to 1001 but the number of unique permutations is only 6 </span></span>
-<span><span class="co">#&gt; Overriding `nperm` to: 6</span></span>
-<span><span class="co">#&gt; Warning in .stage_three_common(diff_df, weights, nperm): Randomization</span></span>
-<span><span class="co">#&gt; inference may not be valid with `nperm` &lt; 500.</span></span>
-<span><span class="va">results</span></span>
-<span><span class="co">#&gt;   treatment_time   agg_ATT agg_ATT_SE      pval agg_ATT_jknife_SE jknife_pval</span></span>
-<span><span class="co">#&gt; 1           7670 0.0213912 0.02509805 0.4838232         0.0434711   0.6713731</span></span>
-<span><span class="co">#&gt;   RI_pval</span></span>
-<span><span class="co">#&gt; 1     0.4</span></span>
-<span></span>
-<span><span class="co"># We can also view a parallel trends plot of our silos by callling</span></span>
-<span><span class="co"># `plot_parallel_trends()`. This function will search a folder for all</span></span>
-<span><span class="co"># CSV files that start with "trends_data" and combine them. The combined</span></span>
-<span><span class="co"># data is returned by the function.</span></span>
-<span><span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_parallel_trends.html">plot_parallel_trends</a></span><span class="op">(</span></span>
-<span>  <span class="va">dir_path</span>,</span>
-<span>  simplify_legend <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co"># Setting to `FALSE` puts every silo in legend</span></span>
-<span>  lwd <span class="op">=</span> <span class="fl">3</span>,                 <span class="co"># Set line width</span></span>
-<span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,          <span class="co"># (min, max) of y-axis</span></span>
-<span>  xdates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1989-01-01"</span>,</span>
-<span>                     <span class="st">"1991-01-01"</span>,</span>
-<span>                     <span class="st">"1993-01-01"</span>, <span class="co"># Explicity declare dates on x-axis</span></span>
-<span>                     <span class="st">"1995-01-01"</span>,</span>
-<span>                     <span class="st">"1997-01-01"</span>,</span>
-<span>                     <span class="st">"1999-01-01"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  date_format <span class="op">=</span> <span class="st">"%Y"</span>, <span class="co"># Specify x-axis date format</span></span>
-<span>  ylabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Values on y-axis</span></span>
-<span>  legend_location <span class="op">=</span> <span class="st">"topleft"</span>, <span class="co"># Where should the legend go?</span></span>
-<span>  legend_on <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Defaults `TRUE`, can be set to `FALSE` to omit legend</span></span>
-<span>  ylab <span class="op">=</span> <span class="st">"coll"</span>, <span class="co"># y-axis title</span></span>
-<span>  treatment_colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="co"># Set colours of treatment silos</span></span>
-<span>                       <span class="st">"coral"</span><span class="op">)</span>,</span>
-<span>  control_colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"#2fa7cf"</span>, <span class="co"># Colours can be entered as hexcodes</span></span>
-<span>                     <span class="st">"skyblue"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="undidR_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">trends</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   silo_name treatment_time       time mean_outcome mean_outcome_residualized</span></span>
-<span><span class="co">#&gt; 1        46        control 1989-01-01    0.5245902                        NA</span></span>
-<span><span class="co">#&gt; 2        46        control 1990-01-01    0.4545455                        NA</span></span>
-<span><span class="co">#&gt; 3        46        control 1991-01-01    0.5490196                        NA</span></span>
-<span><span class="co">#&gt; 4        46        control 1992-01-01    0.6250000                        NA</span></span>
-<span><span class="co">#&gt;   covariates date_format   freq         y</span></span>
-<span><span class="co">#&gt; 1       none        yyyy 1 year 0.5245902</span></span>
-<span><span class="co">#&gt; 2       none        yyyy 1 year 0.4545455</span></span>
-<span><span class="co">#&gt; 3       none        yyyy 1 year 0.5490196</span></span>
-<span><span class="co">#&gt; 4       none        yyyy 1 year 0.6250000</span></span></code></pre></div>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_three.html">undid_stage_three</a></span><span class="op">(</span><span class="va">dir_path</span>, covariates <span class="op">=</span> <span class="cn">FALSE</span>, nperm <span class="op">=</span> <span class="fl">399</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in undid_stage_three(dir_path, covariates = FALSE, nperm = 399): If 'agg = none' then 'weights' can only be either 'none' or 'diff'.</span></span>
+<span><span class="co">#&gt; Setting weights to 'diff'.</span></span>
+<span><span class="co">#&gt; Warning in .compute_ri_pval(results, diff_df, nperm, agg, weights, max_attempts, : 'nperm' was set to 399 but only 5 exist.</span></span>
+<span><span class="co">#&gt; Setting nperm =  5</span></span>
+<span><span class="co">#&gt; Warning in .compute_ri_pval(results, diff_df, nperm, agg, weights,</span></span>
+<span><span class="co">#&gt; max_attempts, : 'nperm' is less than 399.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Weighting: diff</span></span>
+<span><span class="co">#&gt;   Aggregation: none</span></span>
+<span><span class="co">#&gt;   Not-yet-treated: FALSE</span></span>
+<span><span class="co">#&gt;   Covariates: none</span></span>
+<span><span class="co">#&gt;   HCCME: hc3</span></span>
+<span><span class="co">#&gt;   Period Length: 1 year</span></span>
+<span><span class="co">#&gt;   First Period: 1989</span></span>
+<span><span class="co">#&gt;   Last Period: 2000</span></span>
+<span><span class="co">#&gt;   Permutations: 5</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Aggregate Results:</span></span>
+<span><span class="co">#&gt;         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value</span></span>
+<span><span class="co">#&gt;  0.02381393 0.05027192 0.6823859        0.6   0.04353676          0.622451</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; No sub-aggregate estimates available.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
+<p><img src="undidR_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="staggered-adoption-stage-three">3.2 Staggered Adoption (Stage Three)<a class="anchor" aria-label="anchor" href="#staggered-adoption-stage-three"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># When calling `undid_stage_three()` for staggered adoption it is</span></span>
 <span><span class="co"># important to specify the aggregation method, `agg`.</span></span>
 <span><span class="va">dir_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/staggered"</span>, package <span class="op">=</span> <span class="st">"undidR"</span><span class="op">)</span></span>
 <span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/undid_stage_three.html">undid_stage_three</a></span><span class="op">(</span><span class="va">dir_path</span>, agg <span class="op">=</span> <span class="st">"silo"</span>, covariates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                             nperm <span class="op">=</span> <span class="fl">501</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Completed 100 of 500 permutations</span></span>
-<span><span class="co">#&gt; Completed 200 of 500 permutations</span></span>
-<span><span class="co">#&gt; Completed 300 of 500 permutations</span></span>
-<span><span class="co">#&gt; Completed 400 of 500 permutations</span></span>
-<span><span class="co">#&gt; Completed 500 of 500 permutations</span></span>
+<span>                             nperm <span class="op">=</span> <span class="fl">399</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Completed 100 of 399 permutations</span></span>
+<span><span class="co">#&gt; Completed 200 of 399 permutations</span></span>
+<span><span class="co">#&gt; Completed 300 of 399 permutations</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">diff</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
+<span><span class="co">#&gt; 1         23 7670     0  1991;1990 1991;1991  0       6940    10957    both</span></span>
+<span><span class="co">#&gt; 31        32 7670     0  1991;1990 1991;1991  0       6940    10957    both</span></span>
+<span><span class="co">#&gt; 61        46 7670     0  1991;1990 1991;1991  0       6940    10957    both</span></span>
+<span><span class="co">#&gt; 91        54 7670     0  1991;1990 1991;1991  0       6940    10957    both</span></span>
+<span><span class="co">#&gt;    diff_estimate    diff_var diff_estimate_covariates diff_var_covariates</span></span>
+<span><span class="co">#&gt; 1     0.04995599 0.003025270               0.04003924         0.003049531</span></span>
+<span><span class="co">#&gt; 31    0.15384615 0.010602526               0.10568820         0.010788858</span></span>
+<span><span class="co">#&gt; 61    0.09447415 0.009362733               0.09122789         0.008956869</span></span>
+<span><span class="co">#&gt; 91   -0.13125000 0.009224325              -0.12815145         0.009183679</span></span>
+<span><span class="co">#&gt;          covariates date_format   freq   n n_t anonymize_size diff_times_post</span></span>
+<span><span class="co">#&gt; 1  asian;black;male        yyyy 1 year 334 142             NA            7670</span></span>
+<span><span class="co">#&gt; 31 asian;black;male        yyyy 1 year  92  40             NA            7670</span></span>
+<span><span class="co">#&gt; 61 asian;black;male        yyyy 1 year 106  51             NA            7670</span></span>
+<span><span class="co">#&gt; 91 asian;black;male        yyyy 1 year 109  45             NA            7670</span></span>
+<span><span class="co">#&gt;    diff_times_pre    t           y       y_var</span></span>
+<span><span class="co">#&gt; 1            7305 7670  0.04003924 0.003049531</span></span>
+<span><span class="co">#&gt; 31           7305 7670  0.10568820 0.010788858</span></span>
+<span><span class="co">#&gt; 61           7305 7670  0.09122789 0.008956869</span></span>
+<span><span class="co">#&gt; 91           7305 7670 -0.12815145 0.009183679</span></span>
 <span></span>
-<span><span class="co"># The `nperm` parameter specifies how many permutations</span></span>
-<span><span class="co"># to consider for randomization inference.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">results</span><span class="op">$</span><span class="va">trends</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   silo_name treatment_time       time mean_outcome mean_outcome_residualized</span></span>
+<span><span class="co">#&gt; 1        23        control 1989-01-01    0.3963415                 0.2236357</span></span>
+<span><span class="co">#&gt; 2        23        control 1990-01-01    0.4218750                 0.2119609</span></span>
+<span><span class="co">#&gt; 3        23        control 1991-01-01    0.4718310                 0.2435888</span></span>
+<span><span class="co">#&gt; 4        23        control 1992-01-01    0.4625850                 0.2549387</span></span>
+<span><span class="co">#&gt;         covariates date_format   freq   n time_label         y period</span></span>
+<span><span class="co">#&gt; 1 asian;black;male        yyyy 1 year 164       1989 0.2236357      1</span></span>
+<span><span class="co">#&gt; 2 asian;black;male        yyyy 1 year 192       1990 0.2119609      2</span></span>
+<span><span class="co">#&gt; 3 asian;black;male        yyyy 1 year 142       1991 0.2435888      3</span></span>
+<span><span class="co">#&gt; 4 asian;black;male        yyyy 1 year 147       1992 0.2549387      4</span></span>
+<span><span class="co">#&gt;   time_since_treatment</span></span>
+<span><span class="co">#&gt; 1                   NA</span></span>
+<span><span class="co">#&gt; 2                   NA</span></span>
+<span><span class="co">#&gt; 3                   NA</span></span>
+<span><span class="co">#&gt; 4                   NA</span></span>
 <span></span>
-<span><span class="va">results</span></span>
-<span><span class="co">#&gt;   silo_name    silo_ATT    silo_SE  silo_p_val silo_jknife_SE silo_jknife_p_val</span></span>
-<span><span class="co">#&gt; 1        57 -0.08144843 0.06215099 0.205650586     0.08649845       0.358207857</span></span>
-<span><span class="co">#&gt; 2        58  0.05280529 0.02538483 0.042267963     0.02689507       0.054760168</span></span>
-<span><span class="co">#&gt; 3        59  0.12365658 0.03562132 0.001823809     0.04254611       0.007377655</span></span>
-<span><span class="co">#&gt; 4        64  0.07263498 0.03311326 0.035420278     0.03786681       0.063776333</span></span>
-<span><span class="co">#&gt; 5        71  0.04618515 0.02595757 0.079666710     0.02796956       0.103295735</span></span>
-<span><span class="co">#&gt; 6        85  0.07400401 0.03456541 0.041820821     0.04102590       0.082856564</span></span>
-<span><span class="co">#&gt;      agg_ATT agg_ATT_SE agg_ATT_p_val agg_ATT_jknife_SE agg_ATT_jknife_p_val</span></span>
-<span><span class="co">#&gt; 1 0.04797293 0.02570683     0.1210099        0.02816042            0.1636711</span></span>
-<span><span class="co">#&gt; 2         NA         NA            NA                NA                   NA</span></span>
-<span><span class="co">#&gt; 3         NA         NA            NA                NA                   NA</span></span>
-<span><span class="co">#&gt; 4         NA         NA            NA                NA                   NA</span></span>
-<span><span class="co">#&gt; 5         NA         NA            NA                NA                   NA</span></span>
-<span><span class="co">#&gt; 6         NA         NA            NA                NA                   NA</span></span>
-<span><span class="co">#&gt;   agg_ATT_RI_p_val</span></span>
-<span><span class="co">#&gt; 1            0.152</span></span>
-<span><span class="co">#&gt; 2               NA</span></span>
-<span><span class="co">#&gt; 3               NA</span></span>
-<span><span class="co">#&gt; 4               NA</span></span>
-<span><span class="co">#&gt; 5               NA</span></span>
-<span><span class="co">#&gt; 6               NA</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Weighting: both</span></span>
+<span><span class="co">#&gt;   Aggregation: silo</span></span>
+<span><span class="co">#&gt;   Not-yet-treated: FALSE</span></span>
+<span><span class="co">#&gt;   Covariates: asian, black, male</span></span>
+<span><span class="co">#&gt;   HCCME: hc3</span></span>
+<span><span class="co">#&gt;   Period Length: 1 year</span></span>
+<span><span class="co">#&gt;   First Period: 1989</span></span>
+<span><span class="co">#&gt;   Last Period: 2000</span></span>
+<span><span class="co">#&gt;   Permutations: 399</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Aggregate Results:</span></span>
+<span><span class="co">#&gt;        ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value</span></span>
+<span><span class="co">#&gt;  0.0732032 0.03338214 0.07980594 0.03007519    0.0366304        0.07099495</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Subaggregate Results:</span></span>
+<span><span class="co">#&gt; Silo                        ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
+<span><span class="co">#&gt; 71                       0.0434     0.0275     0.1192     0.3083         NA         NA     0.2428</span></span>
+<span><span class="co">#&gt; 58                       0.0478     0.0260     0.0710     0.4486         NA         NA     0.2305</span></span>
+<span><span class="co">#&gt; 64                       0.0451     0.0407     0.2757     0.5965         NA         NA     0.0910</span></span>
+<span><span class="co">#&gt; 59                       0.1454     0.0412     0.0016     0.0602         NA         NA     0.2922</span></span>
+<span><span class="co">#&gt; 85                       0.0964     0.0401     0.0238     0.3258         NA         NA     0.0941</span></span>
+<span><span class="co">#&gt; 57                      -0.0812     0.0888     0.3718     0.2757         NA         NA     0.0494</span></span>
 <span></span>
-<span><span class="co"># If we have many silos, but want to view a parallel trends plot</span></span>
-<span><span class="co"># we can set `combine = TRUE` when calling `plot_parallel_trends()`</span></span>
-<span><span class="co"># which will combine all treatment silos into a single line, and all</span></span>
-<span><span class="co"># control silos into a single line.</span></span>
-<span><span class="va">trends</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_parallel_trends.html">plot_parallel_trends</a></span><span class="op">(</span></span>
-<span>  <span class="va">dir_path</span>,</span>
-<span>  combine <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Plots one line for control and one line for treated</span></span>
-<span>  simplify_legend <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># Reduces legend to simply "Control" and "Treated"</span></span>
-<span>  lwd <span class="op">=</span> <span class="fl">3</span>,                 <span class="co"># Set line width</span></span>
-<span>  ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.6</span><span class="op">)</span>,          <span class="co"># (min, max) of y-axis</span></span>
-<span>  xdates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1989-01-01"</span>,</span>
-<span>                     <span class="st">"1991-01-01"</span>,</span>
-<span>                     <span class="st">"1993-01-01"</span>, <span class="co"># Explicity declare dates on x-axis</span></span>
-<span>                     <span class="st">"1995-01-01"</span>,</span>
-<span>                     <span class="st">"1997-01-01"</span>,</span>
-<span>                     <span class="st">"1999-01-01"</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>  date_format <span class="op">=</span> <span class="st">"%Y"</span>, <span class="co"># Specify x-axis date format</span></span>
-<span>  ylabels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span><span class="op">)</span>, <span class="co"># Values on y-axis</span></span>
-<span>  legend_location <span class="op">=</span> <span class="st">"topright"</span>, <span class="co"># Where should the legend go?</span></span>
-<span>  treatment_indicator_lwd <span class="op">=</span> <span class="fl">2</span>, <span class="co"># line width for the treatment indicator lines</span></span>
-<span>  treatment_indicator_alpha <span class="op">=</span> <span class="fl">0.2</span>, <span class="co"># transparency for treatment indicator lines</span></span>
-<span>  treatment_indicator_col <span class="op">=</span> <span class="st">"red"</span> <span class="co"># colour for treatment indicator lines</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<p><img src="undidR_files/figure-html/unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;"></p>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></span></code></pre></div>
+<p><img src="undidR_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, event <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="undidR_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="70%" style="display: block; margin: auto;">
+## References</p>
+<p>You can access citations by calling
+<code>citation("undidR")</code>.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">trends</span>, <span class="fl">4</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         time silo_name         y treatment_time date_format</span></span>
-<span><span class="co">#&gt; 1 1989-01-01 Treatment 0.3367429           &lt;NA&gt;        yyyy</span></span>
-<span><span class="co">#&gt; 2 1989-01-01   Control 0.4322536           &lt;NA&gt;        yyyy</span></span>
-<span><span class="co">#&gt; 3 1990-01-01 Treatment 0.3521812           &lt;NA&gt;        yyyy</span></span>
-<span><span class="co">#&gt; 4 1990-01-01   Control 0.4222644           &lt;NA&gt;        yyyy</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level2">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h2>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"undidR"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To cite the UN-DID paper, please use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Karim S, Webb M, Austin N, Strumpf E (2024).</span></span>
+<span><span class="co">#&gt;   "Difference-in-Differences with Unpoolable Data." _arXiv preprint</span></span>
+<span><span class="co">#&gt;   arXiv:2403.15910_. &lt;https://arxiv.org/abs/2403.15910&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; If you are using randomization inference p-values, please also cite:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   MacKinnon J, Webb M (2020). "Randomization inference for</span></span>
+<span><span class="co">#&gt;   difference-in-differences with few treated clusters." _Journal of</span></span>
+<span><span class="co">#&gt;   Econometrics_, *218*(2), 435-450.</span></span>
+<span><span class="co">#&gt;   &lt;https://doi.org/10.1016/j.jeconom.2020.04.024&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To cite the undidR software package:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Jamieson E (2025). "undidR: Difference-in-Differences with Unpoolable</span></span>
+<span><span class="co">#&gt;   Data." R package version 3.0.0,</span></span>
+<span><span class="co">#&gt;   &lt;https://doi.org/10.32614/CRAN.package.undidR&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To see these entries in BibTeX format, use 'print(&lt;citation&gt;,</span></span>
+<span><span class="co">#&gt; bibtex=TRUE)', 'toBibtex(.)', or set</span></span>
+<span><span class="co">#&gt; 'options(citation.bibtex.max=999)'.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">"undidR"</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; To cite the UN-DID paper, please use:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Karim S, Webb M, Austin N, Strumpf E (2024).</span></span>
+<span><span class="co">#&gt;   "Difference-in-Differences with Unpoolable Data." _arXiv preprint</span></span>
+<span><span class="co">#&gt;   arXiv:2403.15910_. &lt;https://arxiv.org/abs/2403.15910&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Article{,</span></span>
+<span><span class="co">#&gt;     title = {Difference-in-Differences with Unpoolable Data},</span></span>
+<span><span class="co">#&gt;     author = {Sunny Karim and Matthew D. Webb and Nichole Austin and Erin Strumpf},</span></span>
+<span><span class="co">#&gt;     year = {2024},</span></span>
+<span><span class="co">#&gt;     journal = {arXiv preprint arXiv:2403.15910},</span></span>
+<span><span class="co">#&gt;     url = {https://arxiv.org/abs/2403.15910},</span></span>
+<span><span class="co">#&gt;   }</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; If you are using randomization inference p-values, please also cite:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   MacKinnon J, Webb M (2020). "Randomization inference for</span></span>
+<span><span class="co">#&gt;   difference-in-differences with few treated clusters." _Journal of</span></span>
+<span><span class="co">#&gt;   Econometrics_, *218*(2), 435-450.</span></span>
+<span><span class="co">#&gt;   &lt;https://doi.org/10.1016/j.jeconom.2020.04.024&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Article{,</span></span>
+<span><span class="co">#&gt;     title = {Randomization inference for difference-in-differences with few treated clusters},</span></span>
+<span><span class="co">#&gt;     author = {James G. MacKinnon and Matthew D. Webb},</span></span>
+<span><span class="co">#&gt;     year = {2020},</span></span>
+<span><span class="co">#&gt;     journal = {Journal of Econometrics},</span></span>
+<span><span class="co">#&gt;     volume = {218},</span></span>
+<span><span class="co">#&gt;     number = {2},</span></span>
+<span><span class="co">#&gt;     pages = {435-450},</span></span>
+<span><span class="co">#&gt;     url = {https://doi.org/10.1016/j.jeconom.2020.04.024},</span></span>
+<span><span class="co">#&gt;   }</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; To cite the undidR software package:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   Jamieson E (2025). "undidR: Difference-in-Differences with Unpoolable</span></span>
+<span><span class="co">#&gt;   Data." R package version 3.0.0,</span></span>
+<span><span class="co">#&gt;   &lt;https://doi.org/10.32614/CRAN.package.undidR&gt;.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; A BibTeX entry for LaTeX users is</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   @Misc{,</span></span>
+<span><span class="co">#&gt;     title = {undidR: Difference-in-Differences with Unpoolable Data},</span></span>
+<span><span class="co">#&gt;     author = {Eric Jamieson},</span></span>
+<span><span class="co">#&gt;     year = {2025},</span></span>
+<span><span class="co">#&gt;     note = {R package version 3.0.0},</span></span>
+<span><span class="co">#&gt;     url = {https://doi.org/10.32614/CRAN.package.undidR},</span></span>
+<span><span class="co">#&gt;   }</span></span></code></pre></div>
 <p>Karim, S., Webb, M., Austin, N., and Strumpf, E. 2024.
 Difference-in-Differences with Unpoolable Data. <a href="https://arxiv.org/abs/2403.15910" class="external-link">https://arxiv.org/abs/2403.15910</a></p>
 <p>MacKinnon, J. and Webb, M. 2020. Randomization inference for
 difference-in-differences with few treated clusters. Journal of
 Econometrics. <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="external-link">https://doi.org/10.1016/j.jeconom.2020.04.024</a></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -457,7 +559,7 @@ Econometrics. <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="ext
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

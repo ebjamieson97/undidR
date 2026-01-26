@@ -11,7 +11,7 @@ The empty_diff_df.csv is then to be sent out to each silo to be filled out."></h
 
     <a class="navbar-brand me-2" href="../index.html">undidR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -52,7 +52,7 @@ The <code>empty_diff_df.csv</code> is then to be sent out to each silo to be fil
 <span>  <span class="va">freq</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  freq_multiplier <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  weights <span class="op">=</span> <span class="st">"standard"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>  filename <span class="op">=</span> <span class="st">"empty_diff_df.csv"</span>,</span>
 <span>  filepath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -88,10 +88,14 @@ Specify if the frequency should be multiplied by a non-zero integer.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>A character indicating the weighting to use in the case of
-common adoption. The <code>"standard"</code> (default) weight is calculated as
-\(w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}\).
-Options are: <code>"standard"</code>.</p></dd>
+<dd><p>A character indicating the weighting to use. The options are
+<code>"none"</code>, <code>"diff"</code>, <code>"att"</code>, and <code>"both"</code>. The options reflect the levels at
+which weights are applied. <code>"diff"</code> uses weights based off of the number
+of observations (treated and untreated) when calculating the subaggregate
+ATTs. <code>"att"</code> uses weights based off of the number of treated observations
+associated with each subaggregate ATT when calculating the aggregate ATT.
+<code>"both"</code> applies weighting at both levels, and <code>"none"</code> does not use
+weights at all. Defaults to <code>"both"</code>.</p></dd>
 
 
 <dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
@@ -127,368 +131,368 @@ override any covariates specified in the <code>init.csv</code>.</p>
 <span class="r-in"><span>  date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span></span>
 <span class="r-in"><span>  freq <span class="op">=</span> <span class="st">"yearly"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> empty_diff_df.csv saved to: /tmp/RtmpuNv0QI/empty_diff_df.csv</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     silo_name gvar treat diff_times        gt RI start_time end_time</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          73 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          73 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          73 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          73 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          73 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          73 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7          73 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8          73 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9          73 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10         73 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11         46 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12         46 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13         46 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14         46 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15         46 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16         46 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17         46 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18         46 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19         46 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20         46 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21         54 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22         54 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23         54 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24         54 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25         54 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26         54 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27         54 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28         54 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29         54 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30         54 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31         23 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32         23 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33         23 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34         23 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35         23 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36         23 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37         23 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38         23 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39         23 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40         23 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41         86 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42         86 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43         86 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44         86 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45         86 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46         86 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47         86 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48         86 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49         86 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50         86 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51         32 1991     0  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52         32 1991     0  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53         32 1991     0  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54         32 1991     0  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55         32 1991     0  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56         32 1991     0  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57         32 1991     0  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58         32 1991     0  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59         32 1991     0  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60         32 1991     0  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61         71 1991     1  1991;1990 1991;1991  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62         71 1991     1  1992;1990 1991;1992  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63         71 1991     1  1993;1990 1991;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64         71 1991     1  1994;1990 1991;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65         71 1991     1  1995;1990 1991;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66         71 1991     1  1996;1990 1991;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67         71 1991     1  1997;1990 1991;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68         71 1991     1  1998;1990 1991;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69         71 1991     1  1999;1990 1991;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70         71 1991     1  2000;1990 1991;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71         73 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72         73 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73         73 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74         73 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75         73 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76         73 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77         73 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78         73 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79         46 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80         46 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81         46 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82         46 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83         46 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84         46 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85         46 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86         46 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87         54 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88         54 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89         54 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90         54 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91         54 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92         54 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93         54 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94         54 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95         23 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96         23 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97         23 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98         23 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99         23 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100        23 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101        23 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102        23 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103        86 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104        86 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105        86 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106        86 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107        86 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108        86 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109        86 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110        86 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111        32 1993     0  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112        32 1993     0  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113        32 1993     0  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114        32 1993     0  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115        32 1993     0  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116        32 1993     0  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117        32 1993     0  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118        32 1993     0  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119        58 1993     1  1993;1992 1993;1993  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120        58 1993     1  1994;1992 1993;1994  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121        58 1993     1  1995;1992 1993;1995  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122        58 1993     1  1996;1992 1993;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123        58 1993     1  1997;1992 1993;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124        58 1993     1  1998;1992 1993;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125        58 1993     1  1999;1992 1993;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126        58 1993     1  2000;1992 1993;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127        73 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128        73 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129        73 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130        73 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131        73 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132        46 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133        46 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134        46 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135        46 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136        46 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137        54 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138        54 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139        54 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140        54 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141        54 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142        23 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143        23 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144        23 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 145        23 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146        23 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147        86 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148        86 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149        86 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150        86 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 151        86 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 152        32 1996     0  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 153        32 1996     0  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 154        32 1996     0  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 155        32 1996     0  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 156        32 1996     0  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 157        64 1996     1  1996;1995 1996;1996  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 158        64 1996     1  1997;1995 1996;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 159        64 1996     1  1998;1995 1996;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 160        64 1996     1  1999;1995 1996;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 161        64 1996     1  2000;1995 1996;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162        73 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 163        73 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 164        73 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 165        73 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 166        46 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 167        46 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 168        46 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 169        46 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 170        54 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 171        54 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 172        54 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 173        54 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 174        23 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 175        23 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 176        23 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 177        23 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 178        86 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 179        86 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 180        86 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 181        86 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 182        32 1997     0  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 183        32 1997     0  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 184        32 1997     0  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 185        32 1997     0  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 186        59 1997     1  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 187        59 1997     1  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 188        59 1997     1  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 189        59 1997     1  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 190        85 1997     1  1997;1996 1997;1997  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 191        85 1997     1  1998;1996 1997;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 192        85 1997     1  1999;1996 1997;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 193        85 1997     1  2000;1996 1997;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 194        73 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 195        73 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196        73 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197        46 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198        46 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199        46 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200        54 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 201        54 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 202        54 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 203        23 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 204        23 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 205        23 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 206        86 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 207        86 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 208        86 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 209        32 1998     0  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 210        32 1998     0  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 211        32 1998     0  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 212        57 1998     1  1998;1997 1998;1998  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 213        57 1998     1  1999;1997 1998;1999  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 214        57 1998     1  2000;1997 1998;2000  0       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 215        71 1993    -1  1993;1992 1993;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 216        71 1993    -1  1994;1992 1993;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 217        71 1993    -1  1995;1992 1993;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 218        71 1993    -1  1996;1992 1993;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219        71 1993    -1  1997;1992 1993;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220        71 1993    -1  1998;1992 1993;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221        71 1993    -1  1999;1992 1993;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222        71 1993    -1  2000;1992 1993;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223        71 1996    -1  1996;1995 1996;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 224        71 1996    -1  1997;1995 1996;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 225        71 1996    -1  1998;1995 1996;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 226        71 1996    -1  1999;1995 1996;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 227        71 1996    -1  2000;1995 1996;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 228        71 1997    -1  1997;1996 1997;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 229        71 1997    -1  1998;1996 1997;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 230        71 1997    -1  1999;1996 1997;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 231        71 1997    -1  2000;1996 1997;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 232        71 1998    -1  1998;1997 1998;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 233        71 1998    -1  1999;1997 1998;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 234        71 1998    -1  2000;1997 1998;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 235        58 1991    -1  1991;1990 1991;1991  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 236        58 1991    -1  1992;1990 1991;1992  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 237        58 1991    -1  1993;1990 1991;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 238        58 1991    -1  1994;1990 1991;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 239        58 1991    -1  1995;1990 1991;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 240        58 1991    -1  1996;1990 1991;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 241        58 1991    -1  1997;1990 1991;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 242        58 1991    -1  1998;1990 1991;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 243        58 1991    -1  1999;1990 1991;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 244        58 1991    -1  2000;1990 1991;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 245        58 1996    -1  1996;1995 1996;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 246        58 1996    -1  1997;1995 1996;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 247        58 1996    -1  1998;1995 1996;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 248        58 1996    -1  1999;1995 1996;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 249        58 1996    -1  2000;1995 1996;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 250        58 1997    -1  1997;1996 1997;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 251        58 1997    -1  1998;1996 1997;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 252        58 1997    -1  1999;1996 1997;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 253        58 1997    -1  2000;1996 1997;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 254        58 1998    -1  1998;1997 1998;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 255        58 1998    -1  1999;1997 1998;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 256        58 1998    -1  2000;1997 1998;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 257        64 1991    -1  1991;1990 1991;1991  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 258        64 1991    -1  1992;1990 1991;1992  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 259        64 1991    -1  1993;1990 1991;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 260        64 1991    -1  1994;1990 1991;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 261        64 1991    -1  1995;1990 1991;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 262        64 1991    -1  1996;1990 1991;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 263        64 1991    -1  1997;1990 1991;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 264        64 1991    -1  1998;1990 1991;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 265        64 1991    -1  1999;1990 1991;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 266        64 1991    -1  2000;1990 1991;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 267        64 1993    -1  1993;1992 1993;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 268        64 1993    -1  1994;1992 1993;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 269        64 1993    -1  1995;1992 1993;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 270        64 1993    -1  1996;1992 1993;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 271        64 1993    -1  1997;1992 1993;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 272        64 1993    -1  1998;1992 1993;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 273        64 1993    -1  1999;1992 1993;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 274        64 1993    -1  2000;1992 1993;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 275        64 1997    -1  1997;1996 1997;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 276        64 1997    -1  1998;1996 1997;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 277        64 1997    -1  1999;1996 1997;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 278        64 1997    -1  2000;1996 1997;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 279        64 1998    -1  1998;1997 1998;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 280        64 1998    -1  1999;1997 1998;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 281        64 1998    -1  2000;1997 1998;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 282        59 1991    -1  1991;1990 1991;1991  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 283        59 1991    -1  1992;1990 1991;1992  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 284        59 1991    -1  1993;1990 1991;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 285        59 1991    -1  1994;1990 1991;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 286        59 1991    -1  1995;1990 1991;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 287        59 1991    -1  1996;1990 1991;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 288        59 1991    -1  1997;1990 1991;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 289        59 1991    -1  1998;1990 1991;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 290        59 1991    -1  1999;1990 1991;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 291        59 1991    -1  2000;1990 1991;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 292        59 1993    -1  1993;1992 1993;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 293        59 1993    -1  1994;1992 1993;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 294        59 1993    -1  1995;1992 1993;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 295        59 1993    -1  1996;1992 1993;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 296        59 1993    -1  1997;1992 1993;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 297        59 1993    -1  1998;1992 1993;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 298        59 1993    -1  1999;1992 1993;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 299        59 1993    -1  2000;1992 1993;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 300        59 1996    -1  1996;1995 1996;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 301        59 1996    -1  1997;1995 1996;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 302        59 1996    -1  1998;1995 1996;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 303        59 1996    -1  1999;1995 1996;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 304        59 1996    -1  2000;1995 1996;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 305        59 1998    -1  1998;1997 1998;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 306        59 1998    -1  1999;1997 1998;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 307        59 1998    -1  2000;1997 1998;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 308        85 1991    -1  1991;1990 1991;1991  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 309        85 1991    -1  1992;1990 1991;1992  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 310        85 1991    -1  1993;1990 1991;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 311        85 1991    -1  1994;1990 1991;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 312        85 1991    -1  1995;1990 1991;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 313        85 1991    -1  1996;1990 1991;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 314        85 1991    -1  1997;1990 1991;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 315        85 1991    -1  1998;1990 1991;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 316        85 1991    -1  1999;1990 1991;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 317        85 1991    -1  2000;1990 1991;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 318        85 1993    -1  1993;1992 1993;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 319        85 1993    -1  1994;1992 1993;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 320        85 1993    -1  1995;1992 1993;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 321        85 1993    -1  1996;1992 1993;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 322        85 1993    -1  1997;1992 1993;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 323        85 1993    -1  1998;1992 1993;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 324        85 1993    -1  1999;1992 1993;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 325        85 1993    -1  2000;1992 1993;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 326        85 1996    -1  1996;1995 1996;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 327        85 1996    -1  1997;1995 1996;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 328        85 1996    -1  1998;1995 1996;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 329        85 1996    -1  1999;1995 1996;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 330        85 1996    -1  2000;1995 1996;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 331        85 1998    -1  1998;1997 1998;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 332        85 1998    -1  1999;1997 1998;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 333        85 1998    -1  2000;1997 1998;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 334        57 1991    -1  1991;1990 1991;1991  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 335        57 1991    -1  1992;1990 1991;1992  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 336        57 1991    -1  1993;1990 1991;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 337        57 1991    -1  1994;1990 1991;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 338        57 1991    -1  1995;1990 1991;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 339        57 1991    -1  1996;1990 1991;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 340        57 1991    -1  1997;1990 1991;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 341        57 1991    -1  1998;1990 1991;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 342        57 1991    -1  1999;1990 1991;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 343        57 1991    -1  2000;1990 1991;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 344        57 1993    -1  1993;1992 1993;1993  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 345        57 1993    -1  1994;1992 1993;1994  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 346        57 1993    -1  1995;1992 1993;1995  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 347        57 1993    -1  1996;1992 1993;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 348        57 1993    -1  1997;1992 1993;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 349        57 1993    -1  1998;1992 1993;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 350        57 1993    -1  1999;1992 1993;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 351        57 1993    -1  2000;1992 1993;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 352        57 1996    -1  1996;1995 1996;1996  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 353        57 1996    -1  1997;1995 1996;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 354        57 1996    -1  1998;1995 1996;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 355        57 1996    -1  1999;1995 1996;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356        57 1996    -1  2000;1995 1996;2000  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357        57 1997    -1  1997;1996 1997;1997  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358        57 1997    -1  1998;1996 1997;1998  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359        57 1997    -1  1999;1996 1997;1999  1       1989     2000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360        57 1997    -1  2000;1996 1997;2000  1       1989     2000</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> empty_diff_df.csv saved to: /tmp/RtmpJgi5JA/empty_diff_df.csv</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     silo_name gvar treat diff_times        gt RI start_time end_time weights</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          73 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          73 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          73 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          73 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          73 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          73 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7          73 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8          73 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9          73 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10         73 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11         46 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12         46 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13         46 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14         46 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15         46 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16         46 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17         46 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18         46 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19         46 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20         46 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21         54 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22         54 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23         54 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24         54 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25         54 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26         54 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27         54 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28         54 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29         54 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30         54 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31         23 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32         23 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33         23 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34         23 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35         23 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36         23 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37         23 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38         23 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39         23 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40         23 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41         86 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42         86 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43         86 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44         86 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45         86 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46         86 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47         86 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48         86 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49         86 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50         86 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51         32 1991     0  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52         32 1991     0  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53         32 1991     0  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54         32 1991     0  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55         32 1991     0  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56         32 1991     0  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57         32 1991     0  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58         32 1991     0  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59         32 1991     0  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60         32 1991     0  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61         71 1991     1  1991;1990 1991;1991  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62         71 1991     1  1992;1990 1991;1992  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63         71 1991     1  1993;1990 1991;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64         71 1991     1  1994;1990 1991;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65         71 1991     1  1995;1990 1991;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66         71 1991     1  1996;1990 1991;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67         71 1991     1  1997;1990 1991;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68         71 1991     1  1998;1990 1991;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69         71 1991     1  1999;1990 1991;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70         71 1991     1  2000;1990 1991;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71         73 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72         73 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73         73 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74         73 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75         73 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76         73 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77         73 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78         73 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79         46 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80         46 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81         46 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82         46 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83         46 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84         46 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85         46 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86         46 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87         54 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88         54 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89         54 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90         54 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91         54 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92         54 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93         54 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94         54 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95         23 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96         23 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97         23 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98         23 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99         23 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100        23 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101        23 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102        23 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103        86 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104        86 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105        86 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106        86 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107        86 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108        86 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109        86 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110        86 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111        32 1993     0  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112        32 1993     0  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113        32 1993     0  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114        32 1993     0  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115        32 1993     0  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116        32 1993     0  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117        32 1993     0  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118        32 1993     0  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119        58 1993     1  1993;1992 1993;1993  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120        58 1993     1  1994;1992 1993;1994  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121        58 1993     1  1995;1992 1993;1995  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122        58 1993     1  1996;1992 1993;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123        58 1993     1  1997;1992 1993;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124        58 1993     1  1998;1992 1993;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125        58 1993     1  1999;1992 1993;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126        58 1993     1  2000;1992 1993;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127        73 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128        73 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129        73 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130        73 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131        73 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132        46 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133        46 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134        46 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135        46 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136        46 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137        54 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138        54 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139        54 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140        54 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141        54 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142        23 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143        23 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144        23 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145        23 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146        23 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147        86 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148        86 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149        86 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150        86 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151        86 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152        32 1996     0  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153        32 1996     0  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154        32 1996     0  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155        32 1996     0  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156        32 1996     0  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157        64 1996     1  1996;1995 1996;1996  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158        64 1996     1  1997;1995 1996;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159        64 1996     1  1998;1995 1996;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160        64 1996     1  1999;1995 1996;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161        64 1996     1  2000;1995 1996;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162        73 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163        73 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164        73 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165        73 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166        46 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167        46 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168        46 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169        46 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 170        54 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171        54 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172        54 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173        54 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 174        23 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 175        23 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176        23 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 177        23 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 178        86 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 179        86 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180        86 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 181        86 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182        32 1997     0  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 183        32 1997     0  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 184        32 1997     0  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185        32 1997     0  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186        59 1997     1  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 187        59 1997     1  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 188        59 1997     1  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 189        59 1997     1  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 190        85 1997     1  1997;1996 1997;1997  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 191        85 1997     1  1998;1996 1997;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 192        85 1997     1  1999;1996 1997;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 193        85 1997     1  2000;1996 1997;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194        73 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 195        73 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196        73 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197        46 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198        46 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199        46 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200        54 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 201        54 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 202        54 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 203        23 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 204        23 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 205        23 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 206        86 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 207        86 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 208        86 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 209        32 1998     0  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 210        32 1998     0  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 211        32 1998     0  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 212        57 1998     1  1998;1997 1998;1998  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 213        57 1998     1  1999;1997 1998;1999  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 214        57 1998     1  2000;1997 1998;2000  0       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 215        71 1993    -1  1993;1992 1993;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 216        71 1993    -1  1994;1992 1993;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 217        71 1993    -1  1995;1992 1993;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 218        71 1993    -1  1996;1992 1993;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219        71 1993    -1  1997;1992 1993;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220        71 1993    -1  1998;1992 1993;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221        71 1993    -1  1999;1992 1993;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222        71 1993    -1  2000;1992 1993;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223        71 1996    -1  1996;1995 1996;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 224        71 1996    -1  1997;1995 1996;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 225        71 1996    -1  1998;1995 1996;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 226        71 1996    -1  1999;1995 1996;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 227        71 1996    -1  2000;1995 1996;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 228        71 1997    -1  1997;1996 1997;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 229        71 1997    -1  1998;1996 1997;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 230        71 1997    -1  1999;1996 1997;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 231        71 1997    -1  2000;1996 1997;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 232        71 1998    -1  1998;1997 1998;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 233        71 1998    -1  1999;1997 1998;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 234        71 1998    -1  2000;1997 1998;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 235        58 1991    -1  1991;1990 1991;1991  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 236        58 1991    -1  1992;1990 1991;1992  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 237        58 1991    -1  1993;1990 1991;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 238        58 1991    -1  1994;1990 1991;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 239        58 1991    -1  1995;1990 1991;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 240        58 1991    -1  1996;1990 1991;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 241        58 1991    -1  1997;1990 1991;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 242        58 1991    -1  1998;1990 1991;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 243        58 1991    -1  1999;1990 1991;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 244        58 1991    -1  2000;1990 1991;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 245        58 1996    -1  1996;1995 1996;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 246        58 1996    -1  1997;1995 1996;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 247        58 1996    -1  1998;1995 1996;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 248        58 1996    -1  1999;1995 1996;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 249        58 1996    -1  2000;1995 1996;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 250        58 1997    -1  1997;1996 1997;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 251        58 1997    -1  1998;1996 1997;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 252        58 1997    -1  1999;1996 1997;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 253        58 1997    -1  2000;1996 1997;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 254        58 1998    -1  1998;1997 1998;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 255        58 1998    -1  1999;1997 1998;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 256        58 1998    -1  2000;1997 1998;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 257        64 1991    -1  1991;1990 1991;1991  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 258        64 1991    -1  1992;1990 1991;1992  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 259        64 1991    -1  1993;1990 1991;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 260        64 1991    -1  1994;1990 1991;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 261        64 1991    -1  1995;1990 1991;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 262        64 1991    -1  1996;1990 1991;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 263        64 1991    -1  1997;1990 1991;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 264        64 1991    -1  1998;1990 1991;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 265        64 1991    -1  1999;1990 1991;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 266        64 1991    -1  2000;1990 1991;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 267        64 1993    -1  1993;1992 1993;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 268        64 1993    -1  1994;1992 1993;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 269        64 1993    -1  1995;1992 1993;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 270        64 1993    -1  1996;1992 1993;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 271        64 1993    -1  1997;1992 1993;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 272        64 1993    -1  1998;1992 1993;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 273        64 1993    -1  1999;1992 1993;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 274        64 1993    -1  2000;1992 1993;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 275        64 1997    -1  1997;1996 1997;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 276        64 1997    -1  1998;1996 1997;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 277        64 1997    -1  1999;1996 1997;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 278        64 1997    -1  2000;1996 1997;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 279        64 1998    -1  1998;1997 1998;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 280        64 1998    -1  1999;1997 1998;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 281        64 1998    -1  2000;1997 1998;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 282        59 1991    -1  1991;1990 1991;1991  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283        59 1991    -1  1992;1990 1991;1992  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 284        59 1991    -1  1993;1990 1991;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 285        59 1991    -1  1994;1990 1991;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 286        59 1991    -1  1995;1990 1991;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 287        59 1991    -1  1996;1990 1991;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 288        59 1991    -1  1997;1990 1991;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 289        59 1991    -1  1998;1990 1991;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 290        59 1991    -1  1999;1990 1991;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 291        59 1991    -1  2000;1990 1991;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 292        59 1993    -1  1993;1992 1993;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 293        59 1993    -1  1994;1992 1993;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 294        59 1993    -1  1995;1992 1993;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 295        59 1993    -1  1996;1992 1993;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296        59 1993    -1  1997;1992 1993;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297        59 1993    -1  1998;1992 1993;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298        59 1993    -1  1999;1992 1993;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299        59 1993    -1  2000;1992 1993;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300        59 1996    -1  1996;1995 1996;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 301        59 1996    -1  1997;1995 1996;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 302        59 1996    -1  1998;1995 1996;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 303        59 1996    -1  1999;1995 1996;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 304        59 1996    -1  2000;1995 1996;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 305        59 1998    -1  1998;1997 1998;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 306        59 1998    -1  1999;1997 1998;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 307        59 1998    -1  2000;1997 1998;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 308        85 1991    -1  1991;1990 1991;1991  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 309        85 1991    -1  1992;1990 1991;1992  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 310        85 1991    -1  1993;1990 1991;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 311        85 1991    -1  1994;1990 1991;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 312        85 1991    -1  1995;1990 1991;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 313        85 1991    -1  1996;1990 1991;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314        85 1991    -1  1997;1990 1991;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 315        85 1991    -1  1998;1990 1991;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 316        85 1991    -1  1999;1990 1991;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 317        85 1991    -1  2000;1990 1991;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 318        85 1993    -1  1993;1992 1993;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 319        85 1993    -1  1994;1992 1993;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 320        85 1993    -1  1995;1992 1993;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 321        85 1993    -1  1996;1992 1993;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 322        85 1993    -1  1997;1992 1993;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 323        85 1993    -1  1998;1992 1993;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 324        85 1993    -1  1999;1992 1993;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 325        85 1993    -1  2000;1992 1993;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 326        85 1996    -1  1996;1995 1996;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 327        85 1996    -1  1997;1995 1996;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 328        85 1996    -1  1998;1995 1996;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 329        85 1996    -1  1999;1995 1996;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 330        85 1996    -1  2000;1995 1996;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 331        85 1998    -1  1998;1997 1998;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 332        85 1998    -1  1999;1997 1998;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 333        85 1998    -1  2000;1997 1998;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 334        57 1991    -1  1991;1990 1991;1991  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 335        57 1991    -1  1992;1990 1991;1992  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 336        57 1991    -1  1993;1990 1991;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 337        57 1991    -1  1994;1990 1991;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 338        57 1991    -1  1995;1990 1991;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 339        57 1991    -1  1996;1990 1991;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 340        57 1991    -1  1997;1990 1991;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 341        57 1991    -1  1998;1990 1991;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 342        57 1991    -1  1999;1990 1991;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 343        57 1991    -1  2000;1990 1991;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 344        57 1993    -1  1993;1992 1993;1993  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 345        57 1993    -1  1994;1992 1993;1994  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 346        57 1993    -1  1995;1992 1993;1995  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 347        57 1993    -1  1996;1992 1993;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 348        57 1993    -1  1997;1992 1993;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 349        57 1993    -1  1998;1992 1993;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 350        57 1993    -1  1999;1992 1993;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 351        57 1993    -1  2000;1992 1993;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 352        57 1996    -1  1996;1995 1996;1996  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 353        57 1996    -1  1997;1995 1996;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 354        57 1996    -1  1998;1995 1996;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 355        57 1996    -1  1999;1995 1996;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356        57 1996    -1  2000;1995 1996;2000  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357        57 1997    -1  1997;1996 1997;1997  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358        57 1997    -1  1998;1996 1997;1998  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359        57 1997    -1  1999;1996 1997;1999  1       1989     2000    both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360        57 1997    -1  2000;1996 1997;2000  1       1989     2000    both</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     diff_estimate diff_var diff_estimate_covariates diff_var_covariates</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1              NA       NA                       NA                  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2              NA       NA                       NA                  NA</span>
@@ -850,367 +854,367 @@ override any covariates specified in the <code>init.csv</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 358            NA       NA                       NA                  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 359            NA       NA                       NA                  NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 360            NA       NA                       NA                  NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           covariates date_format   freq</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9   asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99  asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 145 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 151 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 152 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 153 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 154 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 155 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 156 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 157 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 158 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 159 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 160 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 161 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 163 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 164 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 165 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 166 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 167 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 168 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 169 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 170 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 171 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 172 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 173 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 174 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 175 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 176 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 177 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 178 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 179 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 180 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 181 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 182 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 183 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 184 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 185 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 186 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 187 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 188 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 189 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 190 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 191 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 192 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 193 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 194 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 195 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 201 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 202 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 203 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 204 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 205 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 206 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 207 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 208 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 209 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 210 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 211 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 212 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 213 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 214 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 215 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 216 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 217 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 218 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 219 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 220 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 221 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 222 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 223 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 224 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 225 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 226 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 227 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 228 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 229 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 230 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 231 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 232 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 233 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 234 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 235 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 236 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 237 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 238 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 239 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 240 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 241 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 242 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 243 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 244 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 245 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 246 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 247 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 248 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 249 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 250 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 251 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 252 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 253 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 254 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 255 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 256 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 257 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 258 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 259 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 260 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 261 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 262 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 263 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 264 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 265 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 266 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 267 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 268 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 269 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 270 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 271 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 272 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 273 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 274 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 275 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 276 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 277 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 278 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 279 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 280 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 281 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 282 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 283 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 284 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 285 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 286 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 287 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 288 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 289 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 290 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 291 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 292 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 293 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 294 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 295 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 296 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 297 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 298 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 299 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 300 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 301 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 302 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 303 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 304 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 305 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 306 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 307 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 308 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 309 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 310 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 311 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 312 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 313 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 314 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 315 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 316 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 317 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 318 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 319 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 320 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 321 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 322 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 323 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 324 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 325 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 326 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 327 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 328 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 329 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 330 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 331 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 332 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 333 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 334 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 335 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 336 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 337 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 338 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 339 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 340 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 341 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 342 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 343 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 344 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 345 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 346 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 347 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 348 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 349 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 350 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 351 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 352 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 353 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 354 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 355 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 356 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 357 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 358 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 359 asian;black;male        yyyy 1 year</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 360 asian;black;male        yyyy 1 year</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     covariates date_format   freq  n n_t anonymize_size</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9         none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99        none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 170       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 174       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 175       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 177       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 178       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 179       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 181       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 183       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 184       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 187       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 188       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 189       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 190       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 191       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 192       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 193       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 195       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 201       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 202       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 203       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 204       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 205       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 206       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 207       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 208       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 209       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 210       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 211       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 212       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 213       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 214       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 215       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 216       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 217       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 218       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 219       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 220       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 221       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 222       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 223       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 224       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 225       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 226       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 227       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 228       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 229       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 230       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 231       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 232       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 233       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 234       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 235       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 236       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 237       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 238       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 239       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 240       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 241       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 242       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 243       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 244       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 245       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 246       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 247       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 248       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 249       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 250       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 251       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 252       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 253       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 254       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 255       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 256       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 257       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 258       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 259       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 260       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 261       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 262       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 263       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 264       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 265       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 266       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 267       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 268       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 269       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 270       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 271       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 272       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 273       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 274       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 275       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 276       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 277       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 278       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 279       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 280       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 281       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 282       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 283       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 284       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 285       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 286       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 287       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 288       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 289       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 290       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 291       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 292       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 293       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 294       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 295       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 296       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 297       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 298       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 299       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 300       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 301       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 302       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 303       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 304       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 305       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 306       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 307       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 308       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 309       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 310       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 311       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 312       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 313       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 314       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 315       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 316       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 317       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 318       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 319       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 320       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 321       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 322       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 323       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 324       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 325       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 326       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 327       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 328       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 329       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 330       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 331       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 332       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 333       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 334       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 335       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 336       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 337       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 338       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 339       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 340       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 341       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 342       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 343       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 344       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 345       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 346       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 347       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 348       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 349       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 350       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 351       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 352       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 353       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 354       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 355       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 356       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 357       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 358       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 359       none        yyyy 1 year NA  NA             NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 360       none        yyyy 1 year NA  NA             NA</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/unlink.html" class="external-link">unlink</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"empty_diff_df.csv"</span><span class="op">)</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
@@ -1223,7 +1227,7 @@ override any covariates specified in the <code>init.csv</code>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

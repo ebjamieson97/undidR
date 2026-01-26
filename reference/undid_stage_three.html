@@ -11,7 +11,7 @@ and p-values."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">undidR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,15 +48,17 @@ and p-values.</p>
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">undid_stage_three</span><span class="op">(</span></span>
 <span>  <span class="va">dir_path</span>,</span>
-<span>  agg <span class="op">=</span> <span class="st">"silo"</span>,</span>
-<span>  weights <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  agg <span class="op">=</span> <span class="st">"g"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"both"</span>,</span>
 <span>  covariates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  interpolation <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  save_csv <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  filename <span class="op">=</span> <span class="st">"UNDID_results.csv"</span>,</span>
-<span>  filepath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  nperm <span class="op">=</span> <span class="fl">1001</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  notyet <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  nperm <span class="op">=</span> <span class="fl">999</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  check_anon_size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hc <span class="op">=</span> <span class="st">"hc3"</span>,</span>
+<span>  only <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  omit <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  max_attempts <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -72,13 +74,21 @@ all of the filled diff df CSV files.</p></dd>
 <dt id="arg-agg">agg<a class="anchor" aria-label="anchor" href="#arg-agg"></a></dt>
 <dd><p>A character which specifies the aggregation methodology for
 computing the aggregate ATT in the case of staggered adoption.
-Options are: <code>"silo"</code>, <code>"g"</code>, or <code>"gt"</code>. Defaults to <code>"silo"</code>.</p></dd>
+Options are: <code>"silo"</code>, <code>"g"</code>, <code>"gt"</code>, <code>"sgt"</code>, <code>"time"</code>, <code>"none"</code>.
+Defaults to <code>"g"</code>. <code>"silo"</code> computes a subaggregate ATT for each silo,
+<code>"g"</code> computes a subaggregate ATT for each unique treatment time,
+<code>"gt"</code> computes a subaggregate ATT for each unique treatment time
+&amp; post-treatment period pair, <code>"sgt"</code> computes a subaggregate ATT
+for each treatment time &amp; post-treatment pair, separated by silo, <code>"time"</code>
+computes subaggregate ATTs for grouped by time since treatment, and <code>"none"</code>
+does not compute any subaggregate ATTs, but rather computes an aggregate ATT
+directly from the differences.</p></dd>
 
 
 <dt id="arg-weights">weights<a class="anchor" aria-label="anchor" href="#arg-weights"></a></dt>
-<dd><p>A logical value (either <code>TRUE</code> or <code>FALSE</code>) which determines
-whether or not the weights should be used in the case of common adoption.
-Defaults to <code>TRUE</code>.</p></dd>
+<dd><p>A string, determines which of the weighting methodologies
+should be used. Options are: <code>"none"</code>, <code>"diff"</code>, <code>"att"</code>, or <code>"both"</code>.
+Defaults to the weighting choice specified in the filled diff CSV files.</p></dd>
 
 
 <dt id="arg-covariates">covariates<a class="anchor" aria-label="anchor" href="#arg-covariates"></a></dt>
@@ -87,59 +97,53 @@ whether to use the <code>diff_estimate</code> column or the <code>diff_estimate_
 column from the filled diff df CSV files when computing ATTs.</p></dd>
 
 
-<dt id="arg-interpolation">interpolation<a class="anchor" aria-label="anchor" href="#arg-interpolation"></a></dt>
-<dd><p>A logical value or a character which specifies which,
-if any, method of interpolation/extrapolation for missing values of
-<code>diff_estimate</code> or <code>diff_estimate_covariates</code> should be used.
-There must be at least one <code>diff_estimate</code> or <code>diff_estimate_covariates</code>
-value for the (silo,g) group for which a missing value is being estimated
-in order for interpolation to work. Options are: <code>"linear_function"</code>,
-<code>"nearest_value"</code>, or <code>"piecewise_linear"</code>. Defaults to <code>FALSE</code>.</p></dd>
-
-
-<dt id="arg-save-csv">save_csv<a class="anchor" aria-label="anchor" href="#arg-save-csv"></a></dt>
-<dd><p>A logical value, either <code>TRUE</code> or <code>FALSE</code> (default),
-which determines if a CSV copy of the UNDID results will be saved or not.</p></dd>
-
-
-<dt id="arg-filename">filename<a class="anchor" aria-label="anchor" href="#arg-filename"></a></dt>
-<dd><p>A string filename for the created CSV file.
-Defaults to <code>"UNDID_results.csv"</code></p></dd>
-
-
-<dt id="arg-filepath">filepath<a class="anchor" aria-label="anchor" href="#arg-filepath"></a></dt>
-<dd><p>Filepath to save the CSV file. Defaults to <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code>.</p></dd>
+<dt id="arg-notyet">notyet<a class="anchor" aria-label="anchor" href="#arg-notyet"></a></dt>
+<dd><p>A logical value which declares if the not-yet-treated
+differences from treated silos should be used as controls when computing
+relevant sub-aggregate ATTs. Defaults to <code>FALSE</code>.</p></dd>
 
 
 <dt id="arg-nperm">nperm<a class="anchor" aria-label="anchor" href="#arg-nperm"></a></dt>
-<dd><p>Number of random permutations of gvar &amp; silo pairs to consider
-when calculating the randomization inference p-value. Defaults to <code>1001</code>.</p></dd>
+<dd><p>Number of random permutations of treatment assignment to use
+when calculating the randomization inference p-value. Defaults to <code>999</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>A logical value (either <code>TRUE</code> or <code>FALSE</code>) which toggles
-messages showing the progress of the randomization inference.
-Defaults to <code>TRUE</code>.</p></dd>
+<dd><p>A numeric value (or <code>NULL</code>) which toggles messages showing
+the progress of the randomization inference once every <code>verbose</code> iterations.
+Defaults to <code>100</code>.</p></dd>
+
+
+<dt id="arg-check-anon-size">check_anon_size<a class="anchor" aria-label="anchor" href="#arg-check-anon-size"></a></dt>
+<dd><p>A logical value, which if <code>TRUE</code> displays which
+silos enabled the <code>anonymize_weights</code> argument in stage two, and their
+respective <code>anonymize_size</code> values. Defaults to <code>FALSE</code>.</p></dd>
+
+
+<dt id="arg-hc">hc<a class="anchor" aria-label="anchor" href="#arg-hc"></a></dt>
+<dd><p>Specify which heteroskedasticity-consistent covariance matrix
+estimator (HCCME) should be used. Options are <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>, and
+<code>4</code> (or <code>"hc0"</code>, <code>"hc1"</code>, <code>"hc2"</code>, <code>"hc3"</code>, <code>"hc4"</code>).</p></dd>
+
+
+<dt id="arg-only">only<a class="anchor" aria-label="anchor" href="#arg-only"></a></dt>
+<dd><p>A character vector of silos to include. Defaults to <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-omit">omit<a class="anchor" aria-label="anchor" href="#arg-omit"></a></dt>
+<dd><p>A character vector of silos to omit. Defaults to <code>NULL</code>.</p></dd>
+
+
+<dt id="arg-max-attempts">max_attempts<a class="anchor" aria-label="anchor" href="#arg-max-attempts"></a></dt>
+<dd><p>A numeric value. Sets the maximum number of attempts
+to find a new unique random permutations during the randomization
+inference procedure. Defaults to <code>100</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame containing the aggregate ATT and its
-standard errors and p-values from two-sided tests of <code>agg_ATT</code> == 0.
-Also returns group (silo, g, or gt) level ATTs for staggered adoption.</p>
-    </div>
-    <div class="section level2">
-    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The <code>agg</code> parameter specifies the aggregation method used in the
-case of staggered adoption. By default it is set to <code>"silo"</code> so that the ATTs
-are aggregated across silos with each silo having equal weight, but can be
-set to <code>"gt"</code> or <code>"g"</code> instead. Aggregating across <code>"g"</code> calculates ATTs for
-groups based on when the treatment time was, with each <code>"g"</code> group having
-equal weight. Aggregating across <code>"gt"</code> calculates ATTs for groups based on
-when the treatment time was and the time for which the ATT is calculated.
-The <code>agg</code> parameter is ignored in the case of a common treatment time and
-only takes effect in the case of staggered adoption. For common adoption,
-refer to the <code>weights</code> parameter.</p>
+    <p>An UnDiDObj with S3 methods of <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>, <code><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation()</a></code>,
+<code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, and <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code>.</p>
     </div>
 
     <div class="section level2">
@@ -147,26 +151,15 @@ refer to the <code>weights</code> parameter.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Execute `undid_stage_three()`</span></span></span>
 <span class="r-in"><span><span class="va">dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/staggered"</span>, package <span class="op">=</span> <span class="st">"undidR"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">undid_stage_three</span><span class="op">(</span><span class="va">dir</span>, agg <span class="op">=</span> <span class="st">"g"</span>, nperm <span class="op">=</span> <span class="fl">501</span>, verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         gvar    gvar_ATT    gvar_SE   gvar_p_val gvar_jknife_SE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1991-01-01  0.03824003 0.02557435 0.1394760603     0.02756434</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1993-01-01  0.03312283 0.02541522 0.1980131279     0.02691780</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 1996-01-01  0.09702872 0.03208821 0.0048034212     0.03656550</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 1997-01-01  0.11819478 0.02866265 0.0002715445     0.03064223</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 1998-01-01 -0.05942719 0.05037900 0.2527181863     0.06848128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   gvar_jknife_p_val    agg_ATT agg_ATT_SE agg_ATT_p_val agg_ATT_jknife_SE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1      0.1698802214 0.04543183 0.02768056     0.1760813        0.03094781</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2      0.2238366570         NA         NA            NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3      0.0121558950         NA         NA            NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4      0.0005644115         NA         NA            NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5      0.3963391606         NA         NA            NA                NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   agg_ATT_jknife_p_val agg_ATT_RI_p_val</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1            0.2384033            0.214</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2                   NA               NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3                   NA               NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4                   NA               NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5                   NA               NA</span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">undid_stage_three</span><span class="op">(</span><span class="va">dir</span>, agg <span class="op">=</span> <span class="st">"g"</span>, nperm <span class="op">=</span> <span class="fl">399</span>, verbose <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Weighting: both</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Covariates: none</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Aggregation: g</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Aggregate ATT:  0.0761</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (5 sub-aggregate estimates available via print(., level='sub'))</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -178,7 +171,7 @@ refer to the <code>weights</code> parameter.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
