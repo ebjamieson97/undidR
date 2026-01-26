@@ -1,11 +1,11 @@
 Package: undidR
 Title: Difference-in-Differences with Unpoolable Data
-Version: 1.0.1
+Version: 3.0.0
 Authors@R: 
     person("Eric", "Jamieson", email = "ericbrucejamieson@gmail.com", role = c("aut", "cre", "cph"))
 Maintainer: Eric Jamieson <ericbrucejamieson@gmail.com>
 Description: A framework for estimating difference-in-differences with
- unpoolable data, based on Karim, Webb, Austin, and Strumpf (2024)
+ unpoolable data, based on Karim, Webb, Austin, and Strumpf (2025)
  <doi:10.48550/arXiv.2403.15910>. Supports common or staggered adoption, multiple
  groups, and the inclusion of covariates. Also computes p-values for the
  aggregate average treatment effect on the treated via the

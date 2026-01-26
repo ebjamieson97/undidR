@@ -38,7 +38,7 @@ install.packages("undidR")
 
 ## Examples
 
-For a set of highly detailed examples see the package vignette using:
+For a set of detailed examples see the package vignette using:
 ```{r, eval=FALSE}
 vignette("undidR", package = "undidR")
 ```
@@ -80,7 +80,7 @@ head(stage2$trends_data, 4)
 ### Stage Three: `undid_stage_three()`
 ```{r}
 dir_path <- system.file("extdata/staggered", package = "undidR")
-results <- undid_stage_three(dir_path, agg = "silo", covariates = TRUE,
-                             nperm = 501)
-results
+results <- undid_stage_three(dir_path, agg = "g", covariates = TRUE,
+                             nperm = 399, hc = "hc0", verbose = NULL)
+summary(results)
 ```

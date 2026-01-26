@@ -19,10 +19,14 @@
 #'  at each silo. If `FALSE` (default) uses covariates from the `init.csv`.
 #' @param freq_multiplier A numeric value or `FALSE` (default).
 #'  Specify if the frequency should be multiplied by a non-zero integer.
-#' @param weights A character indicating the weighting to use in the case of
-#'  common adoption. The `"standard"` (default) weight is calculated as
-#'  \eqn{w_s = \frac{N_s^{\text{post}}}{N_s^{\text{post}} + N_s^{\text{pre}}}}.
-#'  Options are: `"standard"`.
+#' @param weights A character indicating the weighting to use. The options are
+#'  `"none"`, `"diff"`, `"att"`, and `"both"`. The options reflect the levels at
+#'   which weights are applied. `"diff"` uses weights based off of the number
+#'   of observations (treated and untreated) when calculating the subaggregate
+#'   ATTs. `"att"` uses weights based off of the number of treated observations
+#'   associated with each subaggregate ATT when calculating the aggregate ATT.
+#'   `"both"` applies weighting at both levels, and `"none"` does not use
+#'   weights at all. Defaults to `"both"`.
 #' @param filename A character filename for the created CSV file. Defaults to
 #'  `"empty_diff_df.csv"`
 #' @param filepath Filepath to save the CSV file. Defaults to `tempdir()`.
@@ -44,7 +48,7 @@
 #' @importFrom utils read.csv write.csv
 #' @export
 create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
-                           freq_multiplier = FALSE, weights = "standard",
+                           freq_multiplier = FALSE, weights = "both",
                            filename = "empty_diff_df.csv",
                            filepath = tempdir()) {
 
@@ -67,35 +71,51 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   # Convert start_time and end_time columns to date objects
   init_df$start_time <- as.Date(vapply(init_df$start_time,
                                        .parse_string_to_date,
-                                       FUN.VALUE = as.Date(NA),
-                                       date_format = date_format))
+                                       FUN.VALUE = as.Date(
+                                         NA, origin = "1970-01-01"
+                                       ),
+                                       date_format = date_format),
+  origin = "1970-01-01")
   init_df$end_time <- as.Date(vapply(init_df$end_time, .parse_string_to_date,
-                                     FUN.VALUE = as.Date(NA),
-                                     date_format = date_format))
+                                     FUN.VALUE = as.Date(
+                                       NA, origin = "1970-01-01"
+                                     ),
+                                     date_format = date_format),
+  origin = "1970-01-01")
 
   # Ensure that start times < treat times < end times
   .start_treat_end_time_check(init_df, date_format)
-
 
   # Process freq_multiplier and freq
   freq_string <- .parse_freq_freq_multiplier(freq, freq_multiplier)
 
   # Consider the case of common adoption
+  common_adoption <- FALSE
+  staggered_adoption <- FALSE
   if (length(unique(init_df$treatment_time)) == 2) {
-    diff_df <- .create_common_diff_df(init_df, weights)
-
+    diff_df <- .create_common_diff_df(init_df, date_format)
+    common_adoption <- TRUE
     # Consider the case of staggered adoption
   } else if (length(unique(init_df$treatment_time)) > 2) {
     diff_df <- .create_staggered_diff_df(init_df, date_format, freq_string)
+    staggered_adoption <- TRUE
   } else {
-    stop("Only one unique `treatment_time` value found.")
+    stop("Only one unique `treatment_time` value found (including controls).")
   }
 
-  # Add the diff_estimate columns
-  diff_df$diff_estimate <- rep(NA_real_, nrow(diff_df))
-  diff_df$diff_var <- rep(NA_real_, nrow(diff_df))
-  diff_df$diff_estimate_covariates <- rep(NA_real_, nrow(diff_df))
-  diff_df$diff_var_covariates <- rep(NA_real_, nrow(diff_df))
+
+ # silo_name,treat,common_treatment_time,start_time,end_time,weights,diff_estimate,diff_var,diff_estimate_covariates,diff_var_covariates,covariates,date_format,freq,n,n_t,anonymize_size
+
+  # Add the diff_estimate columns, weights (and n & n_t), anon_size
+  nrows <- nrow(diff_df)
+  diff_df$diff_estimate <- rep(NA_real_, nrows)
+  diff_df$diff_var <- rep(NA_real_, nrows)
+  diff_df$diff_estimate_covariates <- rep(NA_real_, nrows)
+  diff_df$diff_var_covariates <- rep(NA_real_, nrows)
+  diff_df$weights <- rep(weights, nrows)
+  diff_df$n <- rep(NA, nrows)
+  diff_df$n_t <- rep(NA, nrows)
+  diff_df$anonymize_size <- rep(NA, nrows)
 
   # Add the covariates if they exist
   if (identical(covariates, FALSE)) {
@@ -107,14 +127,31 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
   } else {
     covariates <- paste(covariates, collapse = ";")
   }
-  diff_df$covariates <- rep(covariates, nrow(diff_df))
+  diff_df$covariates <- rep(covariates, nrows)
 
   # Note date_format and freq info
   if (date_format %in% .undid_env$date_formats_r) {
     date_format <- .undid_env$date_format_dict_from_r[date_format]
   }
-  diff_df$date_format <- rep(date_format, nrow(diff_df))
-  diff_df$freq <- rep(freq_string, nrow(diff_df))
+  diff_df$date_format <- rep(date_format, nrows)
+  diff_df$freq <- rep(freq_string, nrows)
+
+  # Re-organize columns
+  if (common_adoption) {
+    diff_df <- diff_df[, c("silo_name", "treat", "common_treatment_time",
+                           "start_time", "end_time", "weights",
+                           "diff_estimate", "diff_var",
+                           "diff_estimate_covariates", "diff_var_covariates",
+                           "covariates", "date_format", "freq",
+                           "n", "n_t", "anonymize_size")]
+  } else if (staggered_adoption) {
+    diff_df <- diff_df[, c("silo_name", "gvar", "treat", "diff_times",
+                           "gt", "RI", "start_time", "end_time",
+                           "weights", "diff_estimate", "diff_var",
+                           "diff_estimate_covariates", "diff_var_covariates",
+                           "covariates", "date_format", "freq",
+                           "n", "n_t", "anonymize_size")]
+  }
 
   full_path <- file.path(filepath, filename)
   # Save as csv, print filepath, return dataframe
@@ -152,7 +189,7 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
 
 #' @keywords internal
 # Create empty_diff_df.csv for common treatment time
-.create_common_diff_df <- function(init_df, weights) {
+.create_common_diff_df <- function(init_df, date_format) {
   silo_name <- c()
   treat <- c()
   common_treatment_time <- rep(init_df[init_df$treatment_time != "control",
@@ -172,15 +209,19 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
                                     "end_time"])
     silo_name <- c(silo_name, silo)
   }
-  if (weights == "standard") {
-    weights <- rep("standard", nrow(init_df))
-  }
+
   diff_df <- data.frame(silo_name = silo_name, treat = treat,
                         common_treatment_time = common_treatment_time,
-                        start_time = start_time, end_time = end_time,
-                        weights = weights)
-  diff_df$start_time <- as.Date(diff_df$start_time)
-  diff_df$end_time <- as.Date(diff_df$end_time)
+                        start_time = start_time, end_time = end_time)
+
+  # Transform to a legible date and then to the proper string
+  diff_df$start_time <- .parse_date_to_string(
+    as.Date(diff_df$start_time, origin = "1970-01-01"), date_format
+  )
+  diff_df$end_time <- .parse_date_to_string(
+    as.Date(diff_df$end_time, origin = "1970-01-01"), date_format
+  )
+
   return(diff_df)
 }
 
@@ -195,16 +236,22 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
     } else if (x == "control") {
       return(NA)
     }
-  }, FUN.VALUE = as.Date(NA))
-  all_treatment_times <- sort(as.Date(na.omit(init_df$treatment_time_date)))
+  }, FUN.VALUE = as.Date(NA, origin = "1970-01-01"))
+  all_treatment_times <- sort(as.Date(na.omit(init_df$treatment_time_date),
+                                      origin = "1970-01-01"))
 
   # Grab start and end times
   start <- init_df$start_time[1]
   end <- init_df$end_time[1]
   gt_control <- do.call(rbind,
                         lapply(all_treatment_times, function(treatment_time) {
-                          times <- seq.Date(from = as.Date(treatment_time),
-                                            to = end, by = freq_string)
+                          times <- seq.Date(
+                            from = as.Date(
+                              treatment_time,
+                              origin = "1970-01-01"
+                            ),
+                            to = end, by = freq_string
+                          )
                           data.frame(g = treatment_time, t = times)
                         }))
   gt_control <- unique(gt_control)
@@ -226,9 +273,10 @@ create_diff_df <- function(init_filepath, date_format, freq, covariates = FALSE,
       treat <- "1"
     } else if (treatment_time == "control") {
       gt <- gt_control
-      diff_times <- data.frame(post = as.Date(NULL), pre = as.Date(NULL))
+      diff_times <- data.frame(post = NULL,
+                               pre = NULL)
       for (g in unique(gt$g)) {
-        g <- as.Date(g)
+        g <- as.Date(g, origin = "1970-01-01")
         post_periods <- seq(from = g, to = end, by = freq_string)
         pre_period <- seq(g, length = 2,
                           by = paste0("-", freq_string))[2]
