@@ -52,7 +52,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <strong>undidR</strong> package provides the framework for implementing difference-in-differences with unpoolable data (UNDID) developed in <a href="https://arxiv.org/abs/2403.15910v2" class="external-link">Karim, Webb, Austin, and Strumpf (2024)</a>. UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered adoption scenarios, as well as the optional inclusion of covariates. Additionally, <strong>undidR</strong> incorporates a randomization inference (RI) procedure, based on <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="external-link">MacKinnon and Webb (2020)</a>, for calculating p-values for the UNDID ATT.</p>
+<p>The <strong>undidR</strong> package provides the framework for implementing difference-in-differences with unpoolable data (UNDID) developed in <a href="https://arxiv.org/abs/2403.15910v2" class="external-link">Karim, Webb, Austin, and Strumpf (2025)</a>. UNDID is designed to estimate the average treatment effect on the treated (ATT) in settings where data from different silos cannot be pooled together (potentially for reasons of confidentiality). The package supports both common and staggered adoption scenarios, as well as the optional inclusion of covariates. Additionally, <strong>undidR</strong> incorporates a randomization inference (RI) procedure, based on <a href="https://doi.org/10.1016/j.jeconom.2020.04.024" class="external-link">MacKinnon and Webb (2020)</a>, for calculating p-values for the UNDID ATT.</p>
 <p>See the image below for an overview of the <strong>undidR</strong> framework: <img src="articles/figures/undidR_schematic.png" width="90%" style="display: block; margin: auto;"></p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -81,7 +81,7 @@
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1993"</span>, <span class="st">"1996"</span>, <span class="st">"1997"</span>,</span>
 <span>                                            <span class="st">"1997"</span>, <span class="st">"1998"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpekLAIM/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;    silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1         73       1989     2000        control</span></span>
@@ -102,7 +102,7 @@
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
 <span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>,</span>
 <span>                                covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpekLAIM/empty_diff_df.csv</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/empty_diff_df.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">empty_diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -131,8 +131,8 @@
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpekLAIM/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpekLAIM/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -188,11 +188,11 @@
 <span><span class="co">#&gt; Subaggregate Results:</span></span>
 <span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; 1991                     0.0434     0.0252     0.0899     0.3459         NA         NA     0.2428</span></span>
-<span><span class="co">#&gt; 1993                     0.0478     0.0242     0.0528     0.4311         NA         NA     0.2305</span></span>
-<span><span class="co">#&gt; 1996                     0.0451     0.0353     0.2106     0.6190         NA         NA     0.0910</span></span>
-<span><span class="co">#&gt; 1997                     0.1322     0.0294     0.0001     0.0602     0.0532     0.0302     0.3863</span></span>
-<span><span class="co">#&gt; 1998                    -0.0812     0.0602     0.1937     0.3108         NA         NA     0.0494</span></span></code></pre></div>
+<span><span class="co">#&gt; 1991                     0.0434     0.0252     0.0899     0.3183         NA         NA     0.2428</span></span>
+<span><span class="co">#&gt; 1993                     0.0478     0.0242     0.0528     0.4486         NA         NA     0.2305</span></span>
+<span><span class="co">#&gt; 1996                     0.0451     0.0353     0.2106     0.6015         NA         NA     0.0910</span></span>
+<span><span class="co">#&gt; 1997                     0.1322     0.0294     0.0001     0.0652     0.0532     0.0302     0.3863</span></span>
+<span><span class="co">#&gt; 1998                    -0.0812     0.0602     0.1937     0.3358         NA         NA     0.0494</span></span></code></pre></div>
 </div>
 </div>
 </div>
