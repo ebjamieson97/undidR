@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">undidR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@
 <span>                        treatment_times <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"control"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
 <span>                                            <span class="st">"1991"</span>, <span class="st">"1993"</span>, <span class="st">"1996"</span>, <span class="st">"1997"</span>,</span>
 <span>                                            <span class="st">"1997"</span>, <span class="st">"1998"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/init.csv</span></span>
+<span><span class="co">#&gt; init.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpIDXxEE/init.csv</span></span>
 <span><span class="va">init</span></span>
 <span><span class="co">#&gt;    silo_name start_time end_time treatment_time</span></span>
 <span><span class="co">#&gt; 1         73       1989     2000        control</span></span>
@@ -102,7 +102,7 @@
 <span><span class="va">empty_diff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/create_diff_df.html">create_diff_df</a></span><span class="op">(</span><span class="va">init_filepath</span>, date_format <span class="op">=</span> <span class="st">"yyyy"</span>,</span>
 <span>                                freq <span class="op">=</span> <span class="st">"yearly"</span>,</span>
 <span>                                covariates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"asian"</span>, <span class="st">"black"</span>, <span class="st">"male"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/empty_diff_df.csv</span></span>
+<span><span class="co">#&gt; empty_diff_df.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpIDXxEE/empty_diff_df.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">empty_diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -131,8 +131,8 @@
 <span><span class="va">stage2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/undid_stage_two.html">undid_stage_two</a></span><span class="op">(</span><span class="va">empty_diff_filepath</span>, silo_name <span class="op">=</span> <span class="st">"71"</span>,</span>
 <span>                          silo_df <span class="op">=</span> <span class="va">silo_data</span>, time_column <span class="op">=</span> <span class="st">"year"</span>,</span>
 <span>                          outcome_column <span class="op">=</span> <span class="st">"coll"</span>, silo_date_format <span class="op">=</span> <span class="st">"yyyy"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/filled_diff_df_71.csv</span></span>
-<span><span class="co">#&gt; trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpgllDXd/trends_data_71.csv</span></span>
+<span><span class="co">#&gt; filled_diff_df_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpIDXxEE/filled_diff_df_71.csv</span></span>
+<span><span class="co">#&gt; trends_data_71.csv saved to: C:/Users/Eric Bruce Jamieson/AppData/Local/Temp/RtmpIDXxEE/trends_data_71.csv</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">stage2</span><span class="op">$</span><span class="va">diff_df</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   silo_name gvar treat diff_times        gt RI start_time end_time weights</span></span>
 <span><span class="co">#&gt; 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both</span></span>
@@ -183,16 +183,25 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Aggregate Results:</span></span>
 <span><span class="co">#&gt;        ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value</span></span>
-<span><span class="co">#&gt;  0.0727396 0.02600099 0.04893262 0.05764411   0.03619008        0.06960867</span></span>
+<span><span class="co">#&gt;  0.0727396 0.02600099 0.04893262 0.06766917   0.03619008        0.06960867</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Subaggregate Results:</span></span>
 <span><span class="co">#&gt; Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span></span>
 <span><span class="co">#&gt; -------------------------------------------------------------------------------------------------------------- </span></span>
-<span><span class="co">#&gt; 1991                     0.0434     0.0252     0.0899     0.3183         NA         NA     0.2428</span></span>
-<span><span class="co">#&gt; 1993                     0.0478     0.0242     0.0528     0.4486         NA         NA     0.2305</span></span>
-<span><span class="co">#&gt; 1996                     0.0451     0.0353     0.2106     0.6015         NA         NA     0.0910</span></span>
-<span><span class="co">#&gt; 1997                     0.1322     0.0294     0.0001     0.0652     0.0532     0.0302     0.3863</span></span>
-<span><span class="co">#&gt; 1998                    -0.0812     0.0602     0.1937     0.3358         NA         NA     0.0494</span></span></code></pre></div>
+<span><span class="co">#&gt; 1991                     0.0434     0.0252     0.0899     0.3860         NA         NA     0.2428</span></span>
+<span><span class="co">#&gt; 1993                     0.0478     0.0242     0.0528     0.4511         NA         NA     0.2305</span></span>
+<span><span class="co">#&gt; 1996                     0.0451     0.0353     0.2106     0.5589         NA         NA     0.0910</span></span>
+<span><span class="co">#&gt; 1997                     0.1322     0.0294     0.0001     0.0576     0.0532     0.0302     0.3863</span></span>
+<span><span class="co">#&gt; 1998                    -0.0812     0.0602     0.1937     0.2957         NA         NA     0.0494</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, lwd <span class="op">=</span> <span class="fl">2</span>, legend <span class="op">=</span> <span class="st">"topleft"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-parallel-trends-plot-1.png" width="70%" style="display: block; margin: auto;"></p>
+<p>The S3 method of <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> for an UnDiDObj accepts parameters inherited from default <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> such as <code>main</code>, as well as the additional parameters of: <code>ci</code> (confidence interval), <code>event_window</code> (periods before / after treatment to plot), and <code>event</code> (TRUE or FALSE to plot either event study or parallel trends plots).</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">results</span>, event <span class="op">=</span> <span class="cn">TRUE</span>, ci <span class="op">=</span> <span class="fl">0.9</span>, event_window <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span>,</span>
+<span>     main <span class="op">=</span> <span class="st">"My Event Study Plot"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-event-study-plot-1.png" width="70%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 </div>

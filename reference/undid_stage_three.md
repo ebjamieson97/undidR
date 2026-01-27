@@ -2,7 +2,8 @@
 
 Takes in all of the filled diff df CSV files and uses them to compute
 group level ATTs as well as the aggregate ATT and its standard errors
-and p-values.
+and p-values. Also takes in the trends data CSV files and uses them to
+produce parallel trends and event study plots.
 
 ## Usage
 
@@ -103,7 +104,7 @@ undid_stage_three(
 
 An UnDiDObj with S3 methods of
 [`summary()`](https://rdrr.io/r/base/summary.html),
-[`citation()`](https://rdrr.io/r/utils/citation.html),
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html),
 [`print()`](https://rdrr.io/r/base/print.html), and
 [`coef()`](https://rdrr.io/r/stats/coef.html).
 
@@ -115,14 +116,40 @@ dir <- system.file("extdata/staggered", package = "undidR")
 # \donttest{
    # Recommended: nperm >= 399 for reasonable precision
    # (~15 seconds on typical hardware)
-   undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
+   result <- undid_stage_three(dir, agg = "g", nperm = 399, verbose = NULL)
+
+   # View the summary of results
+   summary(result)
 #> 
 #>   Weighting: both
-#>   Covariates: none
 #>   Aggregation: g
+#>   Not-yet-treated: FALSE
+#>   Covariates: none
+#>   HCCME: hc3
+#>   Period Length: 1 year
+#>   First Period: 1989
+#>   Last Period: 2000
+#>   Permutations: 399
 #> 
-#>   Aggregate ATT:  0.0761
+#> Aggregate Results:
+#>         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value
+#>  0.07611833 0.04999124 0.2025126 0.03007519   0.04125346        0.09208696
 #> 
-#> (5 sub-aggregate estimates available via print(., level='sub'))
+#> Subaggregate Results:
+#> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
+#> -------------------------------------------------------------------------------------------------------------- 
+#> 1991                     0.0339     0.0272     0.2162     0.4511         NA         NA     0.2428
+#> 1993                     0.0316     0.0257     0.2235     0.6015         NA         NA     0.2305
+#> 1996                     0.0685     0.0400     0.0961     0.5288         NA         NA     0.0910
+#> 1997                     0.1487     0.0333     0.0001     0.0426     0.0470     0.0090     0.3863
+#> 1998                    -0.0623     0.0654     0.3525     0.4812         NA         NA     0.0494
+
+   # View the parallel trends plot
+   plot(result)
+
+
+   # View the event study plot
+   plot(result, event = TRUE)
+
 # }
 ```

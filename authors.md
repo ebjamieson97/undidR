@@ -38,13 +38,13 @@ Econometrics*, **218**(2), 435-450.
     }
 
 Jamieson E (2025). “undidR: Difference-in-Differences with Unpoolable
-Data.” R package version 3.0.0,
+Data.” R package version 3.0.1,
 <https://doi.org/10.32614/CRAN.package.undidR>.
 
     @Misc{,
       title = {undidR: Difference-in-Differences with Unpoolable Data},
       author = {Eric Jamieson},
       year = {2025},
-      note = {R package version 3.0.0},
+      note = {R package version 3.0.1},
       url = {https://doi.org/10.32614/CRAN.package.undidR},
     }

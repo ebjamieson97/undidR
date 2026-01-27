@@ -96,7 +96,7 @@ create_diff_df(
   date_format = "yyyy",
   freq = "yearly"
 )
-#> empty_diff_df.csv saved to: /tmp/RtmpngDrKr/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/RtmpHJtMrQ/empty_diff_df.csv
 #>     silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1          73 1991     0  1991;1990 1991;1991  0       1989     2000    both
 #> 2          73 1991     0  1992;1990 1991;1992  0       1989     2000    both

@@ -6,7 +6,15 @@ Plot method for `UnDiDObj`
 
 ``` r
 # S3 method for class 'UnDiDObj'
-plot(x, event = FALSE, event_window = NULL, ci = 0.95, ...)
+plot(
+  x,
+  event = FALSE,
+  event_window = NULL,
+  ci = 0.95,
+  lwd = 1,
+  legend = "topright",
+  ...
+)
 ```
 
 ## Arguments
@@ -28,6 +36,20 @@ plot(x, event = FALSE, event_window = NULL, ci = 0.95, ...)
 - ci:
 
   Numeric between 0 and 1 specifying confidence level. Default is 0.95.
+
+- lwd:
+
+  Linewidth arg passed to
+  [`lines()`](https://rdrr.io/r/graphics/lines.html),
+  [`abline()`](https://rdrr.io/r/graphics/abline.html), and
+  [`segments()`](https://rdrr.io/r/graphics/segments.html). Defaults to
+  `1`.
+
+- legend:
+
+  Keywords for indicating desired legend location. Defaults to
+  `"topright"`. Other options include any of the keywords used as x in
+  `legend(x, ...)`.
 
 - ...:
 
