@@ -49,7 +49,7 @@ plot(
 
   Keywords for indicating desired legend location. Defaults to
   `"topright"`. Other options include any of the keywords used as x in
-  `legend(x, ...)`.
+  `legend(x, ...)` or `NULL` to omit a legend.
 
 - ...:
 
