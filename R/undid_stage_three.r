@@ -616,7 +616,7 @@ coef.UnDiDObj <- function(object, level = c("agg", "sub"), ...) {
 #'  Defaults to `1`.
 #' @param legend Keywords for indicating desired legend location. Defaults to
 #'  `"topright"`. Other options include any of the keywords used as
-#'  x in `legend(x, ...)`.
+#'  x in `legend(x, ...)` or `NULL` to omit a legend.
 #' @param ... other arguments passed to plot
 #' @export
 plot.UnDiDObj <- function(x, event = FALSE,
@@ -805,16 +805,17 @@ plot.UnDiDObj <- function(x, event = FALSE,
     }
 
     # Add legend
-    legend(legend,
-           legend = silos,
-           col = colors,
-           lwd = lwd,
-           lty = ifelse(sapply(silos, function(s) {
-             trends$treatment_time[trends$silo_name == s][1] == "control"
-           }), 2, 1),
-           cex = 0.7)
+    if (!is.null(legend)) {
+      legend(legend,
+             legend = silos,
+             col = colors,
+             lwd = lwd,
+             lty = ifelse(sapply(silos, function(s) {
+               trends$treatment_time[trends$silo_name == s][1] == "control"
+             }), 2, 1),
+             cex = 0.7)
+    }
   }
-
 }
 
 #' @keywords internal

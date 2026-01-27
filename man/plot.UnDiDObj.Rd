@@ -31,7 +31,7 @@ Defaults to \code{1}.}
 
 \item{legend}{Keywords for indicating desired legend location. Defaults to
 \code{"topright"}. Other options include any of the keywords used as
-x in \code{legend(x, ...)}.}
+x in \code{legend(x, ...)} or \code{NULL} to omit a legend.}
 
 \item{...}{other arguments passed to plot}
 }
