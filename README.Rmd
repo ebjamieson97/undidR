@@ -84,3 +84,16 @@ results <- undid_stage_three(dir_path, agg = "g", covariates = TRUE,
                              nperm = 399, hc = "hc0", verbose = NULL)
 summary(results)
 ```
+
+
+```{r parallel-trends-plot, fig.width=6, fig.height=4, out.width = "70%", dpi=300, fig.align="center"}
+plot(results, lwd = 2, legend = "topleft")
+```
+
+The S3 method of `plot()` for an UnDiDObj accepts parameters inherited from default `plot()` such as `main`, as well as the additional parameters of: `ci` (confidence interval), `event_window` (periods before / after 
+treatment to plot), and `event` (TRUE or FALSE to plot either event study or parallel trends plots).
+```{r event-study-plot, fig.width=6, fig.height=4, out.width = "70%", dpi=300, fig.align="center"}
+
+plot(results, event = TRUE, ci = 0.9, event_window = c(-2, 5),
+     main = "My Event Study Plot", lwd = 2)
+```
