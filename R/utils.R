@@ -138,10 +138,8 @@
     omega_diag <- (resid^2) / ((1 - h)^delta)
   }
 
-  omega <- diag(omega_diag)
-
   # Sandwich estimator
-  return(XXinv %*% (t(x) %*% omega %*% x) %*% XXinv)
+  return(XXinv %*% crossprod(x, omega_diag * x) %*% XXinv)
 
 }
 
