@@ -108,8 +108,8 @@ results <- undid_stage_two(
   outcome_column = "coll",
   silo_date_format = "yyyy"
 )
-#> filled_diff_df_71.csv saved to: /tmp/Rtmp4vQlGn/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/Rtmp4vQlGn/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmppI02hW/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmppI02hW/trends_data_71.csv
 
 # View results
 head(results$diff_df)

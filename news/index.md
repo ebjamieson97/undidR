@@ -2,6 +2,8 @@
 
 ## undidR 3.0.1
 
+CRAN release: 2026-02-16
+
 - Added the `lwd` and `legend` parameters to the S3
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method for
   `UnDiDObj` which controls line width and legend locations,
