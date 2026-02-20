@@ -10,7 +10,7 @@
 
 #' @keywords internal
 #' Compute beta coefficients and their SE's
-.regress <- function(x, y, w = NULL, hc = "hc0") {
+.regress <- function(x, y, w = NULL, hc = "hc1") {
 
   # Make sure x is a matrix and y is a vector
   x <- as.matrix(x)
