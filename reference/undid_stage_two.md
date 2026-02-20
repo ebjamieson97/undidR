@@ -108,8 +108,8 @@ results <- undid_stage_two(
   outcome_column = "coll",
   silo_date_format = "yyyy"
 )
-#> filled_diff_df_71.csv saved to: /tmp/RtmppI02hW/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmppI02hW/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmpdtyNvV/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmpdtyNvV/trends_data_71.csv
 
 # View results
 head(results$diff_df)
@@ -121,12 +121,12 @@ head(results$diff_df)
 #> 5        71 1991     1  1995;1990 1991;1995  0       1989     2000    both
 #> 6        71 1991     1  1996;1990 1991;1996  0       1989     2000    both
 #>   diff_estimate    diff_var diff_estimate_covariates diff_var_covariates
-#> 1    0.12916667 0.009447555              0.116348472         0.009397021
-#> 2    0.06916667 0.008602222              0.069515594         0.008272557
-#> 3    0.02546296 0.007975422              0.005133291         0.007767637
-#> 4    0.02703901 0.008564103              0.029958108         0.008338060
-#> 5    0.17361111 0.008686695              0.168621303         0.007994236
-#> 6    0.13594633 0.008204221              0.146360101         0.007834932
+#> 1    0.12916667 0.009655194              0.116348472         0.009930942
+#> 2    0.06916667 0.008781435              0.069515594         0.008624581
+#> 3    0.02546296 0.008134930              0.005133291         0.008084684
+#> 4    0.02703901 0.008748277              0.029958108         0.008704568
+#> 5    0.17361111 0.008860429              0.168621303         0.008320531
+#> 6    0.13594633 0.008360492              0.146360101         0.008139201
 #>         covariates date_format   freq   n n_t anonymize_size
 #> 1 asian;black;male        yyyy 1 year  93  45             NA
 #> 2 asian;black;male        yyyy 1 year  98  50             NA

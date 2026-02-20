@@ -1,5 +1,13 @@
 # Changelog
 
+## undidR 3.0.2
+
+- Computation of HCCMEs is now faster by using a crossproduct approach
+  rather than constructing a full omega matrix.
+- Changed the default HCCME from HC3 to HC1 (i.e., `hc = 1`).
+- Fixed an issue where standard errors were returning `NA` for certain
+  edge cases.
+
 ## undidR 3.0.1
 
 CRAN release: 2026-02-16

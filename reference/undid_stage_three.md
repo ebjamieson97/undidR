@@ -17,7 +17,7 @@ undid_stage_three(
   nperm = 999,
   verbose = 100,
   check_anon_size = FALSE,
-  hc = "hc3",
+  hc = "hc1",
   only = NULL,
   omit = NULL,
   max_attempts = 100
@@ -84,7 +84,8 @@ undid_stage_three(
 
   Specify which heteroskedasticity-consistent covariance matrix
   estimator (HCCME) should be used. Options are `0`, `1`, `2`, `3`, and
-  `4` (or `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`).
+  `4` (or `"hc0"`, `"hc1"`, `"hc2"`, `"hc3"`, `"hc4"`). Defaults to
+  `"hc1"`.
 
 - only:
 
@@ -125,7 +126,7 @@ dir <- system.file("extdata/staggered", package = "undidR")
 #>   Aggregation: g
 #>   Not-yet-treated: FALSE
 #>   Covariates: none
-#>   HCCME: hc3
+#>   HCCME: hc1
 #>   Period Length: 1 year
 #>   First Period: 1989
 #>   Last Period: 2000
@@ -133,16 +134,16 @@ dir <- system.file("extdata/staggered", package = "undidR")
 #> 
 #> Aggregate Results:
 #>         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.07611833 0.04999124 0.2025126 0.03007519   0.04125346        0.09208696
+#>  0.07611833 0.03610753 0.1027101 0.03007519   0.04125346        0.09208696
 #> 
 #> Subaggregate Results:
 #> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 1991                     0.0339     0.0272     0.2162     0.4511         NA         NA     0.2428
-#> 1993                     0.0316     0.0257     0.2235     0.6015         NA         NA     0.2305
-#> 1996                     0.0685     0.0400     0.0961     0.5288         NA         NA     0.0910
-#> 1997                     0.1487     0.0333     0.0001     0.0426     0.0470     0.0090     0.3863
-#> 1998                    -0.0623     0.0654     0.3525     0.4812         NA         NA     0.0494
+#> 1991                     0.0339     0.0253     0.1845     0.4511         NA         NA     0.2428
+#> 1993                     0.0316     0.0243     0.1991     0.6015         NA         NA     0.2305
+#> 1996                     0.0685     0.0360     0.0658     0.5288         NA         NA     0.0910
+#> 1997                     0.1487     0.0301     0.0000     0.0426     0.0470     0.0090     0.3863
+#> 1998                    -0.0623     0.0486     0.2155     0.4812         NA         NA     0.0494
 
    # View the parallel trends plot
    plot(result)

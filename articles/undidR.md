@@ -70,7 +70,7 @@ init <- create_init_csv(silo_names = c("73", "46", "71", "58"),
                         end_times = "2000",
                         treatment_times = c("control", "control",
                                             "1991", "1991"))
-#> init.csv saved to: /tmp/Rtmp0U80UP/init.csv
+#> init.csv saved to: /tmp/RtmpmsKIyo/init.csv
 init
 #>   silo_name start_time end_time treatment_time
 #> 1        73       1989     2000        control
@@ -85,7 +85,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
                                winslash = "/", mustWork = FALSE)
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both")
-#> empty_diff_df.csv saved to: /tmp/Rtmp0U80UP/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/RtmpmsKIyo/empty_diff_df.csv
 empty_diff_df
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        73     0                  1991       1989     2000    both
@@ -117,7 +117,7 @@ init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                         treatment_times = c(rep("control", 6),
                                             "1991", "1993", "1996", "1997",
                                             "1997", "1998"))
-#> init.csv saved to: /tmp/Rtmp0U80UP/init.csv
+#> init.csv saved to: /tmp/RtmpmsKIyo/init.csv
 init
 #>    silo_name start_time end_time treatment_time
 #> 1         73       1989     2000        control
@@ -140,7 +140,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both",
                                 covariates = c("asian", "black", "male"))
-#> empty_diff_df.csv saved to: /tmp/Rtmp0U80UP/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/RtmpmsKIyo/empty_diff_df.csv
 head(empty_diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both
@@ -199,13 +199,13 @@ empty_diff_filepath <- system.file("extdata/common", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/Rtmp0U80UP/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/Rtmp0U80UP/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmpmsKIyo/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmpmsKIyo/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        71     1                  1991       1989     2000    both
 #>   diff_estimate    diff_var diff_estimate_covariates diff_var_covariates
-#> 1    0.05879783 0.002597221               0.06696561         0.002532783
+#> 1    0.05879783 0.002606382               0.06696561         0.002555237
 #>         covariates date_format   freq   n n_t anonymize_size
 #> 1 asian;black;male        yyyy 1 year 569 472             NA
 head(stage2$trends_data, 4)
@@ -233,8 +233,8 @@ empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/Rtmp0U80UP/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/Rtmp0U80UP/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmpmsKIyo/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmpmsKIyo/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both
@@ -242,10 +242,10 @@ head(stage2$diff_df, 4)
 #> 3        71 1991     1  1993;1990 1991;1993  0       1989     2000    both
 #> 4        71 1991     1  1994;1990 1991;1994  0       1989     2000    both
 #>   diff_estimate    diff_var diff_estimate_covariates diff_var_covariates
-#> 1    0.12916667 0.009447555              0.116348472         0.009397021
-#> 2    0.06916667 0.008602222              0.069515594         0.008272557
-#> 3    0.02546296 0.007975422              0.005133291         0.007767637
-#> 4    0.02703901 0.008564103              0.029958108         0.008338060
+#> 1    0.12916667 0.009655194              0.116348472         0.009930942
+#> 2    0.06916667 0.008781435              0.069515594         0.008624581
+#> 3    0.02546296 0.008134930              0.005133291         0.008084684
+#> 4    0.02703901 0.008748277              0.029958108         0.008704568
 #>         covariates date_format   freq   n n_t anonymize_size
 #> 1 asian;black;male        yyyy 1 year  93  45             NA
 #> 2 asian;black;male        yyyy 1 year  98  50             NA
@@ -324,15 +324,15 @@ summary(results)
 #>   Aggregation: none
 #>   Not-yet-treated: FALSE
 #>   Covariates: none
-#>   HCCME: hc3
+#>   HCCME: hc1
 #>   Period Length: 1 year
 #>   First Period: 1989
 #>   Last Period: 2000
 #>   Permutations: 5
 #> 
 #> Aggregate Results:
-#>         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.02381393 0.05027192 0.6823859        0.6   0.04353676          0.622451
+#>         ATT Std. Error p-value RI p-value Jackknife SE Jackknife p-value
+#>  0.02381393 0.03538647 0.57031        0.6   0.04353676          0.622451
 #> 
 #> No sub-aggregate estimates available.
 plot(results)
@@ -396,7 +396,7 @@ summary(results)
 #>   Aggregation: silo
 #>   Not-yet-treated: FALSE
 #>   Covariates: asian, black, male
-#>   HCCME: hc3
+#>   HCCME: hc1
 #>   Period Length: 1 year
 #>   First Period: 1989
 #>   Last Period: 2000
@@ -404,17 +404,17 @@ summary(results)
 #> 
 #> Aggregate Results:
 #>        ATT Std. Error    p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.0732032 0.03338214 0.07980594 0.03007519    0.0366304        0.07099495
+#>  0.0732032 0.02684434 0.04143039 0.03007519    0.0366304        0.07099495
 #> 
 #> Subaggregate Results:
 #> Silo                        ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 71                       0.0434     0.0275     0.1192     0.3083         NA         NA     0.2428
-#> 58                       0.0478     0.0260     0.0710     0.4486         NA         NA     0.2305
-#> 64                       0.0451     0.0407     0.2757     0.5965         NA         NA     0.0910
-#> 59                       0.1454     0.0412     0.0016     0.0602         NA         NA     0.2922
-#> 85                       0.0964     0.0401     0.0238     0.3258         NA         NA     0.0941
-#> 57                      -0.0812     0.0888     0.3718     0.2757         NA         NA     0.0494
+#> 71                       0.0434     0.0256     0.0945     0.3083         NA         NA     0.2428
+#> 58                       0.0478     0.0246     0.0570     0.4486         NA         NA     0.2305
+#> 64                       0.0451     0.0364     0.2238     0.5965         NA         NA     0.0910
+#> 59                       0.1454     0.0345     0.0003     0.0602         NA         NA     0.2922
+#> 85                       0.0964     0.0337     0.0082     0.3258         NA         NA     0.0941
+#> 57                      -0.0812     0.0633     0.2153     0.2757         NA         NA     0.0494
 
 plot(results, main = "My Parallel Trends Plot")
 ```

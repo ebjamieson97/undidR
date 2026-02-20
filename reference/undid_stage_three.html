@@ -58,7 +58,7 @@ to produce parallel trends and event study plots.</p>
 <span>  nperm <span class="op">=</span> <span class="fl">999</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  check_anon_size <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  hc <span class="op">=</span> <span class="st">"hc3"</span>,</span>
+<span>  hc <span class="op">=</span> <span class="st">"hc1"</span>,</span>
 <span>  only <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  omit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  max_attempts <span class="op">=</span> <span class="fl">100</span></span>
@@ -126,7 +126,7 @@ respective <code>anonymize_size</code> values. Defaults to <code>FALSE</code>.</
 <dt id="arg-hc">hc<a class="anchor" aria-label="anchor" href="#arg-hc"></a></dt>
 <dd><p>Specify which heteroskedasticity-consistent covariance matrix
 estimator (HCCME) should be used. Options are <code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>, and
-<code>4</code> (or <code>"hc0"</code>, <code>"hc1"</code>, <code>"hc2"</code>, <code>"hc3"</code>, <code>"hc4"</code>).</p></dd>
+<code>4</code> (or <code>"hc0"</code>, <code>"hc1"</code>, <code>"hc2"</code>, <code>"hc3"</code>, <code>"hc4"</code>). Defaults to <code>"hc1"</code>.</p></dd>
 
 
 <dt id="arg-only">only<a class="anchor" aria-label="anchor" href="#arg-only"></a></dt>
@@ -166,7 +166,7 @@ inference procedure. Defaults to <code>100</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Aggregation: g</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Not-yet-treated: FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Covariates: none</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   HCCME: hc3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   HCCME: hc1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Period Length: 1 year</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   First Period: 1989</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Last Period: 2000</span>
@@ -174,16 +174,16 @@ inference procedure. Defaults to <code>100</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Aggregate Results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.07611833 0.04999124 0.2025126 0.03007519   0.04125346        0.09208696</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.07611833 0.03610753 0.1027101 0.03007519   0.04125346        0.09208696</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Subaggregate Results:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------------------------- </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1991                     0.0339     0.0272     0.2162     0.4511         NA         NA     0.2428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1993                     0.0316     0.0257     0.2235     0.6015         NA         NA     0.2305</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1996                     0.0685     0.0400     0.0961     0.5288         NA         NA     0.0910</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1997                     0.1487     0.0333     0.0001     0.0426     0.0470     0.0090     0.3863</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1998                    -0.0623     0.0654     0.3525     0.4812         NA         NA     0.0494</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1991                     0.0339     0.0253     0.1845     0.4511         NA         NA     0.2428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1993                     0.0316     0.0243     0.1991     0.6015         NA         NA     0.2305</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1996                     0.0685     0.0360     0.0658     0.5288         NA         NA     0.0910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1997                     0.1487     0.0301     0.0000     0.0426     0.0470     0.0090     0.3863</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1998                    -0.0623     0.0486     0.2155     0.4812         NA         NA     0.0494</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>   <span class="co"># View the parallel trends plot</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>

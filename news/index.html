@@ -34,6 +34,12 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.0.2" id="undidr-302">undidR 3.0.2<a class="anchor" aria-label="anchor" href="#undidr-302"></a></h2>
+<ul><li>Computation of HCCMEs is now faster by using a crossproduct approach rather than constructing a full omega matrix.</li>
+<li>Changed the default HCCME from HC3 to HC1 (i.e., <code>hc = 1</code>).</li>
+<li>Fixed an issue where standard errors were returning <code>NA</code> for certain edge cases.</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.0.1" id="undidr-301">undidR 3.0.1<a class="anchor" aria-label="anchor" href="#undidr-301"></a></h2><p class="text-muted">CRAN release: 2026-02-16</p>
 <ul><li>Added the <code>lwd</code> and <code>legend</code> parameters to the S3 <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method for <code>UnDiDObj</code> which controls line width and legend locations, respectively. Removed the default titles of plots.</li>
 <li>Also made other minor aesthetic changes to the default plots, such as adding horizontal bars to the ends of the event study plot confidence bands (like the letter I).</li>
