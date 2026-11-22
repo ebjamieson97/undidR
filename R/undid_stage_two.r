@@ -8,6 +8,20 @@
 #' @details Covariates at the local silo should be renamed to match the
 #' spelling used in the `empty_diff_df.csv`.
 #'
+#' Covariates may be numeric, logical, character, or factor columns.
+#' Character and factor covariates (and any covariates named in `factor`) are
+#' treated as categorical and are automatically converted into dummy
+#' variables, omitting one reference category. For factor columns, unused
+#' levels are dropped and the reference category is the lowest remaining
+#' level. For all other categorical columns, the categories are ordered with
+#' `sort(method = "radix")` and the first is used as the reference.
+#'
+#' Rows with missing values in the time, outcome, or covariate columns are
+#' dropped with a warning that reports the number of missing values in each
+#' affected column. Values in character or factor columns that are empty or
+#' contain only whitespace are treated as missing. Other values are not
+#' modified (e.g. leading or trailing whitespace is not removed).
+#'
 #' @param empty_diff_filepath A character filepath to the `empty_diff_df.csv`.
 #' @param silo_name A character indicating the name of the local silo. Ensure
 #'  spelling is the same as it is written in the `empty_diff_df.csv`.
@@ -34,6 +48,12 @@
 #' @param anonymize_size A numeric value. Counts will be rounded to the nearest
 #'  multiple of this value if `anonymize_weights` is `TRUE` (with a minimum
 #'  value for any count being set as the value given for `anonymize_size`).
+#' @param factor An optional character vector (e.g. `c("educ", "race")`) or
+#'  formula(s) (e.g. `~educ + race`, `~educ ~race`, or `c(~educ, ~race)`)
+#'  naming covariates that should be treated as categorical even though they
+#'  are not character or factor columns, such as numerically coded
+#'  categories. Character and factor covariates are always treated as
+#'  categorical. Defaults to `NULL`.
 #'
 #' @returns A list of data frames. The first being the filled differences
 #' data frame, and the second being the trends data data frame. Use
@@ -69,7 +89,8 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
                             time_column, outcome_column,
                             silo_date_format = NULL,
                             consider_covariates = TRUE, filepath = tempdir(),
-                            anonymize_weights = FALSE, anonymize_size = 5) {
+                            anonymize_weights = FALSE, anonymize_size = 5,
+                            factor = NULL) {
 
   # Check anon args
   .validate_logical_args(anonymize_weights, "anonymize_weights")
@@ -92,10 +113,87 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
   diff_df <- .read_diff_df(empty_diff_filepath, silo_name = silo_name,
                            stage = 2)
 
+  # Parse the factor arg (validated against the covariates further below)
+  factor_cols <- .parse_factor_arg(factor)
+
   # Check and process the outcome and time columns
   .time_and_outcome_check(silo_df, time_column, outcome_column)
+  silo_df <- as.data.frame(silo_df)
   colnames(silo_df)[colnames(silo_df) == time_column] <- "time"
   colnames(silo_df)[colnames(silo_df) == outcome_column] <- "outcome"
+
+  # If covariates are present, ensure the columns exist in silo_df
+  if (identical(consider_covariates, FALSE)) {
+    covariates <- "none"
+  } else if (identical(consider_covariates, TRUE)) {
+    covariates <- diff_df$covariates[1]
+  } else {
+    stop("`consider_covariates` must be entered as either `TRUE` or `FALSE`.")
+  }
+  if (covariates != "none") {
+    covariates <- unlist(strsplit(covariates, ";"))
+    columns_to_keep <- c(covariates, "time", "outcome")
+    missing_covariates <- covariates[!covariates %in% colnames(silo_df)]
+    if (length(missing_covariates) > 0) {
+      stop(paste("Could not find:", paste(missing_covariates,
+                                          collapse = ", "),
+                 "in the local silo.\nEnsure covariates in the local silo are",
+                 "spelled the same as they are in the `empty_diff_df.csv`."))
+    }
+  } else {
+    columns_to_keep <- c("time", "outcome")
+  }
+
+  # Only covariates can be declared as factors
+  if (length(factor_cols) > 0) {
+    active_covariates <- if (identical(covariates, "none")) {
+      character()
+    } else {
+      covariates
+    }
+    not_covariates <- setdiff(factor_cols, active_covariates)
+    if (length(not_covariates) > 0) {
+      warning(paste("The following columns passed to 'factor' are not",
+                    "covariates being considered and will be ignored:",
+                    paste(not_covariates, collapse = ", ")))
+    }
+    factor_cols <- intersect(factor_cols, active_covariates)
+  }
+
+  # Filter out unused columns
+  silo_df <- silo_df[, colnames(silo_df) %in% columns_to_keep, drop = FALSE]
+
+  # Treat empty or whitespace-only strings as missing values
+  blank_check <- .blank_strings_to_na(silo_df)
+  silo_df <- blank_check$df
+  n_blank <- blank_check$n_blank
+
+  # Check columns for missing values, and drop any rows containing them
+  n_missing <- vapply(silo_df, function(col) sum(is.na(col)), integer(1))
+  n_missing <- n_missing[n_missing > 0]
+  if (length(n_missing) > 0) {
+    # Note how many of the missing values were blank strings
+    blank_note <- ifelse(
+      names(n_missing) %in% names(n_blank),
+      paste0(" (", n_blank[names(n_missing)], " empty or whitespace-only)"),
+      ""
+    )
+    # Report the user's original column names rather than the internal ones
+    col_labels <- names(n_missing)
+    col_labels[col_labels == "outcome"] <- outcome_column
+    col_labels[col_labels == "time"] <- time_column
+    incomplete_rows <- !complete.cases(silo_df)
+    silo_df <- silo_df[!incomplete_rows, , drop = FALSE]
+    warning(paste0(
+      "Found missing values in the following columns:\n",
+      paste0("  ", col_labels, ": ", n_missing, blank_note, collapse = "\n"),
+      "\nDropped ", sum(incomplete_rows), " row(s) with missing values. ",
+      nrow(silo_df), " row(s) remain."
+    ))
+    if (nrow(silo_df) == 0) {
+      stop("No rows remain after dropping rows with missing values.")
+    }
+  }
 
   # Allow for time column to be numeric but only if it is 4 digits
   if (is.numeric(silo_df$time)) {
@@ -112,9 +210,6 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
     ))
   }
 
-  if (!all(!is.na(suppressWarnings(as.numeric(silo_df$outcome))))) {
-    stop("Ensure every value in the outcome column is a numeric value.")
-  }
   if (!is.numeric(silo_df$outcome)) {
     stop(paste("Please ensure that the", outcome_column,
                "column has only numeric values."))
@@ -126,51 +221,30 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
   silo_df$time <- mapply(.parse_string_to_date, silo_df$time,
                          silo_date_format)
 
-  # If covariates are present, ensure the columns exist in silo_df
-  if (identical(consider_covariates, FALSE)) {
-    covariates <- "none"
-  } else if (identical(consider_covariates, TRUE)) {
-    covariates <- diff_df$covariates[1]
+  # Check covariate column types, then expand categorical covariates into
+  # dummy columns. Covariates may be numeric, logical, character, or factor
+  # (or any atomic type if declared via the `factor` arg).
+  if (identical(covariates, "none")) {
+    covariate_cols <- "none"
   } else {
-    stop("`consider_covariates` must be entered as either `TRUE` or `FALSE`.")
-  }
-  if (covariates != "none") {
-    covariates <- unlist(strsplit(covariates, ";"))
-    columns_to_keep <- c(covariates, "time", "outcome")
-    columns_to_check <- c("outcome", covariates)
-    missing_covariates <- covariates[!covariates %in% colnames(silo_df)]
-    if (length(missing_covariates) > 0) {
-      stop(paste("Could not find:", paste(missing_covariates,
-                                          collapse = ", "),
-                 "in the local silo.\nEnsure covariates in the local silo are",
-                 "spelled the same as they are in the `empty_diff_df.csv`."))
+    valid_type <- vapply(covariates, function(cov) {
+      col <- silo_df[[cov]]
+      is.numeric(col) || is.logical(col) || is.character(col) ||
+        is.factor(col) || (cov %in% factor_cols && is.atomic(col))
+    }, logical(1))
+    if (!all(valid_type)) {
+      stop(paste("Covariates must be numeric, logical, character, or factor",
+                 "columns. Unsupported column type found for:",
+                 paste(covariates[!valid_type], collapse = ", ")))
     }
-  } else {
-    columns_to_keep <- c("time", "outcome")
-    columns_to_check <- c("outcome")
-  }
-
-  # Filter out unused columns
-  silo_df <- silo_df[, colnames(silo_df) %in% columns_to_keep]
-
-  # Check columns for missing values
-  missing_values <- names(silo_df)[sapply(silo_df, anyNA)]
-  if (length(missing_values > 0)) {
-    stop(paste("Found columns with missing values:", paste(missing_values,
-                                                           collapse = ", ")))
-  }
-
-  # Check outcome and covariate columns are numeric
-  non_numeric_columns <- columns_to_check[!sapply(silo_df[columns_to_check],
-                                                  is.numeric)]
-  if (length(non_numeric_columns > 0)) {
-    stop(paste("Ensure the following columns are numeric:",
-               paste(non_numeric_columns, collapse = ", ")))
+    expanded <- .expand_covariates(silo_df, covariates, factor_cols)
+    silo_df <- expanded$df
+    covariate_cols <- expanded$covariate_cols
   }
 
   # Fill staggered adoption diff_df
   if ("diff_times" %in% names(diff_df)) {
-    diff_df <- .fill_diff_df_staggered(silo_df, diff_df, covariates,
+    diff_df <- .fill_diff_df_staggered(silo_df, diff_df, covariate_cols,
                                        anonymize_size, anonymize_weights)
     if (as.character(as.integer(diff_df[diff_df$RI == 0, "treat"][1])) == "1") {
       treatment_time <- diff_df[diff_df$RI == 0, "gvar"][1]
@@ -179,7 +253,7 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
     }
     # Or fill common adoption diff_df
   } else if ("common_treatment_time" %in% names(diff_df)) {
-    diff_df <- .fill_diff_df_common(silo_df, diff_df, covariates,
+    diff_df <- .fill_diff_df_common(silo_df, diff_df, covariate_cols,
                                     anonymize_size, anonymize_weights)
 
     # Also do the date matching procedure (as in .fill_diff_df_staggered)
@@ -217,8 +291,8 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
 
   # Fill trends_data
   trends_data <- .fill_trends_data(silo_df, diff_df, covariates,
-                                   silo_name, treatment_time, anonymize_size,
-                                   anonymize_weights)
+                                   covariate_cols, silo_name, treatment_time,
+                                   anonymize_size, anonymize_weights)
   # Save as csv, print filepath, return dataframe
   date_format <- diff_df$date_format[1]
   diff_df$start_time <- .parse_date_to_string(
@@ -355,7 +429,8 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
                   (diff_df$diff_times_post == post),
                 "diff_var"] <- (reg$beta_hat_se)^2
         if (!identical(covariates, "none")) {
-          x <- as.matrix(cbind(x, silo_df[time_filter, covariates]))
+          x <- cbind(x, as.matrix(silo_df[time_filter, covariates,
+                                          drop = FALSE]))
           x <- .ensure_full_rank(x)
           reg <- .regress(x, y)
           diff_df[(diff_df$diff_times_pre == pre) &
@@ -470,7 +545,7 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
   diff_df$diff_estimate[1] <- reg$beta_hat
   diff_df$diff_var[1] <- (reg$beta_hat_se)^2
   if (!identical(covariates, "none")) {
-    x <- as.matrix(cbind(x, silo_df[, covariates]))
+    x <- cbind(x, as.matrix(silo_df[, covariates, drop = FALSE]))
     x <- .ensure_full_rank(x)
     reg <- .regress(x, y)
     diff_df$diff_estimate_covariates[1] <- reg$beta_hat
@@ -487,8 +562,11 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
 
 #' @keywords internal
 # Fill trends_data
-.fill_trends_data <- function(silo_df, diff_df, covariates, silo_name,
-                              treatment_time, anonymize_size,
+# `covariates` holds the covariate names as written in the empty_diff_df.csv
+# (used for labelling), while `covariate_cols` holds the (possibly dummy
+# expanded) column names used in the residualizing regressions.
+.fill_trends_data <- function(silo_df, diff_df, covariates, covariate_cols,
+                              silo_name, treatment_time, anonymize_size,
                               anonymize_weights) {
   silo_times <- seq.Date(from = as.Date(diff_df$start_time[1],
                                         origin = "1970-01-01"),
@@ -520,9 +598,10 @@ undid_stage_two <- function(empty_diff_filepath, silo_name, silo_df,
     }
     trends_data[trends_data$time == period, "n"] <- w
   }
-  if (!identical(covariates, "none")) {
+  if (!identical(covariate_cols, "none")) {
     for (period in silo_times) {
-      x <- as.matrix(silo_df[silo_df$time == period, covariates])
+      x <- as.matrix(silo_df[silo_df$time == period, covariate_cols,
+                             drop = FALSE])
       x <- .ensure_full_rank(x, protect = FALSE)
       y <- as.vector(silo_df[silo_df$time == period, ]$outcome)
       beta_hat <- .safe_solve(x, y)

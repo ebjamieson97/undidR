@@ -1,3 +1,9 @@
+# undidR 3.0.3
+* `undid_stage_two()` now accepts categorical covariates. Character and factor covariates are automatically converted into dummy variables, omitting a reference category (the lowest level for factors, otherwise the first category after sorting).
+* Added the optional `factor` argument to `undid_stage_two()` for declaring covariates that should be treated as categorical even when they are not character or factor columns (e.g. numerically coded categories). Accepts a character vector (`factor = c("educ", "race")`) or formula(s) (`factor = ~educ + race`, `factor = ~educ ~race`, or `factor = c(~educ, ~race)`).
+* `undid_stage_two()` now drops rows with missing values in the time, outcome, or covariate columns (with a warning reporting the number of missing values per column) rather than stopping. Empty or whitespace-only values in character columns are treated as missing.
+* Covariates that are collinear with the intercept or treatment indicator within a given difference are now dropped, rather than producing `NA` estimates.
+
 # undidR 3.0.2
 * Computation of HCCMEs is now faster by using a crossproduct approach rather than constructing a full omega matrix.
 * Changed the default HCCME from HC3 to HC1 (i.e., `hc = 1`).

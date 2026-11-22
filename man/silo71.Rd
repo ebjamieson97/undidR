@@ -16,9 +16,6 @@ A tibble with 569 rows and 7 variables:
 \item{state}{State identifier}
 }
 }
-\source{
-\url{https://economics.uwo.ca/people/conley_docs/code_to_download.html}
-}
 \usage{
 silo71
 }

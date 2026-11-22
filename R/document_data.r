@@ -13,5 +13,4 @@
 #'   \item{year}{Year of observation}
 #'   \item{state}{State identifier}
 #' }
-#' @source <https://economics.uwo.ca/people/conley_docs/code_to_download.html>
 "silo71"

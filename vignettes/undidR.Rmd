@@ -104,6 +104,10 @@ in the `n` column (in the trends data and diff matrix) as well as the `n_t` colu
 
 The `undid_stage_two()` looks for covariates based on how they are spelled in the `empty_diff_df.csv` file. This means that silos may have to rename their covariate columns.
 
+Covariates may be numeric or categorical. Character and factor covariates are automatically converted into dummy variables, omitting one reference category: the lowest level for factor columns, or otherwise the first category after sorting. Categorical covariates that are stored as numeric codes (e.g. an education variable coded `1`, `2`, `3`) can be declared with the `factor` argument, either as a character vector (`factor = c("educ", "race")`) or as formula(s) (`factor = ~educ + race`).
+
+Rows with missing values in the time, outcome, or covariate columns are dropped with a warning that reports how many values were missing in each column. Values that are empty or contain only whitespace are treated as missing.
+
 ### 2.1 Common Treatment Time (Stage Two)
 
 ```{r}

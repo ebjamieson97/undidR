@@ -14,7 +14,8 @@ undid_stage_two(
   consider_covariates = TRUE,
   filepath = tempdir(),
   anonymize_weights = FALSE,
-  anonymize_size = 5
+  anonymize_size = 5,
+  factor = NULL
 )
 }
 \arguments{
@@ -53,6 +54,13 @@ calculation of a contrast/difference) should be rounded.}
 \item{anonymize_size}{A numeric value. Counts will be rounded to the nearest
 multiple of this value if \code{anonymize_weights} is \code{TRUE} (with a minimum
 value for any count being set as the value given for \code{anonymize_size}).}
+
+\item{factor}{An optional character vector (e.g. \code{c("educ", "race")}) or
+formula(s) (e.g. \code{~educ + race}, \code{~educ ~race}, or \code{c(~educ, ~race)})
+naming covariates that should be treated as categorical even though they
+are not character or factor columns, such as numerically coded
+categories. Character and factor covariates are always treated as
+categorical. Defaults to \code{NULL}.}
 }
 \value{
 A list of data frames. The first being the filled differences
@@ -69,6 +77,20 @@ as \code{trends_data_$silo_name.csv}.
 \details{
 Covariates at the local silo should be renamed to match the
 spelling used in the \code{empty_diff_df.csv}.
+
+Covariates may be numeric, logical, character, or factor columns.
+Character and factor covariates (and any covariates named in \code{factor}) are
+treated as categorical and are automatically converted into dummy
+variables, omitting one reference category. For factor columns, unused
+levels are dropped and the reference category is the lowest remaining
+level. For all other categorical columns, the categories are ordered with
+\code{sort(method = "radix")} and the first is used as the reference.
+
+Rows with missing values in the time, outcome, or covariate columns are
+dropped with a warning that reports the number of missing values in each
+affected column. Values in character or factor columns that are empty or
+contain only whitespace are treated as missing. Other values are not
+modified (e.g. leading or trailing whitespace is not removed).
 }
 \examples{
 # Load data

@@ -153,32 +153,33 @@
 
 #' @keywords internal
 #' Checks that matrix is full rank, useful for regression
+#' Columns are added one at a time (left to right) and a column is kept only
+#' if it increases the rank of the matrix built so far. Rank is always judged
+#' against the *whole* matrix, so a covariate that is collinear with the
+#' intercept or treatment indicator (e.g. a set of dummies that sums to one
+#' because the reference category is absent from the subset) is also dropped.
+#' If `protect = TRUE`, the first two columns (intercept and treatment) are
+#' always kept and only covariate columns are ever dropped.
 .ensure_full_rank <- function(x, protect = TRUE) {
-  if (protect) {
-    # Protect first 2 columns (intercept and treatment)
-    if (ncol(x) <= 2) {
-      return(x)
-    }
-    protected <- x[, 1:2, drop = FALSE]
-    covariates <- x[, 3:ncol(x), drop = FALSE]
-
-    # Iteratively drop columns from covariates until full rank
-    while (qr(covariates)$rank < ncol(covariates) && ncol(covariates) > 0) {
-      qr_decomp <- qr(covariates)
-      # Drop the last dependent column
-      drop_col <- qr_decomp$pivot[ncol(covariates)]
-      covariates <- covariates[, -drop_col, drop = FALSE]
-    }
-    return(cbind(protected, covariates))
-
-  } else {
-    # No protection - drop from all columns
-    while (qr(x)$rank < ncol(x) && ncol(x) > 0) {
-      qr_decomp <- qr(x)
-      # Drop the last dependent column
-      drop_col <- qr_decomp$pivot[ncol(x)]
-      x <- x[, -drop_col, drop = FALSE]
-    }
+  x <- as.matrix(x)
+  ncolx <- ncol(x)
+  if (ncolx == 0) {
     return(x)
   }
+  n_protected <- if (protect) min(2, ncolx) else 0
+  keep <- seq_len(n_protected)
+  current_rank <- if (n_protected > 0) {
+    qr(x[, keep, drop = FALSE])$rank
+  } else {
+    0
+  }
+  for (j in setdiff(seq_len(ncolx), keep)) {
+    candidate <- c(keep, j)
+    candidate_rank <- qr(x[, candidate, drop = FALSE])$rank
+    if (candidate_rank > current_rank) {
+      keep <- candidate
+      current_rank <- candidate_rank
+    }
+  }
+  return(x[, keep, drop = FALSE])
 }

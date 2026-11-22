@@ -108,6 +108,117 @@
 }
 
 #' @keywords internal
+#' Parses the `factor` argument of `undid_stage_two()` into a character vector
+#' of column names. Accepts `NULL`, a character vector (e.g.
+#' `c("educ", "race")`), a formula (e.g. `~educ`, `~educ + race`, or
+#' `~educ ~race`), or a list of character values and/or formulas (e.g.
+#' `c(~educ, ~race)`). Every variable named in a formula is used.
+.parse_factor_arg <- function(factor) {
+  if (is.null(factor)) {
+    return(character())
+  }
+  if (inherits(factor, "formula")) {
+    return(all.vars(factor))
+  }
+  if (is.character(factor)) {
+    return(factor)
+  }
+  if (is.list(factor)) {
+    valid <- vapply(factor, function(x) {
+      is.character(x) || inherits(x, "formula")
+    }, logical(1))
+    if (length(factor) > 0 && all(valid)) {
+      return(unique(unlist(lapply(factor, .parse_factor_arg))))
+    }
+  }
+  stop(paste("'factor' must be NULL, a character vector of column names",
+             "(e.g. c(\"educ\", \"race\")), or formula(s)",
+             "(e.g. ~educ + race or c(~educ, ~race))."))
+}
+
+#' @keywords internal
+#' Treats empty or whitespace-only values in character and factor columns as
+#' `NA`. All other values are left untouched (no trimming of whitespace).
+#' Returns the updated data frame and the number of blank values found in each
+#' affected column.
+.blank_strings_to_na <- function(df) {
+  n_blank <- integer()
+  for (col_name in names(df)) {
+    col <- df[[col_name]]
+    if (is.character(col)) {
+      blank <- !is.na(col) & grepl("^\\s*$", col)
+    } else if (is.factor(col)) {
+      blank <- !is.na(col) & grepl("^\\s*$", as.character(col))
+    } else {
+      next
+    }
+    if (any(blank)) {
+      col[blank] <- NA
+      df[[col_name]] <- col
+      n_blank[col_name] <- sum(blank)
+    }
+  }
+  return(list(df = df, n_blank = n_blank))
+}
+
+#' @keywords internal
+#' Expands categorical covariates into dummy (0/1) columns.
+#' Character and factor covariates, as well as any covariate named in
+#' `factor_cols`, are replaced by one dummy column per category, omitting a
+#' reference category. For factors, unused levels are dropped and the
+#' reference is the lowest remaining level. For all other columns the
+#' categories are ordered with `sort(method = "radix")` (which does not depend
+#' on the locale) and the first is the reference.
+#' Logical covariates are converted to 0/1. Covariates with only one category
+#' are dropped with a warning. Returns the updated data frame and the names of
+#' the covariate columns to use in the regressions.
+.expand_covariates <- function(df, covariates, factor_cols = character()) {
+  covariate_cols <- character()
+  single_category <- character()
+  for (cov in covariates) {
+    col <- df[[cov]]
+    is_categorical <- cov %in% factor_cols || is.character(col) ||
+      is.factor(col)
+    if (!is_categorical) {
+      if (is.logical(col)) {
+        df[[cov]] <- as.numeric(col)
+      }
+      covariate_cols <- c(covariate_cols, cov)
+      next
+    }
+
+    if (is.factor(col)) {
+      col <- droplevels(col)
+      categories <- levels(col)
+    } else {
+      categories <- sort(unique(col), method = "radix")
+    }
+    df[[cov]] <- NULL
+    if (length(categories) < 2) {
+      single_category <- c(single_category, cov)
+      next
+    }
+
+    # Name dummies `<covariate>_<category>`, avoiding clashes with any
+    # existing column names
+    existing <- names(df)
+    all_names <- make.unique(c(existing, paste0(cov, "_", categories[-1])))
+    dummy_names <- all_names[length(existing) + seq_len(length(categories) - 1)]
+    for (k in seq_along(dummy_names)) {
+      df[[dummy_names[k]]] <- as.numeric(col == categories[k + 1])
+    }
+    covariate_cols <- c(covariate_cols, dummy_names)
+  }
+
+  if (length(single_category) > 0) {
+    warning(paste("The following covariates have only one category in this",
+                  "silo and were dropped:",
+                  paste(single_category, collapse = ", ")))
+  }
+  return(list(df = df, covariate_cols = covariate_cols))
+}
+
+#' @keywords internal
 #' Returns positions of dashes or slashes in a date string
 .get_dash_or_slash_positions <- function(date_string, dash_or_slash) {
   if (!dash_or_slash %in% c("-", "/")) {

@@ -1,2 +1,2 @@
 silo_name,treat,common_treatment_time,start_time,end_time,weights,diff_estimate,diff_var,diff_estimate_covariates,diff_var_covariates,covariates,date_format,freq,n,n_t,anonymize_size
-73,0,1991,1989,2000,both,0.0830424942360981,0.00277217628420342,0.0806654852457349,0.00264413916414117,asian;black;male,yyyy,1 year,562,459,NA
+73,0,1991,1989,2000,both,0.0830424942360981,0.00278207691378988,0.0806654852457349,0.00266787470421426,asian;black;male,yyyy,1 year,562,459,NA
