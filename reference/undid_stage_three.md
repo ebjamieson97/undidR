@@ -112,6 +112,7 @@ An UnDiDObj with S3 methods of
 ## Examples
 
 ``` r
+
 # Execute `undid_stage_three()`
 dir <- system.file("extdata/staggered", package = "undidR")
 # \donttest{
@@ -134,14 +135,14 @@ dir <- system.file("extdata/staggered", package = "undidR")
 #> 
 #> Aggregate Results:
 #>         ATT Std. Error   p-value RI p-value Jackknife SE Jackknife p-value
-#>  0.07611833 0.03610753 0.1027101 0.03007519   0.04125346        0.09208696
+#>  0.07611833 0.03610753 0.1027101 0.03258145   0.04125346        0.09208696
 #> 
 #> Subaggregate Results:
 #> Treatment Time              ATT         SE    p-value   RI p-val      JK SE   JK p-val     Weight
 #> -------------------------------------------------------------------------------------------------------------- 
-#> 1991                     0.0339     0.0253     0.1845     0.4511         NA         NA     0.2428
-#> 1993                     0.0316     0.0243     0.1991     0.6015         NA         NA     0.2305
-#> 1996                     0.0685     0.0360     0.0658     0.5288         NA         NA     0.0910
+#> 1991                     0.0339     0.0253     0.1845     0.4536         NA         NA     0.2428
+#> 1993                     0.0316     0.0243     0.1991     0.6040         NA         NA     0.2305
+#> 1996                     0.0685     0.0360     0.0658     0.5338         NA         NA     0.0910
 #> 1997                     0.1487     0.0301     0.0000     0.0426     0.0470     0.0090     0.3863
 #> 1998                    -0.0623     0.0486     0.2155     0.4812         NA         NA     0.0494
 

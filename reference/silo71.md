@@ -40,7 +40,3 @@ A tibble with 569 rows and 7 variables:
 - state:
 
   State identifier
-
-## Source
-
-<https://economics.uwo.ca/people/conley_docs/code_to_download.html>

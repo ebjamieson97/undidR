@@ -22,6 +22,7 @@ You can install the stable release version of `undidR` from
 [CRAN](https://CRAN.R-project.org/package=undidR) with:
 
 ``` r
+
 install.packages("undidR")
 ```
 
@@ -30,6 +31,7 @@ install.packages("undidR")
 For a set of detailed examples see the package vignette using:
 
 ``` r
+
 vignette("undidR", package = "undidR")
 ```
 
@@ -39,6 +41,7 @@ at each of its three stages.
 ### Stage One: `create_init_csv()` & `create_diff_df()`
 
 ``` r
+
 library(undidR)
 init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                                        "71", "58", "64", "59", "85", "57"),
@@ -90,6 +93,7 @@ head(empty_diff_df, 4)
 ### Stage Two: `undid_stage_two()`
 
 ``` r
+
 silo_data <- silo71
 empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
                                    package = "undidR")
@@ -130,6 +134,7 @@ head(stage2$trends_data, 4)
 ### Stage Three: `undid_stage_three()`
 
 ``` r
+
 dir_path <- system.file("extdata/staggered", package = "undidR")
 results <- undid_stage_three(dir_path, agg = "g", covariates = TRUE,
                              nperm = 399, hc = "hc0", verbose = NULL)
@@ -160,6 +165,7 @@ summary(results)
 ```
 
 ``` r
+
 plot(results, lwd = 2, legend = "topleft")
 ```
 
@@ -174,6 +180,7 @@ as well as the additional parameters of: `ci` (confidence interval),
 (TRUE or FALSE to plot either event study or parallel trends plots).
 
 ``` r
+
 
 plot(results, event = TRUE, ci = 0.9, event_window = c(-2, 5),
      main = "My Event Study Plot", lwd = 2)

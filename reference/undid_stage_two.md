@@ -18,7 +18,8 @@ undid_stage_two(
   consider_covariates = TRUE,
   filepath = tempdir(),
   anonymize_weights = FALSE,
-  anonymize_size = 5
+  anonymize_size = 5,
+  factor = NULL
 )
 ```
 
@@ -79,6 +80,15 @@ undid_stage_two(
   this value if `anonymize_weights` is `TRUE` (with a minimum value for
   any count being set as the value given for `anonymize_size`).
 
+- factor:
+
+  An optional character vector (e.g. `c("educ", "race")`) or formula(s)
+  (e.g. `~educ + race`, `~educ ~race`, or `c(~educ, ~race)`) naming
+  covariates that should be treated as categorical even though they are
+  not character or factor columns, such as numerically coded categories.
+  Character and factor covariates are always treated as categorical.
+  Defaults to `NULL`.
+
 ## Value
 
 A list of data frames. The first being the filled differences data
@@ -90,6 +100,20 @@ frame, and the second being the trends data data frame. Use the suffix
 
 Covariates at the local silo should be renamed to match the spelling
 used in the `empty_diff_df.csv`.
+
+Covariates may be numeric, logical, character, or factor columns.
+Character and factor covariates (and any covariates named in `factor`)
+are treated as categorical and are automatically converted into dummy
+variables, omitting one reference category. For factor columns, unused
+levels are dropped and the reference category is the lowest remaining
+level. For all other categorical columns, the categories are ordered
+with `sort(method = "radix")` and the first is used as the reference.
+
+Rows with missing values in the time, outcome, or covariate columns are
+dropped with a warning that reports the number of missing values in each
+affected column. Values in character or factor columns that are empty or
+contain only whitespace are treated as missing. Other values are not
+modified (e.g. leading or trailing whitespace is not removed).
 
 ## Examples
 
@@ -108,8 +132,8 @@ results <- undid_stage_two(
   outcome_column = "coll",
   silo_date_format = "yyyy"
 )
-#> filled_diff_df_71.csv saved to: /tmp/RtmpdtyNvV/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmpdtyNvV/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/Rtmp7vb50e/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/Rtmp7vb50e/trends_data_71.csv
 
 # View results
 head(results$diff_df)

@@ -1,6 +1,7 @@
 # undidR
 
 ``` r
+
 library(undidR)
 ```
 
@@ -62,6 +63,7 @@ subaggregate ATTs.
 ### 1.1 Common Treatment Time (Stage One)
 
 ``` r
+
 # First, an initializing CSV is created detailing the silos
 # and their treatment times. Control silos (here, 73 and 46)
 # should be labelled with "control".
@@ -70,7 +72,7 @@ init <- create_init_csv(silo_names = c("73", "46", "71", "58"),
                         end_times = "2000",
                         treatment_times = c("control", "control",
                                             "1991", "1991"))
-#> init.csv saved to: /tmp/RtmpmsKIyo/init.csv
+#> init.csv saved to: /tmp/RtmpvgVlVt/init.csv
 init
 #>   silo_name start_time end_time treatment_time
 #> 1        73       1989     2000        control
@@ -85,7 +87,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
                                winslash = "/", mustWork = FALSE)
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both")
-#> empty_diff_df.csv saved to: /tmp/RtmpmsKIyo/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/RtmpvgVlVt/empty_diff_df.csv
 empty_diff_df
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        73     0                  1991       1989     2000    both
@@ -107,6 +109,7 @@ empty_diff_df
 ### 1.2 Staggered Adoption (Stage One)
 
 ``` r
+
 # The initializing CSV for staggered adoption is created in the same way.
 # When `create_diff_df()` is run, it will automatically detect whether or not
 # the initial setup is for a common adoption or staggered adoption scenario.
@@ -117,7 +120,7 @@ init <- create_init_csv(silo_names = c("73", "46", "54", "23", "86", "32",
                         treatment_times = c(rep("control", 6),
                                             "1991", "1993", "1996", "1997",
                                             "1997", "1998"))
-#> init.csv saved to: /tmp/RtmpmsKIyo/init.csv
+#> init.csv saved to: /tmp/RtmpvgVlVt/init.csv
 init
 #>    silo_name start_time end_time treatment_time
 #> 1         73       1989     2000        control
@@ -140,7 +143,7 @@ init_filepath <- normalizePath(file.path(tempdir(), "init.csv"),
 empty_diff_df <- create_diff_df(init_filepath, date_format = "yyyy",
                                 freq = "yearly", weights = "both",
                                 covariates = c("asian", "black", "male"))
-#> empty_diff_df.csv saved to: /tmp/RtmpmsKIyo/empty_diff_df.csv
+#> empty_diff_df.csv saved to: /tmp/RtmpvgVlVt/empty_diff_df.csv
 head(empty_diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        73 1991     0  1991;1990 1991;1991  0       1989     2000    both
@@ -187,9 +190,24 @@ looks for covariates based on how they are spelled in the
 `empty_diff_df.csv` file. This means that silos may have to rename their
 covariate columns.
 
+Covariates may be numeric or categorical. Character and factor
+covariates are automatically converted into dummy variables, omitting
+one reference category: the lowest level for factor columns, or
+otherwise the first category after sorting. Categorical covariates that
+are stored as numeric codes (e.g. an education variable coded `1`, `2`,
+`3`) can be declared with the `factor` argument, either as a character
+vector (`factor = c("educ", "race")`) or as formula(s)
+(`factor = ~educ + race`).
+
+Rows with missing values in the time, outcome, or covariate columns are
+dropped with a warning that reports how many values were missing in each
+column. Values that are empty or contain only whitespace are treated as
+missing.
+
 ### 2.1 Common Treatment Time (Stage Two)
 
 ``` r
+
 # When calling `undid_stage_two()`, ensure that the `time_column` of
 # the `silo_df` contains only character values, i.e. date strings.
 silo_data <- silo71
@@ -199,8 +217,8 @@ empty_diff_filepath <- system.file("extdata/common", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/RtmpmsKIyo/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmpmsKIyo/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmpvgVlVt/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmpvgVlVt/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name treat common_treatment_time start_time end_time weights
 #> 1        71     1                  1991       1989     2000    both
@@ -224,6 +242,7 @@ head(stage2$trends_data, 4)
 ### 2.2 Staggered Adoption (Stage Two)
 
 ``` r
+
 # Here we can see that calling `undid_stage_two()` for staggered adoption
 # is no different than calling `undid_stage_two()` for common adoption.
 silo_data <- silo71
@@ -233,8 +252,8 @@ empty_diff_filepath <- system.file("extdata/staggered", "empty_diff_df.csv",
 stage2 <- undid_stage_two(empty_diff_filepath, silo_name = "71",
                           silo_df = silo_data, time_column = "year",
                           outcome_column = "coll", silo_date_format = "yyyy")
-#> filled_diff_df_71.csv saved to: /tmp/RtmpmsKIyo/filled_diff_df_71.csv
-#> trends_data_71.csv saved to: /tmp/RtmpmsKIyo/trends_data_71.csv
+#> filled_diff_df_71.csv saved to: /tmp/RtmpvgVlVt/filled_diff_df_71.csv
+#> trends_data_71.csv saved to: /tmp/RtmpvgVlVt/trends_data_71.csv
 head(stage2$diff_df, 4)
 #>   silo_name gvar treat diff_times        gt RI start_time end_time weights
 #> 1        71 1991     1  1991;1990 1991;1991  0       1989     2000    both
@@ -306,6 +325,7 @@ you can access the trends data with `UnDiDObj$trends`.
 ### 3.1 Common Treatment Time (Stage Three)
 
 ``` r
+
 # `undid_stage_three()`, given a `dir_path`, will search that folder
 # for all CSV files that begin with "filled_diff_df_" and stitch
 # them together in order to compute the group level ATTs, aggregate ATT
@@ -343,6 +363,7 @@ plot(results)
 ### 3.2 Staggered Adoption (Stage Three)
 
 ``` r
+
 # When calling `undid_stage_three()` for staggered adoption it is
 # important to specify the aggregation method, `agg`.
 dir_path <- system.file("extdata/staggered", package = "undidR")
@@ -358,20 +379,20 @@ head(results$diff, 4)
 #> 61        46 7670     0  1991;1990 1991;1991  0       6940    10957    both
 #> 91        54 7670     0  1991;1990 1991;1991  0       6940    10957    both
 #>    diff_estimate    diff_var diff_estimate_covariates diff_var_covariates
-#> 1     0.04995599 0.003025270               0.04003924         0.003049531
-#> 31    0.15384615 0.010602526               0.10568820         0.010788858
-#> 61    0.09447415 0.009362733               0.09122789         0.008956869
-#> 91   -0.13125000 0.009224325              -0.12815145         0.009183679
+#> 1     0.04995599 0.003043494               0.04003924         0.003095877
+#> 31    0.15384615 0.010838138               0.10568820         0.011408907
+#> 61    0.09447415 0.009542786               0.09122789         0.009400278
+#> 91   -0.13125000 0.009396742              -0.12815145         0.009625202
 #>          covariates date_format   freq   n n_t anonymize_size diff_times_post
 #> 1  asian;black;male        yyyy 1 year 334 142             NA            7670
 #> 31 asian;black;male        yyyy 1 year  92  40             NA            7670
 #> 61 asian;black;male        yyyy 1 year 106  51             NA            7670
 #> 91 asian;black;male        yyyy 1 year 109  45             NA            7670
 #>    diff_times_pre    t           y       y_var
-#> 1            7305 7670  0.04003924 0.003049531
-#> 31           7305 7670  0.10568820 0.010788858
-#> 61           7305 7670  0.09122789 0.008956869
-#> 91           7305 7670 -0.12815145 0.009183679
+#> 1            7305 7670  0.04003924 0.003095877
+#> 31           7305 7670  0.10568820 0.011408907
+#> 61           7305 7670  0.09122789 0.009400278
+#> 91           7305 7670 -0.12815145 0.009625202
 
 head(results$trends, 4)
 #>   silo_name treatment_time       time mean_outcome mean_outcome_residualized
@@ -422,6 +443,7 @@ plot(results, main = "My Parallel Trends Plot")
 ![](undidR_files/figure-html/unnamed-chunk-7-1.png)
 
 ``` r
+
 plot(results, event = TRUE, ci = 0.9, event_window = c(-2, 5),
      main = "My Event Study Plot")
 ```
@@ -433,6 +455,7 @@ plot(results, event = TRUE, ci = 0.9, event_window = c(-2, 5),
 You can access citations by calling `citation("undidR")`.
 
 ``` r
+
 citation("undidR")
 #> To cite the UN-DID paper, please use:
 #> 
@@ -450,7 +473,7 @@ citation("undidR")
 #> To cite the undidR software package:
 #> 
 #>   Jamieson E (2025). "undidR: Difference-in-Differences with Unpoolable
-#>   Data." R package version 3.0.2,
+#>   Data." R package version 3.0.3,
 #>   <https://doi.org/10.32614/CRAN.package.undidR>.
 #> 
 #> To see these entries in BibTeX format, use 'print(<citation>,
@@ -461,6 +484,7 @@ citation("undidR")
 You can also call `print(citation("undidR"), bibtex = TRUE)`.
 
 ``` r
+
 print(citation("undidR"), bibtex = TRUE)
 #> To cite the UN-DID paper, please use:
 #> 
@@ -501,7 +525,7 @@ print(citation("undidR"), bibtex = TRUE)
 #> To cite the undidR software package:
 #> 
 #>   Jamieson E (2025). "undidR: Difference-in-Differences with Unpoolable
-#>   Data." R package version 3.0.2,
+#>   Data." R package version 3.0.3,
 #>   <https://doi.org/10.32614/CRAN.package.undidR>.
 #> 
 #> A BibTeX entry for LaTeX users is
@@ -510,7 +534,7 @@ print(citation("undidR"), bibtex = TRUE)
 #>     title = {undidR: Difference-in-Differences with Unpoolable Data},
 #>     author = {Eric Jamieson},
 #>     year = {2025},
-#>     note = {R package version 3.0.2},
+#>     note = {R package version 3.0.3},
 #>     url = {https://doi.org/10.32614/CRAN.package.undidR},
 #>   }
 ```
